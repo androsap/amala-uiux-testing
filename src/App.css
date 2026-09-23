@@ -1,0 +1,43 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.ant-drawer-header {
+  background-color: #9DDAF2;
+  border-radius: 0;
+}
+
+.ant-drawer-title {
+  color: #fff;
+}
+
+.ant-drawer-body {
+  background-color: #fff;
+  color: #fff;
+  height: calc(100vh - 55px);
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

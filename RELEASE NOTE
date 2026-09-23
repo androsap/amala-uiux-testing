@@ -1,0 +1,1200 @@
+RELEASE NOTE (VERSION 4.0.0)
+1. DASHBOARD
+2. PROFILE
+3. MEMBER MANAGEMENT
+    3.1 Member Data
+        - Profile
+        - Tier
+        - Cards
+        - Cobrand
+        - Activity
+            - Air
+            - Non Air
+        - Transaction
+        - Receipt
+    3.2 Enrollment
+    3.3 Park Activity
+4. DATA MANAGEMENT
+    4.1 BASIC CONFIGURATION
+        4.1.1 Region
+        4.1.2 Country
+        4.1.3 State
+        4.1.4 City
+        4.1.5 Airport
+        4.1.6 Currency
+        4.1.7 General Configuration
+    4.2 Member Configguration
+        4.2.1 Title
+        4.2.2 Salutation
+        4.2.3 Hobbies
+        4.2.4 Religion
+        4.2.5 Language
+    4.3 Tier Management
+        4.3.1 Membership Type
+        4.3.2 Membership
+        4.3.3 Tier Reason
+        4.3.4 Tier
+        4.3.5 Tier Duration
+        4.3.6 Tier Bonus
+            4.3.6.1 Activity Bonus
+            4.3.6.2 Enroll Bonus
+        4.3.7 Mileage Criteria
+    4.4 Parner Management
+        4.4.1 Airline
+        4.4.2 Codeshare List
+        4.4.3 Program Loyalty
+        4.4.4 Partner
+        4.4.5 Partner Group
+        4.5.6 Earning Miles
+        4.5.7 Distance Range
+    4.5 Branch Management
+        4.5.1 Branch
+        4.5.2 Ticket Office
+    4.6 Card Inventory
+    4.7 Redemption
+        4.7.1 Buy Award
+        4.7.2 Update Award
+        4.7.3 Cancel Award
+5. CATALOG
+    5.1 ACCRUAL RULE
+        5.1.1 Air
+            5.1.1.1 Origin Destination
+            5.1.1.2 Booking Class
+        5.1.2 Non Air
+    5.2 Retro Claim
+        5.2.1 Retro Claim Management
+            5.2.1.1 Garuda Indonesia (GA)
+            5.2.1.2 Citilink (QG)
+            5.2.1.3 Sriwijaya Air (SJ)
+            5.2.1.4 Skyteam
+            5.2.1.5 Partner
+        5.2.2 Retro Claim Approval
+            5.2.2.1 Garuda Indonesia (GA)
+            5.2.2.2 Citilink (QG)
+            5.2.2.3 Sriwijaya Air (SJ)
+            5.2.2.4 Skyteam
+            5.2.2.5 Partner
+    5.3 Receipt Catalogue
+    5.4 Custom Transaction
+    5.5 News
+    5.6 Non Air Activity Code
+    5.7 Statement
+    5.8 Billing
+6. AWARD MANAGEMENT
+    6.1 Award Type
+    6.2 Award List
+        - Basic Info
+        - Partner
+        - Price
+        - Cancel/Update
+        - Eligible Countries
+        - Eligible Tiers
+        - Certificate Text ID
+        - Voucher Text
+        - Status
+    6.3 Peak Season
+    6.4 Blackout Period
+7. USER MANAGEMENT
+    7.1 User
+
+RELEASE NOTE (VERSION 4.1.1) - 16 Agustus 2019
+1. retro claim - Bug fixing req info searching in retro claim
+2. retro claim - Add column time in request history
+3. update award - rename title page return
+4. member certificate - change awardtypecode into awardtypename in certificate details
+5. redemption upgrade - change format ticket validity from dd-mm-yyyy into dd/mm/yyyy
+6. redemption - if booking code null change "-"
+7. member certificate - data grid UI improvements
+8. member certificate - rename column title origin-destination into route
+9. price derived - add filter bookingclass and paidbookingclass base categorycode
+10. redemption - passenger disabled (only 1)
+11. subclass - enable spendmiles, earningmiles, upgradebymiles, and upgradebyclass
+
+RELEASE NOTE - 19 Agustus 2019
+1. Cobrand Bonus - Upgrade version service to version 4.1
+2. relation type - add new menu page in Data Management/Relation Management
+3. relation type - add service endpoint (v4.0)
+4. member certificate - fixing column width for compatibility on browsers
+5. relation type - fixing activeperiod value and push direct page
+6. relation type - add field validation
+
+RELEASE NOTE - 22 Agustus 2019
+1. member certificate - fixing input criteria value (%like% operation)
+2. role - add enrollment access feature and improvements
+
+RELEASE NOTE - 26 Agustus 2019
+1. member tourcode - add new feature (service configuration and menu page)
+
+RELEASE NOTE - 27 Agustus 2019
+1. member certifivate - rollback commit (fixing input criteria value (%like% operation))
+2. relation type - fixing coloumn sorting
+3. relation type - fixing field validation relationtypename
+4. invalid name check - add new menu page in Member Management/Invalid Name Check
+
+RELEASE NOTE - 30 Agustus 2019
+1. invalid name check - implement service endpoint memberactivity/retrieve into memberactivity/getinvalidnamechecklist
+2. invalid name check - add alert confirmation before action rating/reject
+3. tour code - fixing and improvements
+
+RELEASE NOTE - 2 September 2019
+1. member corporate - implement data grid (retrieve), profile (detail), member relation, and other submenus on Member Individu
+2. tour code - move component from Member Data into Member corporate
+
+RELEASE NOTE - 4 September 2019
+1. header member - add Mileage Expiry modal in header member profile
+2. headermember - hide lastname if value is null
+3. tier - add field tierid
+4. tier management - fixing disabled field
+
+RELEASE NOTE - 5 September 2019
+1. tier - handle field validation and uppercase tierid value
+2. statement text - change name and display field (request by analyst)
+3. invalid name check - fixing sorting and search criteria 
+4. add menu Suspect Duplicate
+
+
+============================================
+RELEASE NOTE v1.2.1 - 20 MARET 2020
+============================================
+1. Menambahkan idle page pada main layout.
+    - Jika page diam (tidak ada pergerakan kursor), maka otomatis logout.
+
+============================================
+RELEASE NOTE v1.2.2 - 22 MARET 2020
+============================================
+1. Disabled tier pada enrollment
+
+============================================
+RELEASE NOTE v1.2.3 - 03 APRIL 2020
+============================================
+1. File Management
+    - Take out field fileid dan file name dari retrieve
+    - Menambahkan field Remarks di retrieve
+2. Standard fee disabled true di cancel dan update certificate
+3. Bug fixing - Jika fee 0 di update dan cancel certificate, kirimkan valuenya 0 bukan null
+4. Melakukan pengecekan versi aplikasi di client
+
+============================================
+RELEASE NOTE v1.2.4 - 06 APRIL 2020
+============================================
+1. File Management, add field file name
+
+============================================
+RELEASE NOTE v1.2.5 - 09 APRIL 2020
+============================================
+1. Award Type Master Data
+	- EncodeURIComponent and DecodeURIComponent untuk menghandle special char pada awardtypecode
+	- Jika create, validasi awardtypecode adalah required, max 20 dan alphanumeric
+	- Jika Update, validasi awardtypecode adalah required, max 20
+2. Award List
+	- EncodeURIComponent and DecodeURIComponent untuk menghandle special char pada awardcode
+	- Jika create, validasi awardcode adalah required, max 20 dan alphanumeric
+	- Jika Update, validasi awardcode adalah required, max 20
+
+============================================
+RELEASE NOTE v1.2.6 - 15 APRIL 2020
+============================================
+1. Certificate Update, pada bagian certificate detail, seharusnya field certificateid mengambil dari redeemusers bukan redeemuser
+
+============================================
+RELEASE NOTE v1.2.7 - 23 APRIL 2020
+============================================
+1. Program Loyalty Module
+    - Penambahan field fileexchange and templatefile
+
+============================================
+RELEASE NOTE v1.2.8 - 12 MEI 2020
+============================================
+1. Member address
+    - Mengeluarkan data yang active saja
+    - Default sorting preferred address paling atas
+    - Menghapus field status pada form searching
+2. Member Contact
+    - Default sorting preffered number paling atas
+    - Menambahkan 2 column regionphonecode dan countryphonecode pada page preffered contact
+3. Accrual BC - Codeshare
+    - Bug fixing pembulatan award miles and tier miles pada list codeshare flight
+
+============================================
+RELEASE NOTE v1.2.9 - 29 MEI 2020
+============================================
+1. Mileage Expiry Module (New Module)
+2. Enhancement View Member Transaction
+    - Penambahan ENUM pada filter yaitu EXTENSION dan EXPIRATION
+    - Tampilkan transaction detail pada transaksi yang bertipe EXTENSION dan EXPIRATION, comment bisa di klik lalu muncul modal transaction detail.
+        field yang ditampilkan accountdetailid, awardmiles, tiermiles dan frequency.
+    - Field nomor urut di hapus, diganti dengan Transaction ID (trxid)
+
+============================================
+RELEASE NOTE v1.2.10 - 10 JUNI 2020
+============================================
+1. Member Mailing (New Module)
+2. Enhacement header member profile
+    - Penambahkan link pada member yang mempunyai status "MERGED", agar dapat melihat account yang aktif.
+3. Bug Fixing
+    - Member address, change menu rolecode from MBNOTES into MMBRADRS
+    - Sider menu member regular & member corporate, fixing checkpermission menu function
+
+============================================
+RELEASE NOTE v1.2.11 - 24 JUNI 2020
+============================================
+1. Enhancement Program Loyalty Module
+    - Add field Currency
+    - Add field Billing Rate
+2. Enhancement File Management Detail
+    - Add column Rate Per Miles
+    - Add column Total Charge
+
+============================================
+RELEASE NOTE v1.2.12 - 26 JUNI 2020
+============================================
+1. Enhancement Member Profile
+    - Field registration diisi dengan response dari member profile yaitu field enrollchannel
+
+============================================
+RELEASE NOTE v1.2.13 - 26 JUNI 2020
+============================================
+1. Module Reporting
+    - Accrual Air
+    - Accrual Non Air
+    - Award Air
+    - Award Non Air
+    - Redeposit
+
+============================================
+RELEASE NOTE v1.2.14 - 04 JULI 2020
+============================================
+1. Enhancement Reporting, Hardcode branch ADMINISTRATOR dapat melihat reporting seluruh branch
+    - Accrual Air
+    - Accrual Non Air
+    - Award Air
+    - Award Non Air
+    - Redeposit
+
+============================================
+RELEASE NOTE v1.2.15 - 08 JULI 2020
+============================================
+1. Enhancement Enrollment Corporate
+    - Mengubah label "Date" pada corporate information menjadi "Agreement Date"
+    - "Agreement Date" bisa backdate
+    - Mengubah label "Date" pada tour code menjadi "Tour Code Validity"
+    - "Tour Code Validity" bisa backdate
+    - Menghapus section header contact info
+    - Menghapus field name pada tour code
+2. Enhancement Corporate Member Data Grid
+    - Card Number -> exact, minimal 9 digit, numerik
+    - Corporate Code -> like, alpanumerik
+    - Corporate Name -> like, minimal 3 digit, alphanumerik
+    - Corporate Email -> exact dan berformat email, alphanumerik
+    - Contact Name -> like, minimal 3 digit, alphanumerik
+    - Contact Email -> exact dan berformat email, alphanumerik
+    - Enrollment Date -> exact, format date
+
+
+============================================
+RELEASE NOTE v1.2.16 - 09 JULI 2020
+============================================
+1. Member Profile Corporate
+    - Mengubah label "Date" pada corporate information menjadi "Agreement Date"
+    - "Agreement Date" bisa backdate
+
+============================================
+RELEASE NOTE v1.2.17 - 15 JULI 2020
+============================================
+1. Member Air Activity
+    - add manualintervention field request in air activity form
+    - add recordlocator field in air activity form
+2. Member Non Air Activity
+    - Remove the number validation on the reference code (refcode)
+
+============================================
+RELEASE NOTE v1.2.18 - 23 JULI 2020
+============================================
+1. Member Profile
+    - Enhancement enrollchannel request, not value hardcode BO
+
+============================================
+RELEASE NOTE v1.2.19 - 19 AGUSTUS 2020
+============================================
+1. Confirmation Ticket Number Certificate
+    - Add label card number and member name
+2. Member Transaction
+    - Remove trxID
+    - Add column Created by
+    - Rename "Transaction" into "Trx"
+    - Add notes in bottom Comment
+    - Add TrxDate in transaction details
+    - Change accountdetailid into comment in transaction details
+3. Certificate Update (issue operation)
+    - Add modal confirmation before change schedule action
+4. Certificate Cancellation
+    - Add modal confirmation before change schedule action
+    - If account detail expired, add view account detail in confirmation modal
+5. New Module Accrual Promo Catalogue
+
+============================================
+RELEASE NOTE v1.2.20 - 19 AGUSTUS 2020
+============================================
+1. Confirmation Ticket Number Certificate
+    - Add label card number and member name
+2. Member Transaction
+    - Remove trxID
+    - Add column Created by
+    - Rename "Transaction" into "Trx"
+    - Add notes in bottom Comment
+    - Add TrxDate in transaction details
+    - Change accountdetailid into comment in transaction details
+3. Certificate Update (issue operation)
+    - Add modal confirmation before change schedule action
+4. Certificate Cancellation
+    - Add modal confirmation before change schedule action
+    - If account detail expired, add view account detail in confirmation modal
+5. New Module Accrual Promo Catalogue
+
+============================================
+RELEASE NOTE v1.2.21 - 04 SEPTEMBER 2020
+============================================
+1. New Module Reporting Custom Transaction
+2. New Module Reporting Member Profile
+3. Enhancement Member Receipt
+    - Add Button Send & Download
+4. Enhancement Custom Transaction
+    - Add Enum DAY in field durationtype
+    - Add field validbuy
+    - Add field durationindays if durationtype = DAY (mandatory)
+5. New Module Buy Mileage Catalogue
+6. New Module Buy Mileage Promo
+7. New Module Member Buy Mileage
+8. Enhancement Accrual Promo
+    - Bug Fixing - Selection for user search not work
+9. Enhancement Reporting Non Air Award
+    - Rename Label Member ID into Membership Number
+
+============================================
+RELEASE NOTE v1.2.25 - 11 SEPTEMBER 2020
+============================================
+1. New Module Reporting Custom Transaction
+2. New Module Reporting Member Profile
+3. Enhancement Member Receipt
+    - Add Button Send & Download
+4. Enhancement Custom Transaction
+    - Add Enum DAY in field durationtype
+    - Add field validbuy
+    - Add field durationindays if durationtype = DAY (mandatory)
+5. New Module Buy Mileage Catalogue
+6. New Module Buy Mileage Promo
+7. New Module Member Buy Mileage
+8. Enhancement Accrual Promo
+    - Bug Fixing - Selection for user search not work
+9. Enhancement Reporting Non Air Award
+    - Rename Label Member ID into Membership Number
+
+============================================
+RELEASE NOTE v1.2.26 - 23 SEPTEMBER 2020
+============================================
+1. Enhancement Member Profile Reporting
+    - change field membercardid into cardnumber
+
+============================================
+RELEASE NOTE v1.2.27 - 08 OCTOBER 2020
+============================================
+1. Enhancement Corporate Account
+    -  enhancement on Enrollment Corporate
+    -  enhancement on Member Corporate 
+
+============================================
+RELEASE NOTE v1.2.28 - 17 OCTOBER 2020
+============================================
+1. User Reset Password
+    -  add field 'key' for reset Password security 
+
+============================================
+RELEASE NOTE v1.2.31 - 20 NOVEMBER 2020
+============================================
+1. Buy Mileage Reporting
+    - new feature
+
+============================================
+RELEASE NOTE v1.2.32 - 12 DECEMBER 2020
+============================================
+1. Member Tier history (Miftah, Frida, Arischa)
+	- new feature
+	- update terakhir hilangkan GFF Number
+3. Enhancement Corporate account (Miftah, Frida, Tiara)
+	- KTP travel coordinator
+	- email length 255	
+4. Enhancement search member (Ray, Runi, Frida)
+	- enhancement display email
+	- email, username, nameoncard length	
+5. Member Certificate
+	- fixing display fee NaN 
+	member/form/520984516/certificate/cancel/P0119-DI-E202016306416	
+6. Member Redemption (Ray, Runi)
+	change sorting field from 'price' to 'pricingby'
+	branch: enhancement-member-redemption
+
+
+============================================
+RELEASE NOTE v1.2.33 - 28 DECEMBER 2020
+============================================
+1. Retro Claim
+    - adjust datetime in Request History
+
+
+============================================
+RELEASE NOTE v1.2.34 - 14 JANUARY 2021
+============================================
+1. Member Alias
+    - change validation for alias name
+2. Invalid Name Check
+    - change format request service from object to array
+
+
+============================================
+RELEASE NOTE v1.2.35 - 29 JANUARY 2021
+============================================
+1. User Management
+	- add button action for activation
+2. Member Transaction
+	- add page Transaction Detail
+
+
+============================================
+RELEASE NOTE v1.2.36 - 29 JANUARY 2021
+============================================
+1. Member Air Activity  
+    - add field dateofissue, promocode, bookingchannel
+
+
+============================================
+RELEASE NOTE v1.2.37 - 29 JANUARY 2021
+============================================
+1. Member Air Activity  
+    - set field bookingchannel
+
+
+============================================
+RELEASE NOTE v1.2.38 - 05 FEBRUARY 2021
+============================================
+1. Reporting
+	- add Ticket Office
+2. Member Non Air Activity
+	- remove Actvity Date back date restrictions
+
+    
+============================================
+RELEASE NOTE v1.2.39 - 05 FEBRUARY 2021
+============================================
+1. Reporting    
+    - rename ticketingoffice
+
+
+============================================
+RELEASE NOTE v1.2.40 - 08 FEBRUARY 2021
+============================================
+1. Member Non Air Activity
+    - hide component memberlock to provides deployment (production) needs
+
+
+============================================
+RELEASE NOTE v1.2.41 - 19 FEBRUARY 2021
+============================================
+1. Partner Airline
+    - add field Send Email
+
+    
+============================================
+RELEASE NOTE v1.2.42 - 08 MARCH 2021
+============================================
+1. Invalid Name Check
+    - change 'Card Number' field type from like into exact 
+    
+
+============================================
+RELEASE NOTE v1.2.43 - 19 MARCH 2021
+============================================
+1. Reporting (all, except Member Profile)
+    - enhancment - add role level validation 
+
+
+============================================
+RELEASE NOTE v1.2.45 - 7 APRIL 2021
+============================================
+1. Login Captcha
+2. Change Password
+    - on Login when user expired within 90days
+    - on user Profile
+3. Member Certificate  
+    - add button Re-Issued when status VOUCHER_CREATED
+
+    
+============================================
+RELEASE NOTE v1.2.46 - 20 APRIL 2021
+============================================
+1. Expired User Login   
+    - fixing password match validation
+2. Mileage Statmenet Log
+
+
+============================================
+RELEASE NOTE v1.2.47 - 23 APRIL 2021
+============================================
+1. Mileage Statement Member
+
+
+============================================
+RELEASE NOTE v1.2.48 - 31 MEI 2021
+============================================
+1. First Tier Activity Bonus
+2. Enhancement Member Profile
+
+
+============================================
+RELEASE NOTE v1.2.49 - 31 AGUSTUS 2021
+============================================
+1. Birthday Bonus
+2. QR Code ( Enhancement Award  Voucher Template )
+
+
+============================================
+RELEASE NOTE v1.2.50 - 09 SEPT 2021
+============================================
+1. Member Cobrand 
+    - Change Enroll Date value when update terminate cobrand
+2. Helpers
+    - Fix callback fucntion on getGeneralConfig function helper
+    
+
+============================================
+RELEASE NOTE v1.2.51 - 16 SEPT 2021
+============================================
+1. Partner Cobrand Bonus 
+    - Change field CustomTrx to Activity Code 
+2. Member Mileage Statement
+    - Add display data `Extended Miles`
+
+
+============================================
+RELEASE NOTE v1.2.52 - 25 OCTOBER 2021
+============================================
+1. File Management
+    - Download file & summary
+2. Member Transaction
+    - Change URL in detail TRANSACTION
+3. Member Activity
+    - Fixing make correction (frequency 0: is required)
+4. Accrual Rule (Promo)
+    - Add field parameter `corporatesegment` and `corporatecode`
+
+
+============================================
+RELEASE NOTE v1.2.53 - 03 NOV 2021
+============================================
+1. Promo Catalog
+2. Promo Category Type
+3. Promo Criteria Type
+4. Promo File
+5. Promo File Data
+6. Award Voucher  (tag {promocode}{promoname})
+7. Redemption Buy Promo
+8. Redemption Cancel Promo
+9. Redemption Update Promo
+10. Certificate
+11. Report date
+
+
+============================================
+RELEASE NOTE v1.2.54 - 03 NOV 2021
+============================================
+1. Redemption - fixing handle Self Usage
+
+
+============================================
+RELEASE NOTE v1.2.55 - 04 NOV 2021
+============================================
+1. Redemption - fixing issue when buy
+
+
+============================================
+RELEASE NOTE v1.2.56 - 05 NOV 2021
+============================================
+1. Redemption - fixing unclosed modal when buy
+
+
+============================================
+RELEASE NOTE v1.2.57 - 17 NOV 2021
+============================================
+1. Member - change logic for member valid thru
+
+
+============================================
+RELEASE NOTE v1.2.58 - 23 DES 2021
+============================================
+1. Custom Trx
+2. Merge Account
+3. Member Valid Thru
+
+
+============================================
+RELEASE NOTE v1.2.59 - 24 DES 2021
+============================================
+1. fix issue prince when Buy
+
+============================================
+RELEASE NOTE v1.2.60 - 24 DES 2021
+============================================
+1. fix issue price when Buy
+
+
+============================================
+RELEASE NOTE v1.2.61 - 28 JAN 2022
+============================================
+1. Transfer Mileage 
+    - New Feature in Member Management
+    - Enhancement Catalog - Custom Transaction
+    - Enhancement Member Profil - Transaction
+2. Fixing Redemption Promo
+    - add checkdate: true for requestinfg service getpromo (buy)
+    - change date format for activitydate into 'YYYY-MM-DD'
+    - change label name List Promo into Promo List
+
+
+============================================
+RELEASE NOTE v1.2.62 - 23 FEB 2022
+============================================
+1. Redemption Voucher - Bugfix After UAT 
+    - New Feature in Login to show password with icon
+    - Change 'voucher text' label to 'certificate text' in sider menu Award List 
+    - Change 'card template' label to 'certificate template' in menu Certificate Text - Award List
+    - Add new tag 'validty voucher' in menu Certificate Text - Award List
+    - Add new field 'Award Name' in menu certificate
+    - Adjust CertificateID in one row
+    - Adjust 'Award Name' column in Certificate list - Member Profile
+2. Redemption Donation
+    - New Feature in Redemption and Certificate (type Transfer) - Member Profile - Member Management
+    - Enhancement basic info form : 
+        - add new field Use Voucher
+        - change existing Certificate Validity field
+        - change Transfer Factor field to Custom Transaction field
+        - change Cardnumber field to Recipient Card Number field
+    - Add new tag 'cardnumber', 'recipient-name' and 'recipient-cardnumber' in menu Certificate Text - Award List
+    - Remove tag 'member' and 'cardnumber' in menu Certificate Text - Award List
+
+
+============================================
+RELEASE NOTE v1.2.63 - 30 MAR 2022
+============================================
+1. Completion Bonus
+    - Promo Completion
+	- Tier Completion
+2. Enhancement Enrollment 
+	- Referral Bonus
+	- Identity Card
+3. Enhancement Member profile 
+    - Development Referral bonus
+    - Development Member identity
+    - Development Verification identity
+4. Enhancement Catalog Referral
+
+
+============================================
+RELEASE NOTE v1.2.64 - 05 APR 2022
+============================================
+1. Retro Claim
+    - move menu to Member Management
+    - add function permission for feature Manual Verification
+    - fixing and enhancements
+
+
+============================================
+RELEASE NOTE v1.2.65 - 22 APR 2022
+============================================
+1. Enhance Member Profil
+    A. Cancel ( Certificate )
+        - remove auto select flight
+    B. Form
+        - fix form field
+        - Add subscription ( history )
+2. Enhance Enrollment
+    A. Form
+        - Uncomment field subscription 
+
+============================================
+RELEASE NOTE v1.2.66 - 25 MEI 2022
+============================================
+Development Retro Claim Star Alliance
+
+
+============================================
+RELEASE NOTE v1.2.67 - 29 JUNI 2022
+============================================
+1. File Management
+    - add dropdown data for filter field File Type
+
+
+============================================
+RELEASE NOTE v1.2.68 - 04 Agustus 2022
+============================================
+1. Login
+    - hide reset password for security reason
+
+
+============================================
+RELEASE NOTE v1.2.69 - 06 September 2022
+============================================
+1. Login
+    - Unhide reset password for security reason
+
+
+============================================
+RELEASE NOTE v1.2.70 - 08 September 2022
+============================================
+1. My Approval
+    - New Feature
+2. Approval List
+    - New Feature
+3. Member Buy Mileage : 
+    - Enhance table list add new column
+    - Add new validation in retrieve
+    - Add request approval in confirmation ( New Feature )
+4. Member Certificate :
+    - Add new field in view detail ( Retrieve Detail )
+    - Add new tab "Cancel request" ( New Feature )
+    - Add request approval in view detail update certificate ( New Feature )
+    - Add request approval in view detail cancel certificate ( New Feature )
+5. Member Redemption :
+    - Add request approval in transfer form ( New Feature )
+    - Add request approval in freeflight form ( New Feature )
+    - Add request approval in upgrade form ( New Feature )
+    - Add request approval in hotel form ( New Feature )
+    - Add request approval in voucher form ( New Feature )
+6. User Management :
+    - Add new field in User Form
+7. Delete some unused code
+
+============================================
+RELEASE NOTE v1.2.71 - 05 October 2022
+============================================
+1.  Download Data Report
+2.  Report Accrual
+    -   Change button download to generate
+3.  Report Award
+    -   Change button download to generate
+4.  Report Buy Mileage
+    -   Change button download to generate
+5.  Report Custom Transaction
+    -   Change button download to generate
+6.  Report Member Profile
+    -   Change button download to generate
+7.  Report Redeposit
+    -   Change button download to generate
+
+
+============================================
+RELEASE NOTE v1.2.72 - 21 November 2022
+============================================
+1. Approval List [Redemption and Redemption Cancel (Active and Update Tab)]
+    - Remove enum "failed" field approval status in search form
+2. Member Transaction
+    - Change defaultSortOrder column Create Date to descending
+3. Member Certificate : 
+    - Add member status ACTIVE/TEST/SUSPECTDUPLICATE validation for button update and cancel 
+    - Create Miles Information Section in view detail
+    - Separate role permission Certificate and Redemption (New Role: CERTIF)
+4. Member Redemption :
+    - Change not eligible message UI
+
+
+============================================
+RELEASE NOTE v1.2.73 - 24 November 2022
+============================================
+1. Retro Claim Management
+    - GA, SkyTeam, Star Alliance -> Add field Ticket Number, Created By to grid view
+    - Star Aliiance -> Add Route Type, Seat Number
+
+2. Retro Claim Approval
+    - Add field Ticket Number, Created By to grid view
+
+3. Retro Claim Member
+    - Add field Ticket Number, Created By to grid view
+
+4. CodeShare List
+    - Add Effective Date, Discontinue Date to grid view
+    - Add Marketing Flight Number to grid view
+    - Add Operating Flight Number to grid view
+
+5. Terminate Member
+    - Change status member to Terminate or Reactivate with notes
+    - Add field Terminated By and Date of Terminate
+
+
+============================================
+RELEASE NOTE v1.2.74 - 06 December 2022
+============================================
+1. Login Page
+    - Add announcement
+
+
+============================================
+RELEASE NOTE v1.2.76 - 21 Maret 2023
+============================================
+1. Member Notes
+    - Enhancement layout
+    - Add new feature download
+
+    
+============================================
+RELEASE NOTE v1.2.77 - 06 April 2023
+============================================
+1. Member Buy Mileage
+    - Enhancement buy process
+    - New feature Buy Extend Mileage
+2. Member Account Detail
+    - New menu All Account Detail Summary
+    - New feature download PDF and CSV
+    - Enhancement Layout
+3. Member Transaction
+    - Enhancement transaction detail
+4. Buy Mileage Catalog
+    - Enhancement for new feature buy extend mileage
+
+============================================
+RELEASE NOTE v1.2.78 - 17 Mei 2023
+============================================
+1. Member Buy Mileage
+    - New feature cancel buy mileage 
+2. Member Profile Information
+    - Bugfix error null lastname 
+
+============================================
+RELEASE NOTE v1.2.80 - 28 Juli 2023
+============================================
+1. Member Account Detail
+    - Enhancement UI and integration
+2. Member Contact
+    - Cosmetic grid layout
+
+============================================
+RELEASE NOTE v1.2.81 - 03 Agustus 2023
+============================================
+1. Member Receipt
+    - Add new filter receipt type
+    - Add new sort in receipt type column list
+2. Member Buy Mileage
+    - Add validation 0 awardmiles exception handling in eligible list
+    - Move role validation in buy button
+    - Add field payment type and currency in first member buy to extend page
+    - Enhancement in get price page member buy to extend page
+3. Buy Mileage Catalog
+    - Remove partner field in form and list
+    - Add channel field 
+    - Add active deactive features
+
+============================================
+RELEASE NOTE v1.2.82 - 11 Agustus 2023
+============================================
+1. Accrual Rule BC
+    - Enhancement mapping column codeshare
+
+============================================
+RELEASE NOTE v1.2.83 - 25 Agustus 2023
+============================================
+1. Report Fraud Suspect
+    - Add new feature
+
+============================================
+RELEASE NOTE v1.2.84 - 04 September 2023
+============================================
+1. Standard Report
+    - Fasttrack Report
+    - Earning Cobrand
+    - Member Cobrand
+    - Summary Cobrand
+
+2. Member Profile Report
+    - Enhance list and filter
+
+3. Cash and Miles
+    - Member Certificate details
+    - Info cash price, payment price, currency
+    - Enhance award catalog for manual pricing by
+    - Enhance handle manual price member redemption 
+
+============================================
+RELEASE NOTE v1.2.85 - 08 September 2023
+============================================
+1. Enrollment
+    - Add validation for tier Junior in result page
+
+2. Member Profile
+    - Change mandatory field partner to optional
+
+3. Member Redemption
+    - Bugfixing select flight award type upgrade
+
+============================================
+RELEASE NOTE v1.2.86 - 18 September 2023
+============================================
+1. User Log Monitoring
+    - Page User Activity Log
+    - Details user log
+    - Legends
+
+============================================
+RELEASE NOTE v1.2.87 - 18 Oktober 2023
+============================================
+1. Member Tier
+    - Enhance button manage tier
+2. Report Award Non Air
+    - Change membership numbers. Member Tier
+3. Member Corporate
+    - Enhance Travel Coordinator
+    - Enhance Member Relation
+4. Member
+    - Add Travel Coordinator
+
+============================================
+RELEASE NOTE v1.2.88 - 01 November 2023
+============================================
+1. Member Receipt
+    - Add hyperlink to Buy MIleage page in receipt number column
+2. Member Buy Mileage
+    - Add new field Receipt Number in Verify Status Card
+
+============================================
+RELEASE NOTE v1.2.89 - 09 November 2023
+============================================
+1. Login
+    - Update Announcement due to Maintenance activity plan
+
+============================================
+RELEASE NOTE v1.2.90 - 06 Desember 2023
+============================================
+1. File Management
+    - Enhance table and fixed some data lost
+
+============================================
+RELEASE NOTE v1.2.91 - 05 Maret 2024
+============================================
+1. Member Profile
+    - Enhance add button verify email
+    - Enhance add Save with OTP Button and OTP section
+2. New Page Email Verified
+3. Member Redemption with OTP
+    - Generate and input OTP before access menu
+    - OTP with time limit
+4. Member Certificate with OTP
+    - Generate and input OTP before access menu
+    - OTP with time limit
+
+============================================
+RELEASE NOTE v1.2.92 - 08 Mei 2024
+============================================
+1. Member Transaction
+    - Count Transaction
+    - Download Transaction
+    
+============================================
+RELEASE NOTE v1.2.93 - 14 Mei 2024
+============================================
+1. Member Buy to Extend
+    - Enhance request source from TO do BO
+2. Enhance Member Transaction
+    - Count and download
+
+============================================
+RELEASE NOTE v1.2.94 - 29 Mei 2024
+============================================
+1. New Modul Order Management
+2. New Modul Vendor Management
+3. New Modul Mailing Product Catalog
+4. New Modul Letter Management
+5. New Modul Inventory Management
+6. New Modul Member Buy Product
+7. User Management 
+    - Enhance user type select (add type vendor)
+
+============================================
+RELEASE NOTE v1.2.95 - 15 July 2024
+============================================
+1. Member Certificate
+    - Enhance to Penalty Reschedule & Refund in update or cancel freeflight and upgrade
+2. Member Transaction
+    - Add related transaction button in trx detial
+3. Statement Catalog
+    - Remove mandatory isDefault field in template text
+
+============================================
+RELEASE NOTE v1.2.96 - 13 Agustus 2024
+============================================
+1. Enhancement Member Profile Update with OTP
+2. Enhancement Member Redemption with OTP
+3. Close Member Certificate with OTP
+
+============================================
+RELEASE NOTE v1.2.97 - 15 Agustus 2024
+============================================
+1. Enhancement Member Profile Update with OTP
+    - Add handling timezone
+2. Enhancement Member Redemption with OTP
+    - Add handling timezone
+3. Enhance member OTP email verification 
+    - Add error handling
+    - Add handling timezone
+
+============================================
+RELEASE NOTE v1.2.98 - 08 October 2024
+============================================
+1. Enhancement member certificate change schedule
+    - Add validation in request getpromo type freeflight
+    - Add validation in request getpromo type upgrade
+    - Add "-" discount value in price detail 
+
+============================================
+RELEASE NOTE v1.2.99 - 16 October 2024
+============================================
+1. Enhancement member activity
+    - Add new 9 options in filter activity info
+
+============================================
+RELEASE NOTE v1.2.100 - 18 October 2024
+============================================
+1. Enhancement Accrual Non Air
+    - Add Accrual Activity Code Limit
+    - Add Limit Code in Accrual Non Air
+    - Add Non Air Activity Type in Accrual Activity Code
+
+============================================
+RELEASE NOTE v1.2.101 - 08 November 2024
+============================================
+Enhancement Report Log History Phase 2
+    - Enhance Partner Management Earning Miles and CodeShare
+
+============================================
+RELEASE NOTE v1.2.102 - 07 December 2024
+============================================
+1. Catalog non-air activity code
+2. Enhanment member activity
+3. Enhancement member transaction
+4. Member activity limit
+5. Catalog activity limit
+
+============================================
+RELEASE NOTE v1.2.103 - 11 December 2024
+============================================
+1. Enhancement member certificate (freeflight & upgrade) 
+    - Add validation discount ammount with promocode
+    - Fixing some code writting
+
+============================================
+RELEASE NOTE v1.2.104 - 21 January 2025
+============================================
+1. Order Management
+    - Fix blank filter in order tracking
+2. Buy to extend
+    - Change validation validation for extend and expired date
+
+============================================
+RELEASE NOTE v1.2.105 - 03 FEBRUARY 2025
+============================================
+1. Program
+    - Add new Template
+
+============================================
+RELEASE NOTE v1.2.106 - 23 APRIL 2025
+============================================
+1. Enrollment
+    - Add message for Enrollment Suspect Duplicate
+
+============================================
+RELEASE NOTE v1.2.107 - 19 JUNE 2025
+============================================
+1. Retro Claim - ONEWORLD
+    - New modul retroclaim - ONEWORLD
+2. File Management 
+    - Add validation in column sending/receive date
+
+============================================
+RELEASE NOTE v1.2.108 - 20 JUNE 2025
+============================================
+1. Retro Claim Management - ONEWORLD
+    - Bugfix manual verification issue 
+2. Retro Claim Approval - ONEWORLD 
+    - New modul retroclaim - ONEWORLD
+
+============================================
+RELEASE NOTE v1.2.109 - 29 AUGUST 2025
+============================================
+1. Partner Management
+    - Partner Bulk
+    - Bulk Topup, Transaction, Report
+
+============================================
+RELEASE NOTE v1.3.0 - 03 September 2025
+============================================
+1. Data Management
+    - Add new menu Data Synchronize Monitoring
+    - Add new menu Data Synchronize Checking
+
+============================================
+RELEASE NOTE v1.3.1 - 01 October 2025
+============================================
+1. Partner Management Bulk
+    - Enhance Transaction and Details
+
+============================================
+RELEASE NOTE v1.3.2 - 24 October 2025
+============================================
+1. Member Non Air Activity
+    - Refactor request form
+
+============================================
+RELEASE NOTE v1.4.0 - 30 October 2025
+============================================
+1. Program Loyalty
+    - Add new field radio button for Accrual Out Carrier Type
+
+============================================
+RELEASE NOTE v1.4.1 - 03 December 2025
+============================================
+1. Retro Claim - Star Alliance
+    - Add new validation in ticket number field to 13 digit
+
+============================================
+RELEASE NOTE v1.4.2 - 19 Februari 2026
+============================================
+1. Member Transaction - Star Alliance
+    - Add field certificateid and feature calculator 
+
+============================================
+RELEASE NOTE v1.4.4 - 10 April 2026
+============================================
+1. Member Profile
+    - Bugfixing lastname issue
+2. Member Certificate
+    - Bugfixing low to high, high to low award : upgrade
+
+============================================
+RELEASE NOTE v1.4.5 - 13 April 2026
+============================================
+1. OTP Login
+    - Bugfixing auto fill OTP for Login
+
+============================================
+RELEASE NOTE v1.5.0 - 26 Mei 2026
+============================================
+1. Hasil Pen Test 
+    - Hide secret code
+    - Hide endpoint from js
+    - Refactor code
+
+============================================
+RELEASE NOTE v1.5.1 - 10 Juni 2026
+============================================
+1. Pentest fixing
+    - Remove secret key
+    - Remove credential from FE
+    - Enhance obfuscate url services
+2. Profil OTP (Input OTP)
+    - Change service to public
+    - Add recaptcha to verify

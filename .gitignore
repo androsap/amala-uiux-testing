@@ -1,0 +1,5 @@
+node_modules/
+build/
+.svn/
+public/meta.json
+src/config/EncodedURLs.js
