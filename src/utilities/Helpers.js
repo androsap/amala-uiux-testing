@@ -1,5 +1,5 @@
 
-import { RetrieveRequest } from './RequestService';
+import { RetrieveRequest, DetailRequest } from './RequestService';
 import { api } from '../config/Services';
 import Alert from '../components/Alert';
 
@@ -138,7 +138,7 @@ export function validationPassword(value) {
     }
 
     return null;
-}
+};
 
 export function isArray(data, length) {
     let result = false;
@@ -156,17 +156,7 @@ export function isArray(data, length) {
         }
     }
     return result;
-}
-
-export function JSONChecker(value) {
-    if ((value === '{  }') || (value === '{ }') || (value === '{}')) {
-        return false
-    } else if (/^[\],:{}\s]*$/.test(value.replace(/\\["\\\/bfnrtu]/g, '@').
-        replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
-        replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
-        return true
-    } else return false
-}
+};
 
 export function formatMonthAcronym(month) {
     if (month === '01' || month === '1' || month === 'January' || month === 'JANUARY') {
@@ -194,7 +184,7 @@ export function formatMonthAcronym(month) {
     } else {
         return 'Dec';
     }
-}
+};
 
 export function removeNull(obj) {
     return Object.fromEntries(
@@ -205,18 +195,28 @@ export function removeNull(obj) {
                 value === Object(value) ? removeNull(value) : value,
             ]),
     );
+};
+
+export function JSONChecker(value) {
+    if ((value === '{  }') || (value === '{ }') || (value === '{}')) {
+        return false
+    } else if (/^[\],:{}\s]*$/.test(value.replace(/\\["\\\/bfnrtu]/g, '@').
+        replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+        replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+        return true
+    } else return false
 }
 
 export function isEmptyObject(obj) {
     for (const prop in obj) {
-      if (Object.hasOwn(obj, prop)) {
-        return false;
-      }
+        if (Object.hasOwn(obj, prop)) {
+            return false;
+        }
     }
-  
+
     return true;
-  }
-  
+};
+
 export function debounce(fn, ms) {
     let timer;
     return _ => {

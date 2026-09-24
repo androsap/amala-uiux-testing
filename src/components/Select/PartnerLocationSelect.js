@@ -13,6 +13,12 @@ class PartnerLocation extends React.Component {
         }
     }
 
+    componentDidMount() {
+        if (this.props.forceRender) {
+            this.retrieveData();
+        }
+    }
+
     retrieveData(criteria = {}, inactivefield = {}, actionspage = 'create') {
         let paging = { limit: -1, page: 1 }
         let sort = { partnerlocationcode: 'asc' };
@@ -40,7 +46,11 @@ class PartnerLocation extends React.Component {
                 Alert.error(response.status.responsemessage);
             }
         });
-    }
+    };
+
+    handleResetOptions = () => {
+        this.setState({ options: [] })
+    };
 
     render() {
         return (<SelectBase {...this.props} options={this.state.options} isLoading={this.state.isLoading} />)

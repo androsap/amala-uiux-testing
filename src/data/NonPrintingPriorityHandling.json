@@ -1,0 +1,14 @@
+[
+    {
+        "label": "Gold",
+        "value": "GOLD"
+    },
+    {
+        "label": "Silver",
+        "value": "SILVER"
+    },
+    {
+        "label": "Platinum",
+        "value": "PLATINUM"
+    }
+]

@@ -1,0 +1,10 @@
+[
+    {
+        "label": "Upgrade",
+        "value": "UPGRADE"
+    },
+    {
+        "label": "Maintain",
+        "value": "MAINTAIN"
+    }
+]

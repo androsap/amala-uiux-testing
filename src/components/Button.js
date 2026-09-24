@@ -32,6 +32,9 @@ class App extends Component {
         let functioncode = prefixmenuname + "_" + actioncode;
         let custommenu = this.props.custommenu;
         let ghost = this.props.ghost;
+        const { visible = true } = this.props;
+
+        if (!visible) return null;
 
         //CHECK PERMISSION 
         if (menucode !== undefined && prefixmenuname !== undefined && actioncode !== undefined) {
@@ -48,7 +51,7 @@ class App extends Component {
                 }
             } else {
                 if ((this.props.permission.usermenu[menucode] && ((this.props.permission.usermenu[menucode][prefixmenuname + "_UPDATE"] && custommenu) || (this.props.permission.usermenu[menucode][prefixmenuname + "_REQUPDTE"] && custommenu) ||
-                    this.props.permission.usermenu[menucode][prefixmenuname + "_CANCEL"] || (this.props.permission.usermenu[menucode][prefixmenuname + "_REQCNCLE"])))) {
+                    this.props.permission.usermenu[menucode][prefixmenuname + "_CANCEL"] || (this.props.permission.usermenu[menucode][prefixmenuname + "_REQCNCLE"] )))) {
                     isrender = this.props.permission.usermenu[menucode][functioncode];
                 } else {
                     isrender = false;

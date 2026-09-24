@@ -64,8 +64,8 @@ class OriDesSelect extends React.Component {
     }
 
     validationRules = (type) => {
-        let validateori = (this.props.validationrules[0]) ? this.props.validationrules[0] : '';
-        let validatedes = (this.props.validationrules[1]) ? this.props.validationrules[1] : '';
+        let validateori = (this.props.validationrules && this.props.validationrules[0]) ? this.props.validationrules[0] : '';
+        let validatedes = (this.props.validationrules && this.props.validationrules[1]) ? this.props.validationrules[1] : '';
         let labelorigin = (this.props.labeltext[0]) ? this.props.labeltext[0] : 'Origin';
         let labeldestination = (this.props.labeltext[1]) ? this.props.labeltext[1] : 'Destination';
         let validation = [];

@@ -33,11 +33,13 @@ class NomineeCardNumberSelect extends React.Component {
         const data = form.getFieldsValue();
         if (visible) {
             let url = api.url.memberredemptionnominee.list;
-            let memberid = this.props.memberID;
+            let criteria = {
+                memberid: this.props.memberID,
+                active: true
+            }
             this.setState({ isLoading: true });
-            RetrieveRequest(url, { memberid }, {}, [], {}, {}).then((response) => {
+            RetrieveRequest(url, criteria, {}, [], {}, {}).then((response) => {
                 if (response.status.responsecode.substring(0, 1) === '0') {
-                    //remapping for base option select2
                     this.setState({
                         data: response.result
                     });
@@ -50,16 +52,12 @@ class NomineeCardNumberSelect extends React.Component {
 
                     var options = response.result.map(({ cardnumber, firstname, lastname }) => {
                         return {
-                            label: `${cardnumber} (${firstname} ${lastname})`,
+                            label: `${cardnumber} (${firstname}${(lastname) ? ` ${lastname}` : ''})`,
                             value: cardnumber
                         };
                     });
                     this.setState({ options: options.filter(x => !dataSource.includes(x.value)), isLoading: false })
-
-                    // this.setState({ options, isLoading: false });
-                } else {
-                    Alert.error(response.status.responsemessage);
-                }
+                } else Alert.error(response.status.responsemessage);
             });
         }
     }

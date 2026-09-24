@@ -4,7 +4,7 @@ import { SelectBase, Alert } from '../Base/BaseComponent';
 import { api } from '../../config/Services';
 import { RetrieveRequest } from '../../utilities/RequestService';
 
-class ModuleSelect extends React.Component {
+class LegendSelect extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -59,4 +59,4 @@ class ModuleSelect extends React.Component {
 
 }
 
-export default ModuleSelect;
+export default LegendSelect;

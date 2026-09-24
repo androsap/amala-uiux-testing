@@ -1,0 +1,10 @@
+[
+    {
+        "label": "Domestic",
+        "value": "DOMESTIC"
+    },
+    {
+        "label": "International",
+        "value": "INTERNATIONAL"
+    }
+]

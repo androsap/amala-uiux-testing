@@ -48,6 +48,10 @@ class RegionSelect extends React.Component {
         });
     }
 
+    getAllOption() {
+        this.props.getAllOption(this.state.options);
+    }
+
     render() {
         return (<SelectBase {...this.props} options={this.state.options} isLoading={this.state.isLoading} />)
     }

@@ -1,0 +1,14 @@
+[
+    {
+        "label": "Adult",
+        "value": "ADULT"
+    },
+    {
+        "label": "Infant",
+        "value": "INFANT"
+    },
+    {
+        "label": "Child",
+        "value": "CHILD"
+    }
+]

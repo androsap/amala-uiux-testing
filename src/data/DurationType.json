@@ -1,0 +1,14 @@
+[
+    {
+        "label": "DOWNGRADE",
+        "value": "DOWNGRADE"
+    },
+    {
+        "label": "MAINTAIN",
+        "value": "MAINTAIN"
+    },
+    {
+        "label": "UPGRADE",
+        "value": "UPGRADE"
+    }
+]

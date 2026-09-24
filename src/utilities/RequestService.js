@@ -22,6 +22,23 @@ export function RetrieveRequest(url, criteria = {}, paging = {}, column = [], so
     return BaseRequest('POST', url, body);
 }
 
+export function RetrieveRequestCustom(url, parameter = {}, paging = {}) {
+    var body = { identity, paging, parameter };
+    return BaseRequest('POST', url, body);
+}
+
+export function handleResponse(response) {
+    const { status, result } = response || {};
+    const { responsecode, responsemessage } = status || {}
+
+    return {
+        status: responsecode === "0000",
+        data: result,
+        code: responsecode,
+        message: responsemessage
+    }
+}
+
 export function SaveRequest(url, data = {}, fileData = '') {
     data = { identity, parameter: { data } };
     if (typeof fileData === 'object') {
@@ -52,7 +69,7 @@ export function DetailRequest(url, data = {}, callback, type, action) {
     }
 }
 
-export function DeleteRequest(url, data = {}, callback, active = null, type) {
+export function DeleteRequest(url, data = {}, callback, active = null, type, withoutConfirm) {
     let label = '';
     if (active === null) { label = 'delete'; }
     else {
@@ -62,16 +79,22 @@ export function DeleteRequest(url, data = {}, callback, active = null, type) {
             label = (active) ? 'deactivate' : 'activate';
         }
     }
-    confirm({
-        title: 'Are you sure to ' + label + ' this data?',
-        onOk() {
-            data = { identity, parameter: { data } };
-            BaseRequest('POST', url, data).then((response) => {
-                callback(response);
-            });
-        },
-        onCancel() { },
-    });
+    data = { identity, parameter: { data } };
+    if (withoutConfirm) {
+        BaseRequest('POST', url, data).then((response) => {
+            callback(response);
+        });
+    } else {
+        confirm({
+            title: 'Are you sure to ' + label + ' this data?',
+            onOk() {
+                BaseRequest('POST', url, data).then((response) => {
+                    callback(response);
+                });
+            },
+            onCancel() { },
+        });
+    }
 }
 
 export function CancelRequest(url, data = {}, callback, title = 'Are you sure ?') {
@@ -88,8 +111,6 @@ export function CancelRequest(url, data = {}, callback, title = 'Are you sure ?'
 }
 
 export function RequestWithoutAuth(url, data = {}) {
-    identity.userid = 'SYSTEM';
-    identity.signature = 'Yzhzlx&#tihzm]w~ZBA]h5AE^4D6(fl;[T~*~0i<GMWyB(2P>o46Pt6sF<)zZ';
     data = { identity, parameter: { data } };
     return BaseRequest('POST', url, data);
 }
@@ -136,15 +157,21 @@ export function extendsRequest(resolve, reject, originalRequest) {
         });
 }
 
-export function BasicRequest(url, data) {
+export function BasicRequest(url, payload, type = "data") {
     const identity = {
-        "reqtxnid": `${uuid()}`,
-        "reqdate": moment().format("YYYY-MM-DD HH:mm:ss"),
-        "appid": "amala",
-        "userid": "SYSTEM",
-        "signature": `${uuid()}`
+        reqtxnid: `${uuid()}`,
+        reqdate: moment().format("YYYY-MM-DD HH:mm:ss"),
+        appid: "amala",
+        userid: "SYSTEM",
+        signature: `${uuid()}`
     };
-    const request = { identity, parameter: { data } };
+
+    const request = {
+        identity,
+        parameter: {
+            [type]: payload
+        }
+    };
     return BaseRequest('POST', url, request);
 }
 

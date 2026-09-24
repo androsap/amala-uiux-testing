@@ -1,0 +1,38 @@
+[
+    {
+        "label": "Manufacture",
+        "value": "Manufacture"
+    },
+    {
+        "label": "Retail and Distributor",
+        "value": "Retail and Distributor"
+    },
+    {
+        "label": "Agricultural and Mining",
+        "value": "Agricultural and Mining"
+    },
+    {
+        "label": "Financial Business",
+        "value": "Financial Business"
+    },
+    {
+        "label": "Business Information",
+        "value": "Business Information"
+    },
+    {
+        "label": "Utilities",
+        "value": "Utilities"
+    },
+    {
+        "label": "Real Estate",
+        "value": "Real Estate"
+    },
+    {
+        "label": "Transportation",
+        "value": "Transportation"
+    },
+    {
+        "label": "Other",
+        "value": "Other"
+    }
+]

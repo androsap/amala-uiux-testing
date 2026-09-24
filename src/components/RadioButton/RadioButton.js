@@ -32,7 +32,7 @@ class RadioButton extends React.Component {
             labelCol: this.props.labelCol,
             wrapperCol: this.props.wrapperCol
         } : null;
-
+        
         return (
             <Form.Item label={this.props.labeltext} className={this.props.className} {...labelPosition}>
                 {getFieldDecorator(this.props.datafield, {

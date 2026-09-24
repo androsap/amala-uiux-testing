@@ -1,0 +1,38 @@
+[
+    {
+        "label": "Earning",
+        "value": "EARNING"
+    },
+    {
+        "label": "Earning Correction",
+        "value": "EARNING_CORRECTION"
+    },
+    {
+        "label": "Spending",
+        "value": "SPENDING"
+    },
+    {
+        "label": "Spending Correction",
+        "value": "SPENDING_CORRECTION"
+    },
+    {
+        "label": "Cancellation",
+        "value": "CANCELLATION"
+    },
+    {
+        "label": "Expiration",
+        "value": "EXPIRATION"
+    },
+    {
+        "label": "Extension",
+        "value": "EXTENSION"
+    },
+    {
+        "label": "Transfer",
+        "value": "TRANSFER"
+    },
+    {
+        "label": "Received",
+        "value": "RECEIVED"
+    }
+]

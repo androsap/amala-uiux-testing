@@ -1,0 +1,14 @@
+[
+    {
+        "label": "AUTO",
+        "value": "AUTO"
+    },
+    {
+        "label": "DESK",
+        "value": "DESK"
+    },
+    {
+        "label": "INTERNET",
+        "value": "INTERNET"
+    }
+]

@@ -38,7 +38,7 @@ class UploadBase extends Component {
     };
 
     componentDidMount() {
-        const { form, datafield, value, blob } = this.props
+        const { value, blob } = this.props
         if (blob) {
             this.setState({
                 File: [blob]
@@ -71,7 +71,7 @@ class UploadBase extends Component {
         const { File } = this.state;
         const upload = {
             onChange: (e) => {
-                const { file, fileList } = e;
+                const { file } = e;
                 const { type, name, size, uid, lastModified, lastModifiedDate } = file;
 
                 const { accept = [], maxSize = 0 } = this.props;

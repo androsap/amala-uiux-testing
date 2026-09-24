@@ -1,0 +1,10 @@
+[
+    {
+        "value": "SUBSCRIBE",
+        "label": "SUBSCRIBE"
+    },
+    {
+        "value": "UNSUBSCRIBE",
+        "label": "UNSUBSCRIBE"
+    }
+]

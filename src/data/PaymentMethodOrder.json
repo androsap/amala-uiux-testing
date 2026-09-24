@@ -1,0 +1,14 @@
+[
+    {
+        "label": "Cash",
+        "value": "CASH"
+    },
+    {
+        "label": "Transfer",
+        "value": "TRANSFER"
+    },
+    {
+        "label": "Mileage",
+        "value": "MILEAGE"
+    }
+]

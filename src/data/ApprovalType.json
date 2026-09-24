@@ -1,0 +1,18 @@
+[
+    {
+        "label": "REDEMPTION",
+        "value": "REDEMPTION"
+    },
+    {
+        "label": "BUY MILEAGE",
+        "value": "BUYMILEAGE"
+    },
+    {
+        "label": "UPDATE",
+        "value": "UPDATE"
+    },
+    {
+        "label": "CANCEL",
+        "value": "CANCEL"
+    }
+]

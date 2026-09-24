@@ -7,11 +7,11 @@ class InputAutoComplete extends Component {
         this.state = {
             dataSource: []
         }
-    }
+    };
 
     validationRules = () => {
         let validation = [];
-        let label = this.props.placeholder ? this.props.placeholder : this.props.labeltext ? this.props.labeltext : 'Field';
+        let label = (this.props.placeholder) ? this.props.placeholder : (this.props.labeltext) ? this.props.labeltext : 'Field';
 
         if (this.props.validationrules) {
             this.props.validationrules.forEach((item, index) => {
@@ -56,6 +56,7 @@ class InputAutoComplete extends Component {
                             else if (valType[1] === "numberdot") validate = { pattern: new RegExp("^[0-9.]*$"), type: "must be number (integer or decimal)" };
                             else if (valType[1] === "numberdotdash") validate = { pattern: new RegExp("^[0-9.-]*$"), type: "must be number, dot, dash" };
                             else if (valType[1] === "email") validate = { pattern: new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/), type: "format is not valid (e.g. email@example.com)" };
+                            else if (valType[1] === "preventsql") validate = { pattern: new RegExp("^(?!-)(?!.*--)[A-Za-z0-9-_.@() ]+(?<!-)$"), type: "may contain vulnerable characters" };
                             validation.push({ pattern: validate.pattern, message: `${label} ${validate.type}` })
                             break;
                         case "type":
@@ -68,20 +69,21 @@ class InputAutoComplete extends Component {
                     }
                 }
                 else if (typeof (item) === "function") {
-                    validation.push({
-                        validator: item
-                    })
+                    validation.push({ validator: item })
                 }
             })
         }
-
         return validation;
-    }
+    };
 
-    handleSearch = ( value )=> {
+    handleSearch = (value) => {
+        if (this.props.createData) {
+            this.props.onSearch(value);
+        };
+
         let dataSource = (!value) ? [] : this.props.dataSource;
         this.setState({ dataSource });
-      };
+    };
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -99,20 +101,19 @@ class InputAutoComplete extends Component {
                 })(
                     <AutoComplete
                         onSearch={this.handleSearch}
-                        dataSource={this.state.dataSource}
+                        dataSource={(this.props.createData) ? this.props.dataSource : this.state.dataSource}
                         name={this.props.datafield}
                         disabled={this.props.disabled}
                         placeholder={this.props.placeholder}
                         onChange={this.props.onChange}
                         onBlur={this.props.onBlur}
-                        filterOption={(inputValue, option) =>
-                            option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                        } />
+                        filterOption={(inputValue, option) => {
+                            return option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                        }} />
                 )}
             </Form.Item>
         )
-    }
-
+    };
 }
 
 export default InputAutoComplete;

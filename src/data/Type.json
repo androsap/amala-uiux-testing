@@ -1,0 +1,14 @@
+[
+    {
+        "label": "Origin-Destination",
+        "value": "Origin-Destination"
+    },
+    {
+        "label": "Origin",
+        "value": "Origin"
+    },
+    {
+        "label": "Destination",
+        "value": "Destination"
+    }
+]

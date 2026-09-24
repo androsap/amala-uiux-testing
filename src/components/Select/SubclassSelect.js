@@ -47,19 +47,26 @@ class SubclassSelect extends React.Component {
                     return result2;
                 });
 
+                var options2 = response.result.map(obj => {
+                    var result2 = {};
+                    result2['label'] = obj.subclasscode ;
+                    result2['value'] = `${obj.subclasscode} ${obj.compartmentcode}`;
+                    return result2;
+                });
+
                 //if options deactive
                 let { subclasscode } = inactive;
                 if (subclasscode) {
                     options = getOptionsDeactive(actionspage, options, subclasscode, subclasscode);
                 }
 
-                this.setState({ options, isLoading: false });
+                this.setState({ options: this.props.custom ? options2 : options, isLoading: false });
             } else {
                 Alert.error(response.status.responsemessage);
             }
         });
     }
-
+    
     render() {
         return (<SelectBase {...this.props} options={this.state.options} isLoading={this.state.isLoading} />)
     }

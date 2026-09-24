@@ -96,17 +96,11 @@ class CountrySelect extends React.Component {
         return result;
     }
 
-    getValue = (countrycode = null, field = null) => {
-        const { options } = this.state;
-        let result = null;
-        let detailoptions = options.filter(obj => obj.value === countrycode)[0];
-        result = (detailoptions && detailoptions[field]) ? detailoptions[field] : null;
-        return result;
-    }
-
     render() {
+        // const placeholder = (this.props.placeholder) ? `Choose ${this.props.placeholder}` : `Choose ${this.props.labeltext}`;
         return (
             <SelectBase {...this.props} style={this.props.style} options={this.state.options} isLoading={this.state.loading} />
+            // <SelectBase {...this.props} options={this.state.options} isLoading={this.state.loading} placeholder={placeholder} />
         )
     }
 

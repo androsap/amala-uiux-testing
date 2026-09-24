@@ -1,0 +1,34 @@
+[
+    {
+        "label": "Perseorangan",
+        "value": "Perseorangan"
+    },
+    {
+        "label": "PT",
+        "value": "PT"
+    },
+    {
+        "label": "CV",
+        "value": "CV"
+    },
+    {
+        "label": "Firma",
+        "value": "Firma"
+    },
+    {
+        "label": "Perum",
+        "value": "Perum"
+    },
+    {
+        "label": "Koperasi",
+        "value": "Koperasi"
+    },
+    {
+        "label": "Yayasan",
+        "value": "Yayasan"
+    },
+    {
+        "label": "Other",
+        "value": "Other"
+    }
+]

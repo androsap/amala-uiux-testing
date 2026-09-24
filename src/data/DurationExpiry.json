@@ -1,0 +1,50 @@
+[
+    {
+        "label": "END_OF_JANUARY",
+        "value": "END_OF_JANUARY"
+    },
+    {
+        "label": "END_OF_FEBRUARY",
+        "value": "END_OF_FEBRUARY"
+    },
+    {
+        "label": "END_OF_MARCH",
+        "value": "END_OF_MARCH"
+    },
+    {
+        "label": "END_OF_APRIL",
+        "value": "END_OF_APRIL"
+    },
+    {
+        "label": "END_OF_MAY",
+        "value": "END_OF_MAY"
+    },
+    {
+        "label": "END_OF_JUNE",
+        "value": "END_OF_JUNE"
+    },
+    {
+        "label": "END_OF_JULY",
+        "value": "END_OF_JULY"
+    },
+    {
+        "label": "END_OF_AUGUST",
+        "value": "END_OF_AUGUST"
+    },
+    {
+        "label": "END_OF_SEPTEMBER",
+        "value": "END_OF_SEPTEMBER"
+    },
+    {
+        "label": "END_OF_OCTOBER",
+        "value": "END_OF_OCTOBER"
+    },
+    {
+        "label": "END_OF_NOVEMBER",
+        "value": "END_OF_NOVEMBER"
+    },
+    {
+        "label": "END_OF_DECEMBER",
+        "value": "END_OF_DECEMBER"
+    }
+]

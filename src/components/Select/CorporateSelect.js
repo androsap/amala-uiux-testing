@@ -13,8 +13,8 @@ class CorporateSelect extends React.Component {
         }
     }
 
-    componentDidMount(){
-        if(this.props.forceRender){
+    componentDidMount() {
+        if (this.props.forceRender) {
             this.retrieveData();
         }
     }
@@ -33,7 +33,7 @@ class CorporateSelect extends React.Component {
                 var options = response.result.map(obj => {
                     var result2 = {};
                     result2['label'] = obj.corporatename;
-                    result2['value'] = obj.corporatecode;
+                    result2['value'] = (this.props.usingCardnumber) ? obj.cardnumber : obj.corporatecode;
                     return result2;
                 });
 
@@ -44,12 +44,16 @@ class CorporateSelect extends React.Component {
                 }
 
                 this.setState({ options, isLoading: false });
-                this.props.corporateOptions(options);
+                if (this.props.corporateOptions) this.props.corporateOptions(options);
             } else {
                 Alert.error(response.status.responsemessage);
             }
         });
-    }
+    };
+
+    handleResetOptions = () => {
+        this.setState({ options: [] })
+    };
 
     render() {
         return (<SelectBase {...this.props} options={this.state.options} isLoading={this.state.isLoading} />)

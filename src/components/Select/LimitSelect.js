@@ -16,6 +16,7 @@ class ActivityCodeSelect extends React.Component {
         let paging = { limit: -1, page: 1 }
         let sort = {};
         let url = api.url.activitycode.limit.list;
+        criteria.active = true;
         let column = [];
         RetrieveRequest(url, criteria, paging, column, sort).then((response) => {
             if (response.status.responsecode === '0000') {

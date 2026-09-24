@@ -54,7 +54,11 @@ class BranchSelect extends React.Component {
                 Alert.error(response.status.responsemessage);
             }
         });
-    }
+    };
+
+    handleResetOptions = () => {
+        this.setState({ options: [] })
+    };
 
     getValue = (branchcode = null, field = null) => {
         const { options } = this.state;

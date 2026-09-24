@@ -33,19 +33,19 @@ class FreeflightCertificateDetails extends Component {
         let ticketnumber = (this.props.ticketnumber) ? this.props.ticketnumber : '-';
         let ticketofficeuser = (this.props.ticketofficeuser) ? this.props.ticketofficeuser : '-';
 
-        const formItemLayout = this.props.fromCancel ? { labelCol: { span: 5 }, wrapperCol: { span: 19 } } : { labelCol: { span: 4 }, wrapperCol: { span: 16 } };
+        const formItemLayout = { labelCol: { span: 4 }, wrapperCol: { span: 16 } };
 
         return (
             <Card title="Certificate Details" bordered={false} className="card-shadow" style={{ marginBottom: 10 }}>
                 {((requestid === undefined && approvalby === undefined) || (requestid === null && approvalby === null)) ? <Row>
-                    <Col xs={24} sm={24} md={24} lg={20} xl={20} style={{ marginLeft: this.props.fromCancel ? -6 : 0 }}>
+                    <Col xs={24} sm={24} md={24} lg={20} xl={20}>
                         <Form.Item {...formItemLayout} label="Certificate ID" style={{ margin: 0 }}>
                             <span className="ant-form-text">{certificateid}</span>
                         </Form.Item>
                     </Col>
                 </Row> : ''}
                 <Row>
-                    <Col xs={24} sm={24} md={24} lg={{ span: 8, pull: (this.props.fromCancel && requestid !== null) ? 1 : 0 }} xl={8}>
+                    <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                         {
                             ((requestid === undefined && approvalby === undefined) || (requestid === null && approvalby === null)) ? '' :
                                 <Form.Item label="Certificate ID" style={{ margin: 0 }}>
@@ -65,13 +65,10 @@ class FreeflightCertificateDetails extends Component {
                             <span className="ant-form-text">{bookingcode}</span>
                         </Form.Item>
                     </Col>
-                    <Col xs={24} sm={24} md={24} lg={{ span: 7, push: (this.props.fromCancel && requestid !== null) ? 1 : 0 }} xl={7}>
-                        {
-                            (requestid === undefined) ? '' : (requestid === null) ? '' :
-                                <Form.Item label="Request ID" style={{ margin: 0 }}>
-                                    <span className="ant-form-text">{requestid}</span>
-                                </Form.Item>
-                        }
+                    <Col xs={24} sm={24} md={24} lg={6} xl={7}>
+                        {(requestid === undefined) ? '' : (requestid === null) ? '' : <Form.Item label="Request ID" style={{ margin: 0 }}>
+                            <span className="ant-form-text">{requestid}</span>
+                        </Form.Item>}
                         <Form.Item label="Issued By" style={{ margin: 0 }}>
                             <span className="ant-form-text">{ticketofficeuser}</span>
                         </Form.Item>
@@ -85,7 +82,7 @@ class FreeflightCertificateDetails extends Component {
                             <span className="ant-form-text">{formatNumber(cashprice)} {cashcurrency !== '-' ? `(${cashcurrency})` : ''}</span>
                         </Form.Item>
                     </Col>
-                    <Col xs={24} sm={24} md={24} lg={{ span: 9, push: (this.props.fromCancel && requestid !== null) ? 1 : 0 }} xl={9}>
+                    <Col xs={24} sm={24} md={24} lg={10} xl={9}>
                         {
                             (approvalby === undefined) ? '' : (approvalby === null) ? '' :
                                 <Form.Item label="Approval By" style={{ margin: 0 }}>
@@ -106,7 +103,7 @@ class FreeflightCertificateDetails extends Component {
                         </Form.Item>
                     </Col>
                 </Row>
-            </Card>
+            </Card >
         )
     }
 }
@@ -135,19 +132,17 @@ class UpgradeCertificateDetails extends Component {
         let paidticketnumber = (this.props.paidticketnumber) ? this.props.paidticketnumber : '-';
         let ticketofficeuser = (this.props.ticketofficeuser) ? this.props.ticketofficeuser : '-';
 
-        const formItemLayout = this.props.fromCancel ? { labelCol: { span: 5 }, wrapperCol: { span: 19 } } : { labelCol: { span: 4 }, wrapperCol: { span: 16 } };
-
         return (
             <Card title="Certificate Details" bordered={false} className="card-shadow" style={{ marginBottom: 10 }}>
                 {((requestid === undefined && approvalby === undefined) || (requestid === null && approvalby === null)) ? <Row>
-                    <Col xs={24} sm={24} md={24} lg={20} xl={20} style={{ marginLeft: this.props.fromCancel ? -6 : 0 }}>
-                        <Form.Item {...formItemLayout} label="Certificate ID" style={{ margin: 0 }}>
+                    <Col xs={24} sm={24} md={24} lg={8} xl={8}>
+                        <Form.Item label="Certificate ID" style={{ margin: 0 }}>
                             <span className="ant-form-text">{certificateid}</span>
                         </Form.Item>
                     </Col>
                 </Row> : ''}
                 <Row>
-                    <Col xs={24} sm={24} md={24} lg={{ span: 8, pull: (this.props.fromCancel && requestid !== null) ? 1 : 0 }} xl={8}>
+                    <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                         {((requestid === undefined && approvalby === undefined) || (requestid === null && approvalby === null)) ? '' :
                             <Form.Item label="Certificate ID" style={{ margin: 0 }}>
                                 <span className="ant-form-text">{certificateid}</span>
@@ -185,10 +180,13 @@ class UpgradeCertificateDetails extends Component {
                             <span className="ant-form-text">{formatNumber(cashprice)} {cashcurrency !== '-' ? `(${cashcurrency})` : ''}</span>
                         </Form.Item>
                     </Col>
-                    <Col xs={24} sm={24} md={24} lg={{ span: 10, push: (this.props.fromCancel && requestid !== null) ? 1 : 0 }} xl={9} >
-                        {(approvalby === undefined) ? '' : (approvalby === null) ? '' : <Form.Item label="Approval By" style={{ margin: 0 }}>
-                            <span className="ant-form-text">{approvalby}</span>
-                        </Form.Item>}
+                    <Col xs={24} sm={24} md={24} lg={10} xl={9}>
+                        {
+                            (approvalby === undefined) ? '' : (approvalby === null) ? '' :
+                                <Form.Item label="Approval By" style={{ margin: 0 }}>
+                                    <span className="ant-form-text">{approvalby}</span>
+                                </Form.Item>
+                        }
                         <Form.Item label="Issued Date" style={{ margin: 0 }}>
                             <span className="ant-form-text">{issueddate}</span>
                         </Form.Item>
@@ -206,7 +204,7 @@ class UpgradeCertificateDetails extends Component {
                         </Form.Item>
                     </Col>
                 </Row>
-            </Card>
+            </Card >
         )
     }
 }

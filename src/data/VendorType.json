@@ -1,0 +1,14 @@
+[
+    {
+        "label": "Courier",
+        "value": "COURIER"
+    },
+    {
+        "label": "Packaging",
+        "value": "PACKAGING"
+    },
+    {
+        "label": "Printing",
+        "value": "PRINTING"
+    }
+]

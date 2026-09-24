@@ -1,0 +1,18 @@
+[
+    {
+        "label": "BEING PROCESSED",
+        "value": "BEING_PROCESSED"
+    },
+    {
+        "label": "UPLOADED",
+        "value": "UPLOADED"
+    },
+    {
+        "label": "DONE",
+        "value": "DONE"
+    },
+    {
+        "label": "ERROR",
+        "value": "ERROR"
+    }
+]

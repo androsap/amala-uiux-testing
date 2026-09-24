@@ -1,104 +1,224 @@
-import React from "react";
-import { Col, Row, Form, Typography, Modal } from "antd";
-import { api } from "../../../config/Services";
-import { BasicRequest } from "../../../utilities/RequestService";
-import { Alert } from "../../../components/Base/BaseComponent";
-import Error404 from '../../error/Error404';
+import React from 'react';
+import { api } from '../../../config/Services';
+import { DetailRequest, DeleteRequest, SaveRequest } from '../../../utilities/RequestService';
+import { Button, Alert, SearchForm, TableBase, TextArea } from '../../../components/Base/BaseComponent';
+import { Form, Divider, Row, Col, Typography, Modal, Spin } from 'antd';
+import { connect } from "react-redux";
+import moment from 'moment';
+import History from './History';
+import PreviewDelete from './Delete';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 const { confirm } = Modal;
 
-class ProfileUpdateOtp extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			isLoading: true,
-			approvalstatus: null,
-			responsecode: "0000",
-			fieldvalue: {
-				recaptchaResponse: null,
-			},
-		};
-	};
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            visibleHistory: false,
+            visibleDelete: false,
+            visible: false,
+            isLoading: false,
+            fieldvalue: {
+                memberid: props.match.params.ID
+            }
+        }
+    }
 
-	componentDidMount() {
-		document.title = "Verification Member Nominee | Loyalty Management System";
-		this.verifyNominee()
-	}
+    componentDidMount() {
+        const { memberid } = this.state.fieldvalue;
+        document.title = "Member Redemption Nominee | Loyalty Management System";
+        this.getCountNominee(memberid);
+    }
 
-	verifyNominee = () => {
-		const token = this.props.location.pathname.split("/")[3];
-		const type = this.props.location.pathname.split("/")[5];
+    getCountNominee(memberid) {
+        const { fieldvalue } = this.state;
+        let url = api.url.memberredemptionnominee.getcountnominee;
+        let data = { memberid };
+        this.setState({ loading: true });
+        DetailRequest(url, data).then((response) => {
+            const { status, result } = response;
+            const { responsecode, responsemessage } = status;
+            if (responsecode === '0000' && result) {
+                let maxcount = result.maxcount;
+                this.setState({
+                    fieldvalue: { ...fieldvalue, maxcount },
+                    loading: false
+                });
+            } else this.setState({ responseCode: responsecode, responseMessage: responsemessage, formrender: false });
+        });
+    }
 
-		confirm({
-			title:
-				type === "1"
-					? "Are you sure to verify this request nominee?"
-					: "Are you sure to reject this request nominee?",
-			onOk: async () => {
-				const url = api.url.member.verifyemail;
-				const response = await BasicRequest(url, {
-					token,
-					action: type === "1" ? "approve" : "reject",
-				});
-				const { responsecode, responsemessage } = response.status;
-				if (responsecode === "0000") {
-					Alert.success(responsemessage);
-					this.setState({ responsecode })
-				} else {
-					Alert.error(responsemessage);
-					this.setState({ responsecode })
-				}
-			},
-			onCancel: () => {
-				this.props.history.goBack();
-			},
-		});
-	};
+    handleSearchForm = (criteria) => {
+        this.componentTable.handleSearchForm(criteria);
+    }
 
-	render() {
-		const { responsecode, isLoading } = this.state;
-		const type = this.props.location.pathname.split("/")[5];
-		const formItemLayout = {
-			labelCol: { xs: { span: 24 }, sm: { span: 8 } },
-			wrapperCol: { xs: { span: 24 }, sm: { span: 16 } },
-		};
+    deleteData(redemptionnomineecode) {
+        let url = api.url.memberredemptionnominee.delete;
+        let data = { redemptionnomineecode };
+        var callback = (response) => {
+            const { responsecode, responsemessage } = response.status;
+            if (responsecode.substring(0, 1) === '0') {
+                let message = (responsemessage) ? responsemessage : 'Selected data has been deleted';
+                Alert.success(message);
+            } else {
+                Alert.error(responsemessage);
+            }
+            this.componentTable.getList();
+        };
+        DeleteRequest(url, data, callback);
+    }
 
-		const mobileScreen = window.screen.width < 600;
-		if (responsecode !== '0000') {
-			return <Error404 {...this.props} type={'member'} />
-		} else {
-			return (
-				<Row>
-					<Form {...formItemLayout}>
-						<Row>
-							<Row type="flex" justify="center">
-								<Col className="gutter-row" xs={24} style={{ textAlign: "center", marginTop: 250 }}>
-									<Row type="flex" justify="center" style={{ margin: mobileScreen ? '30px 0px 0px 0px' : '30px 0px' }}>
-										<img src="https://amala-pdt.garuda-indonesia.com/assets/images/logoGA.png" alt="GA Logo" width={180} style={{ marginRight: (mobileScreen) ? 0 : 80 }} />
-										<img src="https://amala-pdt.garuda-indonesia.com/assets/images/logo.png" alt="Asyst Logo" width={130} />
-									</Row>
-									<Row>
-										<img src="https://amala-pdt.garuda-indonesia.com/uploads/managetier/profile.png" alt="Member Logo" width={180} height={'100%'} style={{ marginBottom: 20 }} />
-									</Row>
-									<Title level={2}>Verification of Member Nominee</Title>
-									<Text strong style={{ marginTop: 20 }}>
-										You are about to {type === "1" ? "verify" : "reject"} member nominee.
-									</Text>
-									<br></br>
-									<Text strong style={{ marginTop: 30 }}>
-										By verifying, I agree to add new member nominee. This action cannot be undone.
-									</Text>
-								</Col>
-							</Row>
-							<Row type="flex" justify="center" style={{ marginTop: 20 }}>
-							</Row>
-						</Row>
-					</Form>
-				</Row >
-			);
-		}
-	}
+    handleOpenModal = (id, firstname, lastname, membersince, type, awardmiles) => {
+        if (id) this.setState({ visibleDelete: true, fieldvalue: { ...this.state.fieldvalue, redemptionnomineecode: id, firstname, lastname, membersince, type, awardmiles } });
+        else this.setState({ visibleHistory: true });
+    };
+
+    handleCancel = () => {
+        this.setState({ visibleHistory: false, visibleDelete: false });
+    };
+
+    handleOk = () => {
+        const { memberid } = this.state.fieldvalue;
+        this.setState({ visibleHistory: false, visibleDelete: false },
+            this.getCountNominee(memberid),
+            this.componentTable.getList())
+    };
+
+    resendData = (redemptionnomineecode) => {
+        const callback = () => {
+            let url = api.url.memberredemptionnominee.resend;
+            let data = { redemptionnomineecode };
+            let message = 'Resending Email Verification...';
+            DetailRequest(url, data).then((response) => {
+                const { responsecode, responsemessage } = response.status;
+                if (responsecode === '0000') {
+                    message = (responsemessage) ? responsemessage : message;
+                    Alert.success(message);
+                } else {
+                    Alert.error(responsemessage);
+                }
+                this.componentTable.getList();
+            });
+        }
+        confirm({
+            title: 'Are you sure to resend email verification?',
+            onOk() {
+                return new Promise((resolve, reject) => {
+                    setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+                    callback();
+                }).catch(() => console.log('Oops errors!'));
+            },
+            onCancel() { },
+        });
+    };
+
+    render() {
+        const { menucode, prefixmenuname, form } = this.props;
+        const tiername = this.props.profile.membertiers.tiername
+        const { visibleHistory, visibleDelete, totalNominee } = this.state;
+        const { memberid, redemptionnomineecode, firstname, lastname, membersince, type, maxcount } = this.state.fieldvalue;
+        const awardmiles = this.props.profile.awardmiles;
+        console.log(totalNominee)
+
+        const configurationSearchForm = [
+            { labeltext: "Card Number", datafield: "cardnumber", type: 'text', placeholder: 'Card Number', showDefaultSearch: true, maxLength: 20, validationrules: ['pattern.number'] },
+            { labeltext: "First Name", datafield: "firstname", type: 'text', placeholder: 'First Name', showDefaultSearch: true },
+            { labeltext: "Last Name", datafield: "lastname", type: 'text', placeholder: 'Last Name', showDefaultSearch: true },
+            { labeltext: "Date of Birth", datafield: "dateofbirth", type: 'datepicker', placeholder: 'Date of Birth', showDefaultSearch: false },
+            { labeltext: "Registered Since", datafield: "membersince", type: 'datepicker', placeholder: 'Registered Since', showDefaultSearch: false }
+        ];
+        const configurationTable = {
+            url: api.url.memberredemptionnominee.list,
+            criteria: { memberid },
+            criteriadata: {
+                multiplestatus: [
+                    {
+                        active: true,
+                        approvalstatus: 'APPROVED'
+                    },
+                    {
+                        active: false,
+                        approvalstatus: 'WAITING_VERIFICATION'
+                    }
+                ]
+            },
+            columns: [
+                {
+                    type: 'html', title: 'Nominee Type', dataIndex: 'nomineetype', sorter: true,
+                    render: (value) => { return (value === 'MEMBER') ? "Member GarudaMiles" : value === 'NONMEMBER' ? "Non-Member GarudaMiles" : '-' }
+                },
+                {
+                    type: 'html', title: 'Card Number', dataIndex: 'cardnumber', sorter: true,
+                    render: (value) => { return value ? value : '-' }
+                },
+                {
+                    type: 'html', title: 'Salutation', dataIndex: 'salutationcode', sorter: true,
+                    render: (value) => { return value ? value : '-' }
+                },
+                { type: 'field', title: 'First Name', dataIndex: 'firstname', sorter: true },
+                {
+                    type: 'html', title: 'Last Name', dataIndex: 'lastname', sorter: true,
+                    render: (value) => { return value ? value : '-' }
+                },
+                {
+                    type: 'html', title: 'Date of Birth', dataIndex: 'dateofbirth', sorter: true,
+                    render: (value) => { return value ? moment(value).format('DD/MM/YYYY') : '-' }
+                },
+                {
+                    type: 'html', title: 'Registered Since', dataIndex: 'membersince', sorter: true,
+                    render: (value) => { return value ? moment(value).format('DD/MM/YYYY') : '-' }
+                },
+                {
+                    type: 'html', title: 'Approval Status', dataIndex: 'approvalstatus', sorter: true,
+                    render: (value) => { return value ? value.replace(/_/g, ' ') : '-' }
+                },
+                {
+                    type: 'html', title: 'Action', dataIndex: 'action', width: '10%',
+                    render: (value, row) => {
+                        return (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <Button className={row.approvalstatus === 'APPROVED' && moment().diff(moment(row.membersince), 'months') >= 6 ? '' : 'hidden'} htmlType="button" size="small" label="Delete" style={{ fontSize: "14px" }} type="danger" menucode={menucode} prefixmenuname={prefixmenuname} actioncode="DELETE" onClick={() => this.handleOpenModal(row.redemptionnomineecode, row.firstname, row.lastname, row.membersince, 'delete', awardmiles)} />
+                                <Button className={row.approvalstatus === 'APPROVED' && moment().diff(moment(row.membersince), 'months') <= 6 ? '' : 'hidden'} htmlType="button" size="small" label="Force Delete" style={{ fontSize: "11px", width: "60px", whiteSpace: 'normal', lineHeight: '1' }} type="danger" menucode={menucode} prefixmenuname={prefixmenuname} actioncode="FRCDELETE" onClick={() => this.handleOpenModal(row.redemptionnomineecode, row.firstname, row.lastname, row.membersince, 'force', awardmiles)} />
+                                <Button className={row.approvalstatus === 'WAITING_VERIFICATION' ? '' : 'hidden'} htmlType="button" size="small" label="Resend Verification" style={{ fontSize: "11px", width: "70px", whiteSpace: 'normal', lineHeight: '1' }} type="primary" menucode={menucode} prefixmenuname={prefixmenuname} actioncode="RSNDMAIL" onClick={() => this.resendData(row.redemptionnomineecode)} />
+                            </div>
+                        );
+                    }
+                }
+
+            ]
+        };
+        return (
+            <React.Fragment>
+                <Modal visible={visibleHistory} title="Deleted Nominee History" onCancel={this.handleCancel} footer={null} destroyOnClose={true} width={1200}>
+                    <History memberid={memberid} handleOk={this.handleOk} />
+                </Modal>
+                <Modal visible={visibleDelete} onCancel={this.handleCancel} footer={null} destroyOnClose={true} style={{ top: 20 }} width={1000} closable={false} maskClosable={false} keyboard={false}>
+                    <PreviewDelete form={form} memberid={memberid} id={redemptionnomineecode} handleOk={this.handleOk} handleCancel={this.handleCancel} firstname={firstname} lastname={lastname} tiername={tiername} membersince={membersince} type={type} awardmiles={awardmiles} />
+                </Modal>
+                <Row>
+                    <Col xs={24} xl={16}>
+                        <Title level={4}>Manage Nominee</Title>
+                    </Col>
+                    <Col xs={24} xl={8} align="right">
+                        <Button htmlType="button" size="default" className="btn-custom-dark-blue" label="Deleted Nominee History" menucode={menucode} prefixmenuname={prefixmenuname} actioncode="ACCESS" onClick={() => this.handleOpenModal()} />
+                        {
+                            (totalNominee < maxcount) ?
+                                <Button type="primary" url={this.props.match.url + '/form'} size="default" label="Add New" menucode={menucode} prefixmenuname={prefixmenuname} actioncode="CREATE" />
+                                : ''
+                        }
+                    </Col>
+                    <Divider />
+                </Row>
+                <SearchForm form={this.props.form} showAdvanceSearch={true} optionsConfiguration={configurationSearchForm} onSubmit={this.handleSearchForm} />
+                <TableBase ref={(e) => { this.componentTable = e }} configuration={configurationTable} afterRequest={(response) => {
+                    const total = response?.paging?.totalrecord || 0;
+                    this.setState({ totalNominee: total });
+                }} />
+            </React.Fragment>
+        );
+    }
 }
 
-export default ProfileUpdateOtp;
+const mapStateToProps = state => ({ ...state });
+export default connect(mapStateToProps)(Form.create()(App));

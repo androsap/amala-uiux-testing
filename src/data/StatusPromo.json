@@ -1,0 +1,22 @@
+[
+    {
+        "label": "REGISTERED",
+        "value": "REGISTERED"
+    },
+    {
+        "label": "VALIDATION",
+        "value": "VALIDATION"
+    },
+    {
+        "label": "SUCCESS",
+        "value": "SUCCESS"
+    },
+    {
+        "label": "NOT_ELIGIBLE",
+        "value": "NOT_ELIGIBLE"
+    },
+    {
+        "label": "CANCELLED",
+        "value": "CANCELLED"
+    }
+]

@@ -13,5 +13,6 @@ export const general_config = {
     default_announcement: 'announcement.content',
     default_announcement_show: 'announcement.show',
     maximum_retro: 'maximum.retro',
-    member_status: 'member.updatestatus'
+    member_status: 'member.updatestatus',
+    notification_tier_maintain : 'notification.tier.maintain'
 }

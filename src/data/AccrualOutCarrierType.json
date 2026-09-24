@@ -1,0 +1,14 @@
+[
+    {
+        "label": "All",
+        "value": "ALL"
+    },
+    {
+        "label": "Marketing",
+        "value": "MARKETING"
+    },
+    {
+        "label": "Operating",
+        "value": "OPERATING"
+    }
+]

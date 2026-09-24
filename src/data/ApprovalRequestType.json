@@ -1,0 +1,10 @@
+[
+    {
+        "label": "Employee",
+        "value": "EMPLOYEE"
+    },
+    {
+        "label": "Travel Coordinator",
+        "value": "TRAVEL_COORDINATOR"
+    }
+]

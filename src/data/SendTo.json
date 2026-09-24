@@ -1,0 +1,14 @@
+[
+    {
+        "label": "Branch Office GA",
+        "value": "BO"
+    },
+    {
+        "label": "Member Address",
+        "value": "HOME"
+    },
+    {
+        "label": "Others",
+        "value": "OTHERS"
+    }
+]

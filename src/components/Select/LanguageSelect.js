@@ -12,7 +12,7 @@ class LanguageSelect extends React.Component {
             isLoading: false
         }
     }
-
+    
     componentDidMount(){
         if(this.props.forceRender){
             this.retrieveData();

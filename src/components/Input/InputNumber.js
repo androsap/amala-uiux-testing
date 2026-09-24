@@ -53,7 +53,8 @@ class InputNumber extends Component {
                         max={this.props.max}
                         style={(this.props.style) ? this.props.style : { width: 'auto' }}
                         formatter={this.props.formatter}
-                        parser={this.props.parser} />
+                        parser={this.props.parser} 
+                        defaultValue={this.props.defaultValue}/>
                 )}
             </Form.Item>
         )

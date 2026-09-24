@@ -20,9 +20,10 @@ class SearchForm extends React.Component {
                     var specialSearch = items.filter(val => val.datafield === key)[0]['specialSearch'];
                     var customformat = items.filter(val => val.datafield === key)[0]['customformat'];
                     var specialSearchLike = items.filter(val => val.datafield === key)[0]['specialSearchLike'];
+                    var specialSearchCustom = items.filter(val => val.datafield === key)[0]['specialSearchCustom'];
                     var normalSearch = items.filter(val => val.datafield === key)[0]['normalSearch'];
-                    var specialSearchArray = items.filter(val => val.datafield === key)[0]['specialSearchArray'];
                     var searchLike = items.filter(val => val.datafield === key)[0]['searchLike'];
+                    var specialSearchArray = items.filter(val => val.datafield === key)[0]['specialSearchArray'];
 
                     if (customformat) {
                         return criteria[key] = customformat(values[key]);
@@ -82,25 +83,25 @@ class SearchForm extends React.Component {
     };
 
     generateField = (item, key) => {
-        var fieldType = (item.type) ? item.type : 'text';
         const validationrules = ['pattern.preventsql', ...(item.validationrules || [])]
+        var fieldType = (item.type) ? item.type : 'text';
         var forceRender = (item.forceRender === false) ? false : true;
 
         switch (fieldType) {
             case 'autocomplete':
-                return <InputAutoComplete form={this.props.form} {...item} key={key} />
+                return <InputAutoComplete form={this.props.form} {...item} key={key} validationrules={validationrules} />
             case 'datepicker':
                 return <DatePickerBase form={this.props.form} {...item} key={key} />;
             case 'select':
                 return <SelectBase form={this.props.form} {...item} key={key} />;
             case 'selectcheckbox':
                 if (item.labeltext) {
-                    return <SelectBaseWithCheckbox form={this.props.form} {...item} key={key} maxTagCount={2} />
+                    return <SelectBaseWithCheckbox ref={(e) => { this.componentLabelCheckbox = e }} form={this.props.form} {...item} key={key} maxTagCount={2} />
                 } else {
                     item.datafield = `${item.datafield}2`;
-                    return <SelectBaseWithCheckbox form={this.props.form} {...item} key={key} maxTagCount={1} />
+                    return <SelectBaseWithCheckbox ref={(e) => { this.componentCheckbox = e }} form={this.props.form} {...item} key={key} maxTagCount={1} />
                 };
-            case 'component':
+                            case 'component':
                 let Component = item.component;
                 let mode = (item.multipleSelect) ? 'multiple' : undefined;
                 this.component = [];
@@ -110,15 +111,20 @@ class SearchForm extends React.Component {
         }
     };
 
-    customClear = () => {
-        this.props.form.resetFields(this.props.customClear)
-    };
+    customClear = e => {
+        this.props.form.resetFields(this.props.customClear);
+    }
 
     handleReset = () => {
         if (this.props.memberCertif) {
             this.props.handleCustomClear();
         } else {
             this.props.form.resetFields();
+            if (this.props.searchWithSelectCheckbox) {
+                if (this.state.advancesearch) {
+                    this.componentLabelCheckbox.handleReset()
+                } else this.componentCheckbox.handleReset();
+            }
         }
     };
 
@@ -149,51 +155,53 @@ class SearchForm extends React.Component {
 
         return (
             <React.Fragment>
-                <Form layout="inline" className={(!this.props.defaultAdvanceSearch) ? "searching-form" : "searching-form hidden"} onSubmit={this.handleSearch} style={{ display: (!advancesearch) ? 'block' : 'none' }} >
-                    {fieldsDefaultSearch}
-                    <span style={{ lineHeight: '40px' }}>
-                        <Button label="Search" size="default" type="primary" htmlType="submit" />
-                        <Button label="Clear" size="default" style={{ marginLeft: 8 }} onClick={this.props.allowCustomClear ? this.customClear : this.handleReset} htmlType="button" />
-                        {(this.props.useDownload) ? <Button htmlType='button' type='primary' icon='download' title={this.props.titleDownload} onClick={() => this.props.handleDownload()} style={{ marginLeft: 8 }} /> : null}
-                    </span>
-                    <Row style={{ display: (this.props.showAdvanceSearch) ? 'block' : 'none' }}>
-                        <a className="btn-advance-search" style={{ fontSize: 12 }} onClick={this.handleAdvanceSearch}>
-                            Advance Search<Icon type={advancesearch ? 'up' : 'down'} />
-                        </a>
-                    </Row>
-                </Form>
-                <Form {...formItemLayout} className="searching-form" style={{ display: ((this.props.showAdvanceSearch && advancesearch) || this.props.defaultAdvanceSearch) ? 'block' : 'none' }} onSubmit={this.handleSearch}>
-                    <Row gutter={24}>
-                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={24} xl={24} style={{ display: (!this.props.defaultAdvanceSearch) ? 'block' : 'none' }}>
+                <Row gutter={24} type={(this.props.justify) ? "flex" : ''} justify={(this.props.justify) ? this.props.justify : 'start'} style={this.props.style}>
+                    <Form layout="inline" className={(!this.props.defaultAdvanceSearch) ? "searching-form" : "searching-form hidden"} onSubmit={this.handleSearch} style={{ display: (!advancesearch) ? 'block' : 'none' }} >
+                        {fieldsDefaultSearch}
+                        <span style={{ lineHeight: '40px' }}>
+                            <Button label="Search" size="default" type="primary" htmlType="submit" />
+                            <Button label="Clear" size="default" style={{ marginLeft: 8 }} onClick={this.props.allowCustomClear ? this.customClear : this.handleReset} htmlType="button" />
+                            {this.props.useDownload ? <Button htmlType='button' type='primary' icon='download' title={this.props.titleDownload} onClick={() => this.props.handleDownload()} /> : null}
+                        </span>
+                        <Row style={{ display: (this.props.showAdvanceSearch) ? 'block' : 'none' }}>
                             <a className="btn-advance-search" style={{ fontSize: 12 }} onClick={this.handleAdvanceSearch}>
                                 Advance Search<Icon type={advancesearch ? 'up' : 'down'} />
                             </a>
-                        </Col>
-                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={12} xl={12}>
-                            {
-                                this.props.optionsConfiguration.map((obj, key) => {
-                                    if (key < totalField) { return this.generateField(obj, key); }
-                                    return null;
-                                })
-                            }
-                        </Col>
-                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={12} xl={12}>
-                            {
-                                this.props.optionsConfiguration.map((obj, key) => {
-                                    if (key >= totalField) { return this.generateField(obj, key); }
-                                    return null;
-                                })
-                            }
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={24} style={{ textAlign: 'right' }}>
-                            <Button label="Search" size="default" type="primary" htmlType="submit"> Search </Button>
-                            <Button label="Clear" size="default" style={{ marginLeft: 8 }} onClick={this.props.allowCustomClear ? this.customClear : this.handleReset} htmlType="button" > Clear </Button>
-                            {(this.props.useDownload) ? <Button htmlType='button' type='primary' icon='download' title={this.props.titleDownload} onClick={() => this.props.handleDownload()} style={{ marginLeft: 8 }} /> : null}
-                        </Col>
-                    </Row>
-                </Form>
+                        </Row>
+                    </Form>
+                    <Form {...formItemLayout} className="searching-form" style={{ display: ((this.props.showAdvanceSearch && advancesearch) || this.props.defaultAdvanceSearch) ? 'block' : 'none' }} onSubmit={this.handleSearch}>
+                        <Row gutter={24}>
+                            <Col className="gutter-row" xs={24} sm={24} md={24} lg={24} xl={24} style={{ display: (!this.props.defaultAdvanceSearch) ? 'block' : 'none' }}>
+                                <a className="btn-advance-search" style={{ fontSize: 12 }} onClick={this.handleAdvanceSearch}>
+                                    Advance Search<Icon type={advancesearch ? 'up' : 'down'} />
+                                </a>
+                            </Col>
+                            <Col className="gutter-row" xs={24} sm={24} md={24} lg={12} xl={12}>
+                                {
+                                    this.props.optionsConfiguration.map((obj, key) => {
+                                        if (key < totalField) { return this.generateField(obj, key); }
+                                        return null;
+                                    })
+                                }
+                            </Col>
+                            <Col className="gutter-row" xs={24} sm={24} md={24} lg={12} xl={12}>
+                                {
+                                    this.props.optionsConfiguration.map((obj, key) => {
+                                        if (key >= totalField) { return this.generateField(obj, key); }
+                                        return null;
+                                    })
+                                }
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={24} style={{ textAlign: 'right' }}>
+                                <Button label="Search" size="default" type="primary" htmlType="submit"> Search </Button>
+                                <Button label="Clear" size="default" style={{ marginLeft: 8 }} onClick={this.props.allowCustomClear ? this.customClear : this.handleReset} htmlType="button" > Clear </Button>
+                                {this.props.useDownload ? <Button htmlType='button' type='primary' icon='download' title={this.props.titleDownload} onClick={() => this.props.handleDownload()} /> : null}
+                            </Col>
+                        </Row>
+                    </Form>
+                </Row>
             </React.Fragment>
         )
     }

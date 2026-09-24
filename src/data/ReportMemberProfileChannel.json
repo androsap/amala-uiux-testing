@@ -1,0 +1,34 @@
+[
+    {
+        "label": "MOBILE",
+        "value": "MOBILE"
+    },
+    {
+        "label": "WEBSITE",
+        "value": "WEBSITE"
+    },
+    {
+        "label": "BO",
+        "value": "BO"
+    },
+    {
+        "label": "CHECKIN",
+        "value": "CHECKIN"
+    },
+    {
+        "label": "PARTNER",
+        "value": "PARTNER"
+    },
+    {
+        "label": "COBRAND",
+        "value": "COBRAND"
+    },
+    {
+        "label": "CHARITY",
+        "value": "CHARITY"
+    },
+    {
+        "label": "CORPORATE",
+        "value": "CORPORATE"
+    }
+]

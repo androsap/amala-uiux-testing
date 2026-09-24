@@ -12,8 +12,8 @@ class ActivityCodeSelect extends React.Component {
         }
     }
 
-    componentDidMount(){
-        if(this.props.customRender){
+    componentDidMount() {
+        if (this.props.customRender) {
             this.retrieveData(this.props.criteria);
         }
     };
@@ -44,6 +44,38 @@ class ActivityCodeSelect extends React.Component {
                 });
 
                 //if options deactive
+                const { activitycode, activityname } = inactivefield;
+                if (activitycode) {
+                    options = getOptionsDeactive(actionspage, options, activitycode, activityname);
+                }
+
+                this.setState({ options });
+            } else {
+                Alert.error(response.status.responsemessage);
+            }
+        });
+    };
+
+    handleResetOptions = () => {
+        this.setState({ options: [] })
+    };
+
+    retrieveWithData(criteria = {}, inactivefield = {}, actionspage = 'create', data = {}) {
+        let paging = { limit: -1, page: 1 }
+        let sort = { activityname: 'asc' };
+        let url = api.url.activitycode.list;
+        criteria.active = true;
+        let column = [];
+        RetrieveRequest(url, criteria, paging, column, sort, data).then((response) => {
+            if (response.status.responsecode.substring(0, 1) === '0') {
+                var options = response.result.map(obj => {
+                    var result2 = {};
+                    result2['label'] = `${obj.activitycode} - ${obj.activityname}`;
+                    result2['value'] = obj.activitycode;
+                    result2['nonairactivitytype'] = obj.nonairactivitytype;
+                    return result2;
+                });
+
                 const { activitycode, activityname } = inactivefield;
                 if (activitycode) {
                     options = getOptionsDeactive(actionspage, options, activitycode, activityname);

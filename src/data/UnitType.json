@@ -1,0 +1,10 @@
+[
+    {
+        "label": "Piece",
+        "value": "PIECE"
+    },
+    {
+        "label": "Package",
+        "value": "PACKAGE"
+    }
+]

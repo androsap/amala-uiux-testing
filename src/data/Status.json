@@ -1,0 +1,10 @@
+[
+    {
+        "label": "ACTIVE",
+        "value": true
+    },
+    {
+        "label": "INACTIVE",
+        "value": false
+    }
+]

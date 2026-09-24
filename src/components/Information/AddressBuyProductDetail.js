@@ -4,7 +4,7 @@ import { Row, Col, Card, Alert as AlertAntd } from 'antd';
 class AddressBuyProductDetail extends React.Component {
 
     render() {
-        const { sendto, countryname, statename, cityname, postalcode, branchname, ticketofficename, address } = this.props.addressInformation;
+        const { sendto, countryname, statename, cityname, postalcode, postalcodeOther, branchname, ticketofficename, address } = this.props.addressInformation;
 
         return (
             <React.Fragment>
@@ -35,9 +35,8 @@ class AddressBuyProductDetail extends React.Component {
                     </Row> : null}
                     {(!sendto) ? null : (sendto !== 'BO') ? <Row style={{ marginBottom: 10 }}>
                         <Col className='gutter-row' xs={24} sm={12} xl={10}><label>Postal Code</label></Col>
-                        <Col className='gutter-row' xs={24} sm={12} xl={14} style={{ textAlign: 'right' }}>{(postalcode) ? postalcode : '-'}</Col>
+                        <Col className='gutter-row' xs={24} sm={12} xl={14} style={{ textAlign: 'right' }}>{(postalcode || postalcodeOther) ? postalcode || postalcodeOther : '-'}</Col>
                     </Row> : null}
-
                 </Card>
             </React.Fragment>
         )

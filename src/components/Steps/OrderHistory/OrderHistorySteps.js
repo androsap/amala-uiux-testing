@@ -83,7 +83,7 @@ class OrderHistorySteps extends Component {
                                     <Col xs={24} style={{ margin: '5px 0' }}><Icon component={ReadyToPickupIcon} /></Col>
                                     <Col xs={24} style={{ margin: '5px 0', color: ((readytopickups[key]) ? '#1890ff' : '') }}>{(readytopickups[key]) ? <Icon type='check' /> : ''} Ready To Pick Up</Col>
                                     <Col xs={24} style={{ margin: '-5px 0' }}>{(readytopickups[key]) ? moment(readytopickups[key].date).format('DD/MM/YYYY') : '-'}</Col>
-                                    <Col xs={24} style={{ margin: '5px 0' }}>{(readytopickups[key]) ? ((readytopickups[key].isoversla) ? <span style={{ color: 'red' }}>Over Sla</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
+                                    <Col xs={24} style={{ margin: '5px 0' }}>{(readytopickups[key]) ? ((readytopickups[key].isoversla) ? <span style={{ color: 'red' }}>Over SLA</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
                                 </Row>
                             </Col>
                             <Col sm={24} md={1} lg={1} style={{ marginTop: 20 }}>
@@ -94,7 +94,7 @@ class OrderHistorySteps extends Component {
                                     <Col xs={24} style={{ margin: '5px 0' }}  ><Icon component={OnDeliveryIcon} style={{ fontSize: '50%' }} /></Col>
                                     <Col xs={24} style={{ margin: '5px 0', color: ((ondeliverys[key]) ? '#1890ff' : '') }}  >{(ondeliverys[key]) ? <Icon type='check' /> : ''} On Delivery</Col>
                                     <Col xs={24} style={{ margin: '-5px 0' }}  >{(ondeliverys[key]) ? moment(ondeliverys[key].date).format('DD/MM/YYYY') : '-'}</Col>
-                                    <Col xs={24} style={{ margin: '5px 0' }}  >{(ondeliverys[key]) ? ((ondeliverys[key].isoversla) ? <span style={{ color: 'red' }}>Over Sla</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
+                                    <Col xs={24} style={{ margin: '5px 0' }}  >{(ondeliverys[key]) ? ((ondeliverys[key].isoversla) ? <span style={{ color: 'red' }}>Over SLA</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
                                 </Row>
                             </Col>
                             <Col sm={24} md={1} lg={1} style={{ marginTop: 20 }}>
@@ -107,7 +107,7 @@ class OrderHistorySteps extends Component {
                                     <Col xs={24} style={{ margin: '5px 0' }}><Icon component={DeliveredIcon} /></Col>
                                     <Col xs={24} style={{ margin: '5px 0', color: ((delivered) ? '#1890ff' : '') }}>{(delivered) ? <Icon type='check' /> : ''} Delivered</Col>
                                     <Col xs={24} style={{ margin: '-5px 0' }}>{(delivered) ? moment(delivered.date).format('DD/MM/YYYY') : '-'}</Col>
-                                    <Col xs={24} style={{ margin: '5px 0' }}>{(delivered) ? ((delivered.isoversla) ? <span style={{ color: 'red' }}>Over Sla</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
+                                    <Col xs={24} style={{ margin: '5px 0' }}>{(delivered) ? ((delivered.isoversla) ? <span style={{ color: 'red' }}>Over SLA</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
                                 </Row>
                             </Col>
                         </Row>
@@ -128,7 +128,7 @@ class OrderHistorySteps extends Component {
                                         <Col xs={24} style={{ margin: '5px 0' }}  ><Icon component={OnDeliveryIcon} style={{ fontSize: '50%' }} /></Col>
                                         <Col xs={24} style={{ margin: '5px 0', color: ((ondeliverys[key]) ? '#1890ff' : '') }}  >{(ondeliverys[key]) ? <Icon type='check' /> : ''} On Delivery</Col>
                                         <Col xs={24} style={{ margin: '-5px 0' }}  >{(ondeliverys[key]) ? moment(ondeliverys[key].date).format('DD/MM/YYYY') : '-'}</Col>
-                                        <Col xs={24} style={{ margin: '5px 0' }}  >{(ondeliverys[key]) ? ((ondeliverys[key].isoversla) ? <span style={{ color: 'red' }}>Over Sla</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
+                                        <Col xs={24} style={{ margin: '5px 0' }}  >{(ondeliverys[key]) ? ((ondeliverys[key].isoversla) ? <span style={{ color: 'red' }}>Over SLA</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
                                     </Row>
                                 </Col>
                                 <Col sm={24} md={1} lg={1} style={{ marginTop: 20 }}>
@@ -141,7 +141,7 @@ class OrderHistorySteps extends Component {
                                         <Col xs={24} style={{ margin: '5px 0' }}><Icon component={DeliveredIcon} /></Col>
                                         <Col xs={24} style={{ margin: '5px 0', color: ((delivered) ? '#1890ff' : '') }}>{(delivered) ? <Icon type='check' /> : ''} Delivered</Col>
                                         <Col xs={24} style={{ margin: '-5px 0' }}>{(delivered) ? moment(delivered.date).format('DD/MM/YYYY') : '-'}</Col>
-                                        <Col xs={24} style={{ margin: '5px 0' }}>{(delivered) ? ((delivered.isoversla) ? <span style={{ color: 'red' }}>Over Sla</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
+                                        <Col xs={24} style={{ margin: '5px 0' }}>{(delivered) ? ((delivered.isoversla) ? <span style={{ color: 'red' }}>Over SLA</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
                                     </Row>
                                 </Col>
                             </Row>
@@ -157,7 +157,7 @@ class OrderHistorySteps extends Component {
                             <Col xs={12} type='flex' align='start'>
                                 <Col xs={24} style={{ margin: '5px 0', color: ((readytopickups[key]) ? '#1890ff' : '') }}>{(readytopickups[key]) ? <Icon type='check' /> : ''} Ready To Pick Up</Col>
                                 <Col xs={24} style={{ margin: '-5px 0' }}>{(readytopickups[key]) ? moment(readytopickups[key].date).format('DD/MM/YYYY') : '-'}</Col>
-                                <Col xs={24} style={{ margin: '5px 0' }}>{(readytopickups[key]) ? ((readytopickups[key].isoversla) ? <span style={{ color: 'red' }}>Over Sla</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
+                                <Col xs={24} style={{ margin: '5px 0' }}>{(readytopickups[key]) ? ((readytopickups[key].isoversla) ? <span style={{ color: 'red' }}>Over SLA</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
                             </Col>
                         </Col>
                         <Col sm={24} style={{ marginBottom: 10 }}>
@@ -167,7 +167,7 @@ class OrderHistorySteps extends Component {
                             <Col xs={12} type='flex' align='start'>
                                 <Col xs={24} style={{ margin: '5px 0', color: ((ondeliverys[key]) ? '#1890ff' : '') }}  >{(ondeliverys[key]) ? <Icon type='check' /> : ''} On Delivery</Col>
                                 <Col xs={24} style={{ margin: '-5px 0' }}  >{(ondeliverys[key]) ? moment(ondeliverys[key].date).format('DD/MM/YYYY') : '-'}</Col>
-                                <Col xs={24} style={{ margin: '5px 0' }}  >{(ondeliverys[key]) ? ((ondeliverys[key].isoversla) ? <span style={{ color: 'red' }}>Over Sla</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
+                                <Col xs={24} style={{ margin: '5px 0' }}  >{(ondeliverys[key]) ? ((ondeliverys[key].isoversla) ? <span style={{ color: 'red' }}>Over SLA</span> : <span style={{ color: 'green' }}>On Time</span>) : ''}</Col>
                             </Col>
                         </Col>
                     </div>

@@ -52,6 +52,10 @@ class SelectBaseWithCheckbox extends Component {
         return validation;
     };
 
+    handleReset = () => {
+        this.setState({ selectedOptions: []});
+    };
+
     render() {
         const { getFieldDecorator } = this.props.form;
         let labelPosition = this.props.labelCol || this.props.wrapperCol ? {

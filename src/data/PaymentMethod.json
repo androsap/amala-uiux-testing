@@ -1,0 +1,26 @@
+[
+    {
+        "label": "Credit Card",
+        "value": "CREDIT_CARD"
+    },
+    {
+        "label": "Debit Card",
+        "value": "DEBIT_CARD"
+    },
+    {
+        "label": "Internet Banking",
+        "value": "INTERNET_BANKING"
+    },
+    {
+        "label": "Cash",
+        "value": "CASH"
+    },
+    {
+        "label": "Transfer Bank",
+        "value": "TRANSFER_BANK"
+    },
+    {
+        "label": "Other",
+        "value": "OTHERS"
+    }
+]

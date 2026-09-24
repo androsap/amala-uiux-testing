@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, Form } from 'antd';
+import { Select, Form, Tooltip } from 'antd';
 
 const { Option } = Select;
 
@@ -36,7 +36,7 @@ class SelectBase extends React.Component {
             wrapperCol: this.props.wrapperCol
         } : null;
         let allowClear = (this.props.allowClear !== undefined) ? this.props.allowClear : true;
-        let placeholder = `${(this.props.noSuffixPlaceholder) ? '' : ((this.props.showArrow || (this.props.showArrow === undefined)) ? 'Choose ' : 'Input ')} ${(this.props.labeltext || this.props.placeholder)}`;
+        let placeholder = `${(this.props.noSuffixPlaceholder) ? '' : ((this.props.showArrow || (this.props.showArrow === undefined)) ? 'Choose ' : 'Input ')} ${(this.props.placeholder) ? this.props.placeholder : this.props.labeltext}`;
 
         return (
             <Form.Item label={this.props.labeltext} className={this.props.className} {...labelPosition} style={this.props.style}>
@@ -67,6 +67,7 @@ class SelectBase extends React.Component {
                             </Option>
                         ))}
                     </Select>,
+
                 )}
             </Form.Item>
         )

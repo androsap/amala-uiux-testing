@@ -1,0 +1,26 @@
+[
+    { 
+        "value": "RANGE", 
+        "label": "Range" 
+    },
+    { 
+        "value": "DATE", 
+        "label": "Date" 
+    },
+    { 
+        "value": "LIFETIME", 
+        "label": "Lifetime" 
+    },
+    { 
+        "value": "MONTH", 
+        "label": "Month" 
+    },
+    { 
+        "value": "YEAR", 
+        "label": "Year" 
+    },
+    { 
+        "value": "AGE", 
+        "label": "Age" 
+    }
+]

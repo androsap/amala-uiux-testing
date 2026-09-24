@@ -1,9 +1,661 @@
 ============================================
-DEVELOPMENT NOTE v1.0.0 - 1 Jul 2026
+DEVELOPMENT NOTE v1.2.114 - 8 JANUARI 2021
 ============================================
-1. Landing Page Profile OTP
+1. Member alias - mba runi
+	- change input validation for alias name
+2. Member trx - mas dika 
+	- hide Changes in Member Account table
+3. User - arischa
+	- add active & inactive action button on data list
+	
 
 ============================================
-DEVELOPMENT NOTE v1.0.1 - 6 Jul 2026
+DEVELOPMENT NOTE v1.2.116 - 12 JANUARI 2021
 ============================================
-1. Landing Page Nominee
+1. User - arischa
+	- form disabled when data inactive
+
+
+============================================
+DEVELOPMENT NOTE v1.2.117 - 14 JANUARI 2021
+============================================
+1. [LMSD-5662] Invalid Name Check
+    - change request response namecheckapproval from object to be array
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.119 - 21 JANUARI 2021
+============================================
+1. Redemption
+	- add field 'Remark' before buy/redeem
+2. Member Non Air Activity
+	- set free back date on field Activity Date 
+
+
+============================================
+DEVELOPMENT NOTE v1.2.120 - 27 JANUARI 2021
+============================================
+1. Reporting (all, except Member Profile)
+    - add field Ticket Office in table and search
+
+
+============================================
+DEVELOPMENT NOTE v1.2.122 - 2 FEBRUARY 2021
+============================================
+1. Reporting buy mileage    
+    - Cardnumber ditampilkan '-' jika kosong/null
+    - Search Ticket Office belum ada default valuenya
+
+============================================
+DEVELOPMENT NOTE v1.2.123 - 3 FEBRUARY 2021
+============================================
+1. Member Transaction
+    - Remapping data based on service
+
+
+============================================
+DEVELOPMENT NOTE v1.2.125 - 25 FEBRUARY 2021
+============================================
+1. Login, Change Password
+    - Enhancement Login if user password expired
+2. Change Password (Profile)
+    - Enhancement password validation
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.126 - 2 MARCH 2021
+============================================
+1. Login, Change Password
+    - Validation & alert info improvements
+2. Mileage Statament Log
+    - New feature
+
+
+============================================
+DEVELOPMENT NOTE v1.2.128 - 3 MARCH 2021
+============================================
+1. Login, Change Password
+    - Validation & alert info improvements
+2. Mileage Statament Log
+    - New feature
+
+
+============================================
+DEVELOPMENT NOTE v1.2.130 - 4 MARCH 2021
+============================================
+1. Login, Change Password
+    - Validation fixing & improvements
+2. Mileage Statement Log
+    - set criteria for data download
+3. Mileage Statament Template
+    - New feature
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.131 - 8 MARCH 2021
+============================================
+1. Login
+    - add captcha
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.132 - 12 MARCH 2021
+============================================
+1. Mileage Statement Template
+2. Reporting (all)
+    - enhancement - add role level
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.134 - 26 MARCH 2021
+============================================
+1. Member Certificate
+    - add action button re-issued
+2. Mileage Statement Log
+    - adjust action after download based on response message
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.138 - 13 APRIL 2021
+============================================
+1. Change Password - Profile & Login
+    - fixing password match
+    
+
+============================================
+DEVELOPMENT NOTE v1.2.140 - 20 APRIL 2021
+============================================
+1. Change Password - Login
+    - fixing password match
+
+
+============================================
+DEVELOPMENT NOTE v1.2.141 - 22 APRIL 2021
+============================================
+1. Redemption Nominee
+
+
+============================================
+DEVELOPMENT NOTE v1.2.142 - 23 APRIL 2021
+============================================
+1. Redemption Buy Award
+    - enhancement at award companion
+    
+
+============================================
+DEVELOPMENT NOTE v1.2.145 - 28 APRIL 2021
+============================================
+1. File Management (Edit in branch master)
+    - Uncomment enum TRANSFER_POINT and ENROLLMENT_FILE 
+2. Member Redemption, Member Certificate (Buy Award)
+    - Change name field Garuda MilesID to Card Number with select component
+    - Re position field Card Number before field salutation
+
+
+============================================
+DEVELOPMENT NOTE v1.2.146 - 29 APRIL 2021
+============================================
+1. Job Catalogue
+
+
+============================================
+DEVELOPMENT NOTE v1.2.147 - 4 MAY 2021
+============================================
+1. Member Activity (Air & Non Air)
+    - get cardnumber from activiydetail
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.148 - 10 MAY 2021
+============================================
+1. Member Cobrand
+    - change enrolldate value from 'today' into current enrolldate 
+
+
+============================================
+DEVELOPMENT NOTE v1.2.149 - 27 MAY 2021
+============================================
+1. Nominee Fee Config
+    - new feature
+
+============================================
+DEVELOPMENT NOTE v1.2.150-153 - 27 MAY 2021
+============================================
+1. Nominee Fee Config [Issues]
+    1. Create : Start date sepertinya bebas kapan aja, kalo sekarang di FE dibatesi start from tomorrow
+    2. Update : Field custom trx editable, tidak perlu di disable
+    3. Search : Dropdown customtrx belum ada optionnya
+    4. Deactivate : Remove validasi required pada field remark
+    5. Activate : Remove field startdate, enddate, remark
+    6. Deactivate all : Remove field startdate, enddate, remark
+    5. Activate : Remove field startdate, enddate, remark
+    6. Deactivate, deactivate all : Remove autofill pada field date
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.154 - 23 JUNE 2021
+============================================
+1. Member Redemption Nominee
+    1. Change label 'Member Since' into 'Registered Since' (on table list & form create)
+    2. Add `Nominee History`
+2. Nominee Fee Config
+    1. Remove button delete and deactivate all
+    2. Remove field date on deactivate; Activate/deactivate just to change status, so just need request `nomineefeeconfigid`
+        => cuma munculkan confirmation popup yes/no aja dengan parameter nomineefeeconfigid
+    3. Add field notes in Update form; optional requirement
+    4. Remove row startdate and enddate on Nominee Fee History
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.155 - 24 JUNE 2021
+============================================
+fixing update
+
+
+============================================
+DEVELOPMENT NOTE v1.2.156 - 06 JULY 2021
+============================================
+1. [LMSD-9707 & LMSD-9710] Redemption Promo Catalog 
+    - New feature
+2. Nominee Fee Config
+    - fixing bug in Add button
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.157 - 09 JULY 2021
+============================================
+1. [LMS-2088] Birthday Bonus 
+    - New feature
+    
+    
+============================================
+DEVELOPMENT NOTE v1.2.157 - 12 JULY 2021
+============================================
+1. [request by tester Wina] Redemption Promo File 
+    - fixing issues & improvements
+2. Fixing bug in Menu.js
+
+
+============================================
+DEVELOPMENT NOTE v1.2.158 - 15 JULY 2021
+============================================
+1. Redemption Promo Buy 
+    - new feature Use Promo
+
+
+============================================
+DEVELOPMENT NOTE v1.2.159 - 15 JULY 2021
+============================================
+1. Bugfix 
+    - birthday bonus and promo catalog
+    
+
+============================================
+DEVELOPMENT NOTE v1.2.160 - 16 JULY 2021
+============================================
+1. Redemption Promo Buy 
+    - updates
+2. File Management
+    - rename all field `Failed` to `Rejected` 
+3. Birthday Bonus
+    - add column `Tier` & `Specific Channel` on data list 
+
+
+============================================
+DEVELOPMENT NOTE v1.2.161 - 21 JULY 2021
+============================================
+1. Bugfix
+    - Dashboard ( change notification to alert )
+
+
+============================================
+DEVELOPMENT NOTE v1.2.162 - 22 JULY 2021
+============================================
+1. Redemption Buy Promo
+    - Add New buy Request promocode and channelapp
+    - Add New Service getPromoUsage Before buy redemption
+
+
+============================================
+DEVELOPMENT NOTE v1.2.163 - 28 JULY 2021
+============================================
+1. Enhancement Award Voucher Template
+
+
+============================================
+DEVELOPMENT NOTE v1.2.163 - 29 JULY 2021
+============================================
+1. Fixing Bug import at file management
+
+
+============================================
+DEVELOPMENT NOTE v1.2.164 - 6 AUG 2021
+============================================
+1. Birthday Bonus
+    - add criteria validforearn:true for Channel
+    - add criteria earntierbonus:true for Partner
+    - enhancement & improvements
+
+
+============================================
+DEVELOPMENT NOTE v1.2.165 - 12 AUG 2021
+============================================
+1. Promo Catalog
+    - Change label 0 to Unlimited
+    - Fixing some bugs
+
+
+============================================
+DEVELOPMENT NOTE v1.2.166 - 12 AUG 2021
+============================================
+1. Promo Catalog
+    - Fixing some bugs
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.167 - 18 AUG 2021
+============================================
+1. Birthday Bonus
+    - Enhancement post-UAT
+    - Add activation feature
+
+
+============================================
+DEVELOPMENT NOTE v1.2.168 - 19 AUG 2021
+============================================
+1. Member Nominee
+    - Re-add router for menu display
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.169 - 27 AUG 2021
+============================================
+1. [LMS-2171] Flight Schedule
+    - Add validforearn and validforredeem
+2. [LMS-2211] Redemption Promo Catalog
+    - Enhancement post-UAT
+    - Move menu from Catalog to Award Management
+
+
+============================================
+DEVELOPMENT NOTE v1.2.170 - 01 SEP 2021
+============================================
+1. [LMS-2157] Merging Account
+    - New feature
+2. Bugfix Dashboard
+    - Change dropdown component
+    - Minor bugfix channel component
+3. [LMS-2209] Redeem Promo 
+    - Enhancement post-UAT
+4. Enhancement Accrual Promo
+    - Update accrual promo corporatesegment
+5. Mileage Statement
+    - Some revision
+6. Enhancement Member Profile Valid Thru
+    - Change value of date in valid thru every card
+    - Add new label 'membership end', change valid thru value & reposition
+
+
+============================================
+DEVELOPMENT NOTE v1.2.171 - 13 SEP 2021
+============================================
+1. Reporting
+    - change date range from 30 days to 3 months
+2. File Management
+    - add new feature download file & download summary
+3. Transfer Mileage 
+    - New feature
+4. File Management [14/10/2021]
+    - Enhancement
+5. Merging Account [14/10/2021]
+    - Change menu position
+    - Take out from suspect duplicate
+    - Change Sider menu into stepper
+    - Add prev and next button
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.172 - 18 SEP 2021
+============================================
+1. Catalog Referral Bonus
+    - new feature
+2. Transfer Mileage
+    - handle null data and Min Awardmiles
+3. Promo Catalog Redemption
+    - enable disabled field when select all (airline, compartment & subclass)
+4. Merging Account
+    - add cardnumber infoe
+5. Subcription History
+    - new feature
+6. Redeem Promo
+    - bugfix
+7. Cobrand Bonus
+    - enhancement disable option first transfer 
+
+    
+============================================
+DEVELOPMENT NOTE v1.2.173 - 12 NOV 2021
+============================================
+1. Enrollment
+    - Add new field Referral Code
+2. Member Profile
+    - Add new field Referral Code, Reference Code
+    - Fixing and ehance actions
+    
+============================================
+DEVELOPMENT NOTE v1.2.175 - 01 DEC 2021
+============================================
+1. Catalog Referral Bonus   
+    1. Reference Get Bonus When dijadikan optional
+    2. Specific Type dihilangkan dari data grid
+    3. Button ACTIVATE/DEACTIVATE dipindah ke dalam page edit (contoh di catalog hobbies)
+    4. membership sama tier dipisah (table)
+    5. request date:
+        "data": {
+            "period": "2033-04-15"
+        }
+
+============================================
+DEVELOPMENT NOTE v1.2.175 - 01 DEC 2021
+============================================
+1. Redemption:
+    - Ditambahkan award name di certificate, halaman cancel 
+    - perlu awardname dari response service, saat ini belum ada
+    - tampilan certificate, certificateidnya dilebarkan agar dalam satu baris
+    - tampilan dibuat satu row dengan tooltip dan fitur copy text
+    - tampilan certificate list, kolom award name dilebarkan
+     - tampilan dibuat satu row dengan tooltip dan fitur copy text
+2. Edit Award Catalog:
+    - voucher text -> certificate text (FE)
+    - card template -> certificate template (FE) 
+3. Login:
+    - Passwordnya ditambahkan mata, agar bisa terlihat (optional) (FE)
+
+
+============================================
+DEVELOPMENT NOTE v1.2.178 - 07 JAN 2022
+============================================
+1. Tier Completion Bonus
+2. Enhance Member Profile for Completion Bonus
+3. Enhance File Management
+4. Enhance Redemption Voucher
+5. Change value Transaction Type in Member Profile-Transaction
+    ~ From RECEIVE to RECEIVED
+6. Enhance Award List Create and Update when category type Transfer
+    ~ Add 2 new field ( Custom Trx and Recipient Card Number )
+7. Enhance Award List - Certificate Text
+    ~ Add new tag Vouchercode Validity
+
+
+============================================
+DEVELOPMENT NOTE v1.2.179 - 20 JAN 2022
+============================================
+1. Development Completion Bonus
+2. Update Redemption Promo and Buy  ( change in master )
+3. Development Redemption Donation
+
+============================================
+DEVELOPMENT NOTE v1.2.180 - 7 FEB 2022
+============================================
+1. Development Retro Claim Manager Star Alliance
+2. Development Retro Claim Approval Star Alliance
+
+============================================
+DEVELOPMENT NOTE v1.2.181 - 24 FEB 2022
+============================================
+1. Development Transfer Mileage Log
+
+============================================
+DEVELOPMENT NOTE v1.2.181 - 8 APR 2022
+============================================
+1. Vendor Management
+
+============================================
+DEVELOPMENT NOTE v1.2.182 - 2 JUN 2022
+============================================
+1. Enhance Tier Duration:
+    - Add new enum "QUALIFICATION" in field Duration Type
+    - Change location hardcode enum from form.js to data json
+
+============================================
+DEVELOPMENT NOTE v1.2.185 - 5 JUL 2022
+============================================
+1. Approval Request
+     - Add new field categorycode and price
+2. My Approval
+     - Add new enum 'Rejected' in filter table list
+     - Add price buy mileage field in view detail
+     - Add new column createdby in history
+3. Approval Request
+     - Fixing isdataactive issue
+     - Add price buy mileage field in view detail
+     - Make notes field mandatory
+     - Add new column createdby in history
+     - Add new airactivity box and checkin out field in view detail
+
+============================================
+DEVELOPMENT NOTE v1.2.186 - 14 JUL 2022
+============================================
+1. Approval Request
+     - Add new field booking code, awardinfo
+     - Add new category request (UPDATE-UPGRADE) 
+2. My Approval
+     - Add new field paid compartment, paid bookingclass and recipient
+     - Add new update approval page for UPDATE-UPGRADE and FREEEFLIGHT
+     - Add certificate detail with voucher
+3. Approval List
+     - Add new field paid compartment, paid bookingclass and recipient
+     - Add certificate detail with voucher
+     - fixing glitch searching in tab update
+
+
+============================================
+DEVELOPMENT NOTE v1.2.187 - 20 SEPT 2022
+============================================
+1. Inventory System
+     - New Features
+2. Member Certificate - Update
+     - Bugfix Update Freeflight
+
+============================================
+DEVELOPMENT NOTE v1.2.188 - 25 OKT 2022
+============================================
+1. Custom Transaction by Role
+
+============================================
+DEVELOPMENT NOTE v1.2.189 - 12 FEB 2022
+============================================
+1. Merging Account Request
+    - New Features
+2. Merging Account Request List
+    - Request list
+    - Finishing and rejecting merge account
+
+============================================
+DEVELOPMENT NOTE v1.2.190 - 20 OKT 2023
+============================================
+1. Enhance Tier Membership
+    - Develop Qualification Period
+
+============================================
+DEVELOPMENT NOTE v1.2.191 - 27 MAR 2024
+============================================
+1. Retro Claim Management
+    - Develop Retro Sky Team In
+
+============================================
+DEVELOPMENT NOTE v1.2.193 - 28 FEB 2025
+============================================
+1. Accrual Non Air
+    - Add Useforpartner
+    - Add usedforbulk
+2. Partner
+    - Add Upload Partner Logo
+
+============================================
+DEVELOPMENT NOTE v1.3.0 - 28 FEB 2026
+============================================
+1. Member Profile
+    - Hide and show information member
+
+============================================
+DEVELOPMENT NOTE v1.3.1 - 2 Maret 2026
+============================================
+1. Member Nominee
+    - New criteria for table nominee
+    - Create Landing Page for confirmation nominee
+
+============================================
+DEVELOPMENT NOTE v1.3.6 - 6 Mei 2026
+============================================
+1. Member Nominee
+    - Delete and force delete nominee
+
+============================================
+DEVELOPMENT NOTE v1.3.7 - 7 Mei 2026
+============================================
+1. Nominee Fee Config
+    - Add Fee miles, IDR, USD
+
+============================================
+DEVELOPMENT NOTE v1.3.8 - 12 Mei 2026
+============================================
+1. Nominee Fee Config
+    - Take out some info and layouting
+
+============================================
+DEVELOPMENT NOTE v1.3.8 - 22 Mei 2026
+============================================
+1. Nominee Create
+    - Add Identity Type NIK or Passport
+
+============================================
+DEVELOPMENT NOTE v1.4.0 - 26 Mei 2026
+============================================
+1. Temuan hasil pentest
+
+============================================
+DEVELOPMENT NOTE v1.5.0 - 29 Mei 2026
+============================================
+1. Obfuscate and encode public secret code
+
+============================================
+DEVELOPMENT NOTE v1.5.1 - 2 Juni 2026
+============================================
+1. Obfuscate and encode fixing
+
+============================================
+DEVELOPMENT NOTE v1.5.2 - 2 Juni 2026
+============================================
+1. Change api to public landing page OTP
+
+============================================
+DEVELOPMENT NOTE v1.5.3 - 3 Juni 2026
+============================================
+1. Change api to public landing page Nominee
+
+============================================
+DEVELOPMENT NOTE v1.5.4 - 4 Juni 2026
+============================================
+1. Add new field to create nominee
+2. Remove hardcode credential
+
+============================================
+DEVELOPMENT NOTE v1.5.5 - 6 Juni 2026
+============================================
+1. Takeout flow hit service withotp in profile-otp
+2. Landing Page Nominee and OTP, create not found page
+
+============================================
+DEVELOPMENT NOTE v1.5.5 - 10 Juni 2026
+============================================
+1. Nominee Total based on new service
+
+============================================
+DEVELOPMENT NOTE v1.5.7 - 2 Juli 2026
+============================================
+1. Note UAT Member Nominee
+
+============================================
+DEVELOPMENT NOTE v1.5.8 - 23 Juli 2026
+============================================
+1. Retro and Member Air Activity
+    Validasi input flight number and ticket number
+
+============================================
+DEVELOPMENT NOTE v1.5.9 - 29 Juli 2026
+============================================
+1. Accrual Rule Air
+    Add Fare Family
+
+============================================
+DEVELOPMENT NOTE v1.5.10 - 1 Agustus 2026
+============================================
+1. Member Activity Air
+    Add Fare Basis Code
+
+
+============================================
+DEVELOPMENT NOTE v1.5.11 - 17 September 2026
+============================================
+1. Add config to handle chunk.js penetration test

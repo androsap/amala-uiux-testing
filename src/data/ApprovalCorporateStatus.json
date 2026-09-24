@@ -1,0 +1,14 @@
+[
+    {
+        "label": "NEW",
+        "value": "NEW"
+    },
+    {
+        "label": "APPROVED",
+        "value": "APPROVE"
+    },
+    {
+        "label": "REJECTED",
+        "value": "REJECT"
+    }
+]

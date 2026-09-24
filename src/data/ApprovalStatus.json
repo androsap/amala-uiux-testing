@@ -1,0 +1,26 @@
+[
+    {
+        "label": "NEW",
+        "value": "NEW"
+    },
+    {
+        "label": "REVISE",
+        "value": "REVISE"
+    },
+    {
+        "label": "READY TO APPROVAL",
+        "value": "READY_TO_APPROVAL"
+    },
+    {
+        "label": "APPROVED",
+        "value": "APPROVED"
+    },
+    {
+        "label": "FAILED",
+        "value": "FAILED"
+    },
+    {
+        "label": "REJECTED",
+        "value": "REJECTED"
+    }
+]

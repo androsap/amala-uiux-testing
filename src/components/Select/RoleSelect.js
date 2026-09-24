@@ -12,6 +12,10 @@ class RoleSelect extends React.Component {
         }
     }
 
+    componentDidMount() {
+        if (this.props.forceRender) this.retrieveData();
+    };
+
     retrieveData(criteria = {}, inactivefield = {}, actionspage = 'create') {
         let paging = { limit: -1, page: 1 }
         let sort = { rolename: 'asc' };

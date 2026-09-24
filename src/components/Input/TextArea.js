@@ -69,6 +69,7 @@ class InputText extends Component {
                 {getFieldDecorator(this.props.datafield, {
                     validateTrigger: 'onBlur',
                     rules: this.validationRules(),
+                    // initialValue: this.props.defaultValue
                 })(
                     <Input.TextArea rows={this.props.maxRows === undefined ? 0 : this.props.maxRows} name={this.props.datafield} disabled={this.props.disabled} placeholder={this.props.placeholder} maxLength={this.props.maxLength} />
                 )}

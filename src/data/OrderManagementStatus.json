@@ -1,0 +1,18 @@
+[
+    {
+        "label": "NOTREADY",
+        "value": "NOTREADY"
+    },
+    {
+        "label": "ACTIVATED",
+        "value": "ACTIVATED"
+    },
+    {
+        "label": "EXPIRED",
+        "value": "EXPIRED"
+    },
+    {
+        "label": "TERMINATE",
+        "value": "TERMINATE"
+    }
+]

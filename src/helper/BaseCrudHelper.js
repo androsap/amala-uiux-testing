@@ -1,10 +1,6 @@
 import BaseHelper from "./BaseHelper";
 
 class BaseCrudHelper extends BaseHelper {
-    constructor(props){
-        super(props);
-    }
-
     static url = ""
 
     static create(url, data, callback) {

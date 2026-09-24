@@ -1,5 +1,4 @@
 import { configuration } from '../config/Config';
-import jwt from 'jwt-simple';
 
 const PERMISSION_KEY = configuration.PERMISSION_KEY;
 
@@ -15,7 +14,7 @@ export function setPermission(rolecode) {
                 permission[result.rolepermission[field]["menuname"]][result.rolepermission[field]["function"][field2]["functionname"]] = result.rolepermission[field]["function"][field2]["grant"];
             }
         }
-        localStorage.setItem(PERMISSION_KEY, jwt.encode(permission, '&&_0x24410e', 'HS256', true));
+        localStorage.setItem(PERMISSION_KEY, JSON.stringify(permission));
         window.location.replace('/');
     });
 }
@@ -50,8 +49,7 @@ function getServicePermission(url, parameter) {
 export function _getUserPermission() {
     // get profile_key
     let permission_key = localStorage.getItem(PERMISSION_KEY);
-    // decode
-    let permission = (permission_key) ? jwt.decode(permission_key, '&&_0x24410e', false, 'HS256') : {};
+    let permission = permission_key ? JSON.parse(permission_key) : {};
     return permission;
 }
 

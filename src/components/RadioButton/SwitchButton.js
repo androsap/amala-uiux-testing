@@ -4,14 +4,14 @@ import { Form, Switch } from 'antd';
 class SwitchButton extends React.Component {
     validationRules = () => {
         let validation = [];
-        let fieldlabel = this.props.placeholder ? this.props.placeholder : this.props.labeltext ? this.props.labeltext : 'Date';
         if (this.props.validationrules) {
             (this.props.validationrules).forEach((item, index) => {
+                let label = this.props.labeltext ? this.props.labeltext : (this.props.placeholder) ? this.props.placeholder : 'Field';
                 if (typeof (item) === "string") {
                     let valType = item.split(".");
                     switch (valType[0]) {
                         case "required":
-                            validation.push({ required: true, message: `${fieldlabel} is Required` })
+                            validation.push({ required: true, message: `${label} is Required` })
                             break;
                         default:
                     }
@@ -33,7 +33,7 @@ class SwitchButton extends React.Component {
             wrapperCol: this.props.wrapperCol
         } : null;
         return (
-            <Form.Item label={this.props.labeltext} className={this.props.className} {...labelPosition}>
+            <Form.Item label={this.props.labeltext} className={this.props.className} {...labelPosition} style={this.props.style}>
                 {getFieldDecorator(this.props.datafield, { valuePropName: 'checked', initialValue: this.props.defaultChecked, rules: this.validationRules(), })(
                     (this.props.checked) ? <Switch checkedChildren="Yes" unCheckedChildren="No" disabled={this.props.disabled} onChange={this.props.onChange} checked={this.props.checked} /> :
                         <Switch checkedChildren="Yes" unCheckedChildren="No" disabled={this.props.disabled} onChange={this.props.onChange} />

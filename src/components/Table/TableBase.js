@@ -1,5 +1,5 @@
 import React from 'react';
-import { RetrieveRequest } from '../../utilities/RequestService';
+import { RetrieveRequest, RetrieveRequestCustom } from '../../utilities/RequestService';
 import { Alert, Pagination } from '../../components/Base/BaseComponent';
 import { Table, Row } from 'antd';
 
@@ -15,6 +15,7 @@ class TableBase extends React.Component {
             criteriadata: this.props.configuration.criteriadata ? this.props.configuration.criteriadata : {},
             sort: this.props.configuration.sort ? this.props.configuration.sort : {},
             loading: false,
+            totalrecord: 0,
             rowsSelection: {
                 selectedRows: this.props.defaultRowSelected ? this.props.defaultRowSelected : [],
                 selectedRowKeys: this.props.defaultRowSelectedKey ? this.props.defaultRowSelectedKey : []
@@ -41,7 +42,21 @@ class TableBase extends React.Component {
         */
         let paging = (this.props.pagination === false) ? { page: 1, limit: -1 } : { page: this.state.current, limit: this.state.pageSize };
         this.setState({ loading: true });
-        RetrieveRequest(url, criteria, paging, column, sort, criteriadata).then((response) => {
+        if (this.props.configuration.retrieveCustom) {
+            let parameter = (this.props.configuration.noColumnRequest) ? { column, criteria, sort } : { column, criteria, sort, data: criteriadata };
+            RetrieveRequestCustom(url, parameter, paging).then((response) => {
+                const { paging, status } = response;
+                const { responsecode } = status;
+                if (responsecode && responsecode.substring(0, 1) === '0') {
+                    let number = (this.props.pagination === false) ? 0 : (paging.page - 1) * paging.limit;
+                    let dataList = response.result.map((obj, key) => { return ({ number: number + (key + 1), ...obj }) });
+                    let totalrecord = (this.props.pagination === false) ? dataList.length : response.paging.totalrecord;
+
+                    this.setState({ dataList, totalrecord });
+                } else Alert.error(response.status.responsemessage);
+                this.setState({ loading: false });
+            });
+        } else RetrieveRequest(url, criteria, paging, column, sort, criteriadata).then((response) => {
             const { paging, status } = response;
             const { responsecode } = status;
             if (responsecode && responsecode.substring(0, 1) === '0') {

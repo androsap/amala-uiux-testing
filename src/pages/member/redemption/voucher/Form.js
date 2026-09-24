@@ -1,0 +1,661 @@
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { SaveRequest, DetailRequest } from '../../../../utilities/RequestService';
+import { api } from '../../../../config/Services';
+import { getProfile } from '../../../../utilities/AuthService';
+import { connect } from "react-redux";
+import { SalutationSelect, Button, Alert, SelectBase, SwitchButton, InputText, InputNumber, ErrorGeneral, NomineeCardNumberSelect } from '../../../../components/Base/BaseComponent';
+import { Form, Row, Col, Divider, Typography, Spin, Modal, Card, Affix, Tooltip, Alert as AlertAnt } from 'antd';
+import { formatNumber, getTravelerType } from '../../../../utilities/Helpers';
+import { TravelerType } from '../../../../data'
+import moment from 'moment';
+import UsePromoNonair from './UsePromoNonair';
+
+const { confirm, warning } = Modal;
+const { Title, Text } = Typography;
+class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: false,
+            formrender: true,
+            fieldvalue: {},
+            fielddisabled: {
+                comparmentfielddisabled: true
+            },
+            requestSearchFlight: {},
+            flightDeparture: [],
+            flightReturn: [],
+            selectFlightDeparture: null,
+            selectFlightReturn: null,
+            mileageDeparture: 0,
+            mileageReturn: 0,
+            totalMileage: 0,
+            isSuccessBuy: false,
+            responseBuyAward: {},
+            awardinfo: {},
+            pricingby: null,
+            fixprice: null,
+            visible: null,
+            cardnumber: this.props.cardnumber,
+            totalafterdiscount: null,
+            discount: null,
+            price: null
+        }
+    }
+
+    componentDidMount() {
+        //title bar on browser
+        document.title = "Redemption Voucher | Loyalty Management System";
+        let awardcode = this.props.match.params.awardcode;
+        this.getDetail(awardcode);
+    }
+
+    getDetail = (awardcode) => {
+        let url = api.url.awardmaster.detailbasicinfo;
+        let data = { awardcode };
+        //call loader
+        DetailRequest(url, data).then((response) => {
+            let { status, result } = response;
+            if (status.responsecode.substring(0, 1) === '0' && result) {
+                let awardinfo = result;
+                let pricingby = (result.pricingby) ? result.pricingby : null;
+
+                if (pricingby === 'FIXED') { this.getFixPrice(awardcode); }
+                this.setState({ awardinfo, pricingby, formrender: true });
+            } else {
+                this.setState({ responseCode: status.responsecode, responseMessage: status.responsemessage, formrender: false });
+            }
+        });
+    }
+
+    getFixPrice = (awardcode) => {
+        let url = api.url.awardmaster.detailfixedprice;
+        let data = { awardcode };
+        //call loader
+        DetailRequest(url, data).then((response) => {
+            let { status, result } = response;
+            if (status.responsecode.substring(0, 1) === '0') {
+                let fixprice = (result.fixprice !== undefined) ? result.fixprice : null;
+
+                this.setState({ fixprice, formrender: true, price: fixprice });
+                this.props.form.setFieldsValue({ price: fixprice });
+            } else {
+                this.setState({ responseCode: status.responsecode, responseMessage: status.responsemessage, formrender: false });
+            }
+        });
+    }
+
+    save2Action = (e) => {
+        e.preventDefault();
+        this.setState({ isLoading: true });
+    }
+
+    saveAction = (e, typeButton) => {
+        e.preventDefault();
+        const callback = (input) => {
+            this.setState({ isLoading: true });
+            //define parameter
+            let memberid = this.props.match.params.ID;
+            const { totalafterdiscount } = this.state;
+            let promocode = (this.state.promocode) ? this.state.promocode : null;
+            let channelapp = "amalabo";
+            let awardcode = this.props.match.params.awardcode;
+            let username = getProfile().username;
+            let issueddate = moment().format("YYYY-MM-DD");
+            let quantity = input.quantity;
+            let bookingcode = (input.bookingcode) ? input.bookingcode : null;
+            let ticketnumber = null;
+            let ticketvaliditydate = null;
+            let freeaward = false;
+            let price = input.price;
+            let totalprice = (totalafterdiscount !== null) ? (Number(totalafterdiscount) * Number(quantity)) : (Number(price) * Number(quantity));
+            // let totalprice = (totalafterdiscount !== null) ? (totalafterdiscount * quantity) : (price * quantity);
+            let redeemairactivity = null;
+            let remark = (input.remark) ? input.remark : null;
+
+            let redeemuser = [];
+            redeemuser.push({
+                name: input[`passenger-name0`],
+                familyname: input[`passenger-familyname0`],
+                salutationcode: input[`passenger-salutationcode0`],
+                memberiduser: (input[`passenger-memberid0`].split(' '))[0],
+                travelertype: input[`passenger-travelertype0`],
+                selfusage: (input.selfusage) ? input.selfusage : false,
+                certificateprice: (totalafterdiscount !== null) ? totalafterdiscount : price,
+                activitydate: null
+            });
+
+            let data = (typeButton === 'BUY') ? { promocode, channelapp, awardcode, issueddate, quantity, memberid, username, bookingcode, ticketnumber, ticketvaliditydate, freeaward, totalprice, redeemuser, redeemairactivity, remark, return: null } : {
+                referenceid: null, memberid: memberid, requesttype: "REDEMPTION", requeststatus: "NEW", approvalby: null, approvaldate: null, remark: null, reqdatas: {
+                    url: 'redemption/transaction/v1.2/buyaward', promocode, channelapp, awardcode, issueddate, quantity, memberid, username, bookingcode, ticketnumber, ticketvaliditydate, freeaward, totalprice, redeemuser, redeemairactivity, remark, return: null, categorycode: this.state.awardinfo.categorycode
+                }
+            };
+
+
+            let url = (typeButton === 'BUY') ? api.url.redemption.buyaward : api.url.requestapproval.create;
+            let message = 'New data has been created';
+            SaveRequest(url, data).then((response) => {
+                const { responsecode, responsemessage } = response.status;
+                if (responsecode.substring(0, 1) === '0') {
+                    message = (responsemessage) ? responsemessage : message;
+                    this.props.refreshHeader()
+                    Alert.success(message);
+
+                    let responseBuyAward = response.result;
+                    if (typeButton === 'BUY') {
+                        this.setState({ isSuccessBuy: true, responseBuyAward })
+                    } else {
+                        this.props.history.push(`/member/form/${memberid}/redemption`);
+                    };
+                } else {
+                    Alert.error(responsemessage);
+                }
+                //hide loader
+                this.setState({ isLoading: false });
+            })
+        }
+
+        this.props.form.validateFieldsAndScroll((err, input) => {
+            const { promocode } = this.state;
+            if (!err) {
+                if (promocode) {
+                    this.getPromoUsage(callback, input);
+                } else {
+                    confirm({
+                        title: `Are you sure ${typeButton.toLowerCase()} this award?`,
+                        onOk(e) {
+                            return new Promise((resolve, reject) => {
+                                setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+                                callback(input);
+                            }).catch(() => console.log('Oops errors!'));
+                        },
+                        onCancel() { },
+                    });
+                }
+            }
+        });
+    };
+
+    handleAirlineChange = (airlinecode) => {
+        let compartmentcode = undefined;
+        let comparmentfielddisabled = (airlinecode) ? false : true;
+        if (airlinecode) {
+            this.componentCompartmentSelect.retrieveData({ airlinecode });
+        }
+        this.props.form.setFieldsValue({ compartmentcode });
+        this.setState({ fielddisabled: { ...this.state.fielddisabled, comparmentfielddisabled } });
+    }
+
+    handleSelectFlight = (event, type = '', key) => {
+        event.preventDefault();
+        const { flightDeparture, flightReturn } = this.state;
+        const { roundtrip } = this.state.requestSearchFlight;
+        let totalMileage = 0;
+
+        if (type === 'DEPARTURE') {
+            let mileageDeparture = (flightDeparture[key]['price']) ? flightDeparture[key]['price'] : 0;
+            totalMileage = mileageDeparture;
+            if (roundtrip) { totalMileage = mileageDeparture + this.state.mileageReturn; }
+            this.setState({ ...this.state, selectFlightDeparture: key, mileageDeparture, totalMileage });
+        } else if (type === 'RETURN') {
+            let mileageDeparture = this.state.mileageDeparture;
+            let mileageReturn = (flightReturn[key]['price']) ? flightReturn[key]['price'] : 0;
+            totalMileage = mileageDeparture + mileageReturn;
+            this.setState({ ...this.state, selectFlightReturn: key, mileageReturn, totalMileage });
+        }
+    }
+
+    handleSelfUsageChange = (selfusage) => {
+        let salutationcode = (selfusage) ? this.props.profile.salutationcode : undefined;
+        let name = (selfusage) ? this.props.profile.firstname : undefined;
+        let familyname = (selfusage) ? this.props.profile.lastname : undefined;
+        let memberid = (selfusage) ? this.props.cardnumber : undefined;
+        let age = moment().diff(moment(this.props.profile.dateofbirth), 'years');;
+        let travelertype = (selfusage) ? getTravelerType(age) : undefined;
+
+        // this.props.form.setFieldsValue({ salutationcode, name, familyname, memberid, travelertype });
+        this.props.form.setFieldsValue({
+            [`passenger-salutationcode0`]: salutationcode,
+            [`passenger-name0`]: name,
+            [`passenger-familyname0`]: familyname,
+            [`passenger-travelertype0`]: travelertype,
+            [`passenger-memberid0`]: ((selfusage) ? `${memberid} (${name} ${familyname})` : undefined)
+        });
+    }
+
+    handleOthersPassenger = (value, data, key) => {
+        if (value) {
+            const { salutationcode, firstname, lastname, dateofbirth } = data;
+            let age = moment().diff(moment(dateofbirth), 'years');
+
+            this.props.form.setFieldsValue({
+                [`passenger-salutationcode${key}`]: salutationcode,
+                [`passenger-name${key}`]: firstname,
+                [`passenger-familyname${key}`]: lastname,
+                [`passenger-travelertype${key}`]: getTravelerType(age)
+            });
+        }
+        else {
+            this.props.form.resetFields([
+                `passenger-salutationcode${key}`,
+                `passenger-name${key}`,
+                `passenger-familyname${key}`,
+                `passenger-travelertype${key}`]
+            );
+        }
+    }
+
+    handleOpenModal = (e) => {
+        e.preventDefault();
+        this.props.form.validateFieldsAndScroll((err) => {
+            if (!err) this.setState({ visible: true });
+        });
+    }
+
+    handleCloseModal = () => {
+        this.setState({ visible: false });
+    };
+
+    handleOk = (codepromo) => {
+        this.setState({ visible: false });
+        this.props.form.setFieldsValue({ codepromo });
+    };
+
+    setStateOfParent = (totalafterdiscount, promocode, catalogname, discount, discounttype, totaldiscount) => {
+        this.setState({ totalafterdiscount, promocode, catalogname, discount, discounttype, totaldiscount });
+    }
+
+    handleCancelPromo = () => {
+        this.setState({
+            promocode: null, summarydiscount: 0, summaryafterdiscount: 0, totaldiscount: null,
+            totalafterdiscount: null, catalogname: null, discount: null, discounttype: null
+        });
+    }
+
+    getPromoUsage = (callback, input) => {
+        const { promocode } = this.state;
+        let memberid = this.props.match.params.ID;
+        let url = api.url.redeempromo.getusagepromo;
+        let promo = [promocode];
+        let data = {
+            "promocode": promo,
+            "memberid": memberid
+        };
+        DetailRequest(url, data).then((response) => {
+            const { status, result } = response;
+            const { responsecode, responsemessage } = status || {};
+            if (responsecode) {
+                this.setState({ promoUsageStatus: result, responsemessage });
+                this.handlePromoUsage(callback, input);
+            } else {
+                Alert.error(responsemessage);
+            }
+        });
+    }
+
+    handlePromoUsage = (callback, input) => {
+        const { promoUsageStatus } = this.state
+        const { promocode } = this.state || {}
+        if (promoUsageStatus[0].status === true) {
+            if (promocode) {
+                this.getPromo(promocode)
+            }
+            confirm({
+                title: `Promo used, Are you sure to buy this award?`,
+                onOk(e) {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+                        callback(input);
+                    }).catch(() => console.log('Oops errors!'));
+                },
+                onCancel() { },
+            });
+        }
+        else {
+            const { promocode } = this.state
+            if (promocode && !promoUsageStatus[0].status) this.handleCancelPromo();
+            warning({ title: 'Promo Unavailable, Normal Price will be Charged.' })
+        }
+    }
+
+    getPromo = (codepromo) => {
+        const { awardinfo, cardnumber } = this.state;
+        let price = this.props.form.getFieldValue('price');
+        let quantity = this.props.form.getFieldValue('quantity')
+        const { awardcode, partnercode, startdate, categorytype } = awardinfo || {};
+        let url = api.url.redeempromo.getpromo;
+        let data = {
+            "promocode": codepromo,
+            "promotype": categorytype,
+            "cardnumber": cardnumber,
+            "channel": "amalabo",
+            "awardcode": awardcode,
+            "total": price,
+            "checkdate": true,
+            "nonairactivity": {
+                "partnercode": partnercode,
+                "activitydate": moment(startdate).format('YYYY-MM-DD'),
+                "quantity": quantity
+            }
+        };
+        this.setState({ isLoading: true });
+        DetailRequest(url, data).then((response) => {
+            const { status, result } = response;
+            const { responsecode, responsemessage } = status || {};
+            if (responsecode === "0000") {
+                var promoData = [];
+                var key = 0;
+                for (const field in result) {
+                    promoData[key] = {};
+                    promoData[key]['discount'] = result[field].discount;
+                    promoData[key]['promocode'] = result[field].promocode;
+                    promoData[key]['catalogname'] = result[field].catalogname;
+                    promoData[key]['discounttype'] = result[field].discounttype;
+                    promoData[key]['totaldiscount'] = result[field].totaldiscount;
+                    promoData[key]['totalafterdiscount'] = result[field].totalafterdiscount;
+                    promoData[key]['enddate'] = (!result[field].unlimitedperiod) ? moment(result[field].enddate).format('DD/MM/YYYY') : "Unlimited";
+                    key++;
+                }
+                this.setState({
+                    discount: promoData[0].discount,
+                    promocode: promoData[0].promocode,
+                    discounttype: promoData[0].discounttype,
+                    totaldiscount: promoData[0].totaldiscount,
+                    summarydiscount: promoData[0].summarydiscount,
+                    totalafterdiscount: promoData[0].totalafterdiscount,
+                    summaryafterdiscount: promoData[0].summaryafterdiscount,
+                    responsemessage
+                });
+            } else {
+                Alert.error(responsemessage);
+                this.handleCancelPromo()
+            }
+            this.setState({ isLoading: false });
+        });
+    }
+
+    handlePromoCode = (e) => {
+        let promocode = this.props.form.getFieldValue('codepromo') ? this.props.form.getFieldValue('codepromo') : null;
+        if (promocode !== null) {
+            if (e.key === 'Enter') {
+                this.getPromo(promocode)
+            }
+        } else {
+            Alert.error('Promocode cannot be empty')
+        }
+    }
+
+    handlePriceBy = (rules, value, callback) => {
+        let price = (this.state.pricingby === 'FIXED') ? this.state.price :
+            ((value < 0) || (value > 99999999999) || (value.match(/^[0-9]+$/) === null)) ? 0 : value
+
+        if (value < 0) {
+            callback('Price must be 0 or greater')
+        } else if (value > 99999999999) {
+            callback('Price must be 99,999,999,999 or smaller')
+        } else if (value.match(/^[0-9]+$/) === null && (value.match(/^[-]+$/) !== null)) {
+            callback('Price must be number')
+        } else if (value === null) { callback('Price is Required') };
+
+        this.setState({ price });
+        callback();
+    }
+
+
+    render() {
+        const formItemLayout = {
+            labelCol: { xs: { span: 24 }, sm: { span: 8 }, },
+            wrapperCol: { xs: { span: 24 }, sm: { span: 16 } }
+        };
+        const { isSuccessBuy, responseBuyAward, formrender, awardinfo, pricingby, promocode, price, visible, isLoading, cardnumber, totalafterdiscount, discount, discounttype, totaldiscount } = this.state;
+        let selfusage = this.props.form.getFieldValue('selfusage');
+        // let totaldiscount = (discount && price && discounttype == "PERCENTAGE") ? (discount / 100) * price : 
+        // (discount && price && discounttype == "MILEAGE")?   null;
+        let quantity = this.props.form.getFieldValue('quantity');
+        quantity = (quantity) ? quantity : 0;
+        let totalMileage = quantity * price;
+        let adultpassenger = 1;
+
+        if (!formrender) {
+            return (<ErrorGeneral {...this.props} message={this.state.responseMessage} />);
+        }
+        let memberid = this.props.match.params.ID;
+        if (isSuccessBuy) {
+            let awardcode = this.props.match.params.awardcode;
+            return (<Redirect to={{ pathname: '/member/form/' + memberid + '/redemption/voucher/' + awardcode + '/certificate', state: { responseBuyAward } }} />)
+        } else {
+            return (
+                <Row>
+                    <Modal visible={visible} title="Use Promo" loading={isLoading} onCancel={this.handleCloseModal} footer={null} destroyOnClose={true} width={680}>
+                        <UsePromoNonair onClose={this.handleOk} {...this.props} setStateOfParent={this.setStateOfParent} awardinfo={awardinfo} quantity={quantity} price={price} pricingby={pricingby} cardnumber={cardnumber} />
+                    </Modal>
+                    <Row>
+                        <Title level={4}><Button url={'/member/form/' + memberid + '/redemption'} shape="circle" icon="left" /> Redemption Voucher</Title>
+                        <Divider />
+                    </Row>
+                    <Spin spinning={this.state.isLoading}>
+                        <Form {...formItemLayout}>
+                            <Row>
+                                {/* <Col className="gutter-row" xs={24} sm={24} md={24} lg={16} xl={16}>
+                                    <Row>
+                                        <Divider>Member Data</Divider>
+                                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
+                                            <SwitchButton wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Self Usage" datafield="selfusage" onChange={this.handleSelfUsageChange} />
+                                            <NomineeCardNumberSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid0"} disabled={selfusage} validationrules={['pattern.number']}
+                                                onChange={this.handleOthersPassenger} indexRow={0} memberID={memberid} adultpassenger={adultpassenger} />
+                                            <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} ref={(e) => { this.componentSalutationSelect = e }} form={this.props.form} labeltext="Salutation" datafield={"passenger-salutationcode0"} disabled />
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Name" datafield={"passenger-name0"} validationrules={['required', 'pattern.letterspace']} maxLength={45} disabled />
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Family Name" datafield={"passenger-familyname0"} validationrules={['pattern.letter']} maxLength={45} disabled />
+                                            <SelectBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Traveler Type" datafield={"passenger-travelertype0"} validationrules={['required']} options={TravelerType} disabled />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Divider>Confirmation</Divider>
+                                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Booking Code" datafield="bookingcode" validationrules={['pattern.alphanumeric']} maxLength={50} />
+                                            <InputNumber wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Quantity" datafield="quantity" validationrules={['required']} min={1} max={5} defaultValue={1} />
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Price" datafield="price" validationrules={(pricingby === 'FIXED') ? ['required'] : ['required', this.handlePriceBy]} disabled={(pricingby === 'FIXED') ? true : false} type='number' />
+                                        </Col>
+
+                                        {(promocode) ?
+                                            <Col className={''} xs={24} sm={24} md={24} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} style={{ paddingLeft: "150px", paddingRight: "90px" }}>
+                                                <AlertAnt showIcon message={`Promo ${promocode} used`} type="success" style={{ marginBottom: '10px' }}
+                                                    closeText="Cancel Promo" afterClose={() => this.handleCancelPromo()} />
+                                            </Col>
+                                            : null
+                                        }
+                                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 16, offset: 3 }} xl={{ span: 16, offset: 3 }} >
+                                            <Row gutter={24} type="flex" justify="left">
+                                                <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 14 }} form={this.props.form} labeltext="Input Promo Code" datafield="codepromo" placeholder="Ex. air00020" maxLength={20} onPressEnter={this.handlePromoCode} disabled={(quantity) ? false : true} />
+                                                <Button htmlType="button" size="medium" label="Promo List" onClick={(e) => this.handleOpenModal(e)} style={{ marginLeft: 8, marginTop: 4, }} />
+                                            </Row>
+                                        </Col>
+                                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Remark" datafield="remark" />
+                                        </Col>
+                                    </Row>
+                                </Col> */}
+                                
+                                {/* ini batas rollback */}
+                                <Col className="gutter-row" xs={24} sm={24} md={24} lg={16} xl={16}>
+                                    <Row>
+                                        <Divider>Member Data</Divider>
+                                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
+                                            <SwitchButton wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Self Usage" datafield="selfusage" onChange={this.handleSelfUsageChange} />
+                                            <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} ref={(e) => { this.componentSalutationSelect = e }} form={this.props.form} labeltext="Salutation" datafield={"passenger-salutationcode0"} disabled={selfusage} />
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Name" datafield={"passenger-name0"} validationrules={['required', 'pattern.letterspace']} maxLength={45} disabled={selfusage} />
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Family Name" datafield={"passenger-familyname0"} validationrules={['required', 'pattern.letter']} maxLength={45} disabled={selfusage} />
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="GarudaMiles ID" datafield={"passenger-memberid0"} disabled={selfusage} validationrules={['pattern.number']} maxLength={16} />
+                                            <SelectBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Traveler Type" datafield={"passenger-travelertype0"} validationrules={['required']} options={TravelerType} disabled={selfusage} />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Divider>Confirmation</Divider>
+                                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Booking Code" datafield="bookingcode" validationrules={['pattern.alphanumeric']} maxLength={50} />
+                                            <InputNumber wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Quantity" datafield="quantity" validationrules={['required']} min={1} max={5} defaultValue={1} />
+                                            {/* <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Price" datafield="price" validationrules={['required', 'pattern.number']} maxLength={11} disabled={(pricingby === 'FIXED') ? true : false} /> */}
+                                            {/* <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Remark" datafield="remark" /> */}
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Price" datafield="price" validationrules={(pricingby === 'FIXED') ? ['required'] : ['required', this.handlePriceBy]} disabled={(pricingby === 'FIXED') ? true : false} type='number' />
+                                        </Col>
+
+                                        {/* (pricingby === 'FIXED') ? */}
+                                        {/* <Col className={(pricingby === 'FIXED') ? '' : 'hidden'} xl={4} md={4} sm={4} style={{ lineHeight: '40px' }}>
+                                            <Button htmlType="button" label="Use Promo" onClick={(e) => this.handleOpenModal(e)} />
+                                        </Col> */}
+                                    </Row>
+                                    <Row gutter={48}>
+                                        {(promocode) ?
+                                            <Col className={''} xs={24} sm={24} md={24} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }} style={{ paddingLeft: "150px", paddingRight: "90px" }}>
+                                                <AlertAnt showIcon message={`Promo ${promocode} used`} type="success" style={{ marginBottom: '10px' }}
+                                                    closeText="Cancel Promo" afterClose={() => this.handleCancelPromo()} />
+                                            </Col>
+                                            : null}
+                                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 21, pull: 3 }} xl={{ span: 21, pull: 3 }}>
+                                            {(pricingby === 'MANUAL') ? null : <Row gutter={48} type="flex" justify="end">
+                                                <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 12 }} form={this.props.form} labeltext="Input Promo Code" datafield="codepromo" placeholder="Ex. air00020" maxLength={20} onPressEnter={this.handlePromoCode} disabled={(quantity) ? false : true} />
+                                                <Button htmlType="button" size="medium" label="Promo List" onClick={(e) => this.handleOpenModal(e)} style={{ marginLeft: 0, marginTop: 5, }} disabled={(quantity) ? false : true} />
+                                            </Row>}
+                                        </Col>
+                                    </Row>
+                                    <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
+                                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Remark" datafield="remark" />
+                                    </Col>
+                                </Col>
+                                {/* ini batas rollback */}
+                                
+                                <Col className="gutter-row" xs={24} sm={24} md={24} lg={8} xl={8} style={{ padding: '0 10px' }}>
+                                    <Affix offsetTop={30}>
+                                        <div>
+                                            <Card title="Award Information" bordered={false} style={{ boxShadow: '0 2px 5px 0 rgba(27,27,27,.1)' }}>
+                                                <Row>
+                                                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                                        Award Code
+                                                    </Col>
+                                                    <Col xs={24} sm={24} md={24} lg={12} xl={12} style={{ textAlign: 'right' }}>
+                                                        <Tooltip title={(awardinfo.awardcode) ? awardinfo.awardcode : '-'}>
+                                                            {(awardinfo.awardcode) ?
+                                                                (awardinfo.awardcode.length > 12) ? awardinfo.awardcode.substring(0, 12) + '...' : awardinfo.awardcode
+                                                                : '-'}
+                                                        </Tooltip>
+                                                    </Col>
+                                                </Row>
+                                                <Row style={{ marginTop: '10px' }}>
+                                                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                                        Award Type
+                                                    </Col>
+                                                    <Col xs={24} sm={24} md={24} lg={12} xl={12} style={{ textAlign: 'right' }}>
+                                                        {(awardinfo.awardtypecode) ? awardinfo.awardtypecode : '-'}
+                                                    </Col>
+                                                </Row>
+                                                <Row style={{ marginTop: '10px' }}>
+                                                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                                        Partner
+                                                    </Col>
+                                                    <Col xs={24} sm={24} md={24} lg={12} xl={12} style={{ textAlign: 'right' }}>
+                                                        {(awardinfo.partnername) ? awardinfo.partnername : '-'}
+                                                    </Col>
+                                                </Row>
+                                            </Card>
+                                            <Card title="Price Details" bordered={false} style={{ boxShadow: '0 2px 5px 0 rgba(27,27,27,.1)', marginTop: '10px' }}>
+                                                <Row>
+                                                    <Col xs={24} sm={24} md={24} lg={16} xl={16}>
+                                                        <Tooltip title={(awardinfo.awardcode) ? awardinfo.awardcode : '-'}>
+                                                            {(awardinfo.awardcode) ?
+                                                                (awardinfo.awardcode.length > 12) ? awardinfo.awardcode.substring(0, 12) + '...' : awardinfo.awardcode : '-'}
+                                                        </Tooltip>
+                                                        <Text style={{ display: 'block', marginLeft: 30, }}>
+                                                            {
+                                                                (totalMileage) ? `@${formatNumber(price)} x ${quantity}` : " "
+                                                            }
+                                                        </Text>
+                                                        <Text style={{ display: 'block' }}>
+                                                            {
+                                                                (promocode) ? `Promo ${promocode}` : " "
+                                                            }
+                                                        </Text>
+                                                        <Text style={{ display: 'block', marginLeft: 30 }}>
+                                                            {(discount && discounttype === "PERCENTAGE" && totaldiscount) ? `(Disc ${discount}%) @${formatNumber(totaldiscount)} x ${quantity}` :
+                                                                (discount && discounttype === "MILEAGE" && totaldiscount) ? `(Disc ${discount} Miles) @${formatNumber(totaldiscount)} x ${quantity}` : ''}
+                                                        </Text>
+                                                    </Col>
+                                                    <Col xs={24} sm={24} md={24} lg={6} xl={8} style={{ textAlign: 'right', }}>
+                                                        {(price && quantity > 0) ? formatNumber(price * quantity) : "-"}
+                                                    </Col>
+                                                    <Col xs={24} sm={24} md={24} lg={6} xl={8} style={{ textAlign: 'right', marginTop: 22 }}>
+                                                        {(totalafterdiscount) ? `- ${formatNumber(totaldiscount * quantity)}` : (!totalafterdiscount) ? "" : ""}
+                                                    </Col>
+                                                    {/* {
+                                                        (totalafterdiscount !== null) ?
+                                                            <div>
+                                                                <Col xs={24} sm={24} md={24} lg={18} xl={18}>
+                                                                    <Text type="secondary">Promo {promocode}</Text>
+                                                                </Col>
+                                                                <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
+                                                                    <Text type="secondary">{formatNumber((totalafterdiscount - price) * quantity)}</Text>
+                                                                </Col>
+                                                            </div> : ''
+                                                    } */}
+                                                </Row>
+                                                <Row style={{ paddingTop: '16px', borderTop: '1px solid #e8e8e8', marginTop: '12px' }}>
+                                                    <Col xs={24} sm={24} md={24} lg={16} xl={16}>
+                                                        <Text strong>Total Mileage</Text>
+                                                    </Col>
+                                                    <Col xs={24} sm={24} md={24} lg={8} xl={8} style={{ textAlign: 'right' }}>
+                                                        {(price && totalafterdiscount !== null) ? <Text strong>{formatNumber(totalafterdiscount * quantity)}</Text> :
+                                                            (price && totalafterdiscount == null && quantity > 0) ? <Text strong>{formatNumber(price * quantity)}</Text> :
+                                                                (price && totalafterdiscount == null && quantity > 0 && (price <= totaldiscount)) ? '0' : '-'}
+                                                    </Col>
+                                                </Row>
+                                            </Card>
+                                            <Button htmlType="button" type="primary" label='Buy' block={true} style={{ marginTop: '20px' }} onClick={(e) => this.saveAction(e, 'BUY')} menucode={'REDEEM'} prefixmenuname={'REDEEM'} actioncode={'BUY'} />
+                                            <Button htmlType="button" type="primary" label='Request' block={true} style={{ marginTop: '20px' }} onClick={(e) => this.saveAction(e, 'REQUEST')} menucode={'REDEEM'} prefixmenuname={'REDEEM'} actioncode={'REQUEST'} />
+                                        </div>
+                                    </Affix>
+                                </Col>
+                            </Row>
+                            {/* <Row>
+                                <Divider>Redemption Summary</Divider>
+                                <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 14, offset: 5 }} xl={{ span: 14, offset: 5 }}>
+                                    <Row style={{ marginBottom: '10px' }}>
+                                        <Divider>Award Information</Divider>
+                                        <Col xs={24} sm={24} md={24} lg={18} xl={18}>
+                                            <Text strong>Award Code</Text>
+                                        </Col>
+                                        <Col xs={24} sm={24} md={24} lg={6} xl={6}>
+                                            {(awardinfo.awardcode) ? awardinfo.awardcode : '-'}
+                                        </Col>
+                                        <Col xs={24} sm={24} md={24} lg={18} xl={18}>
+                                            <Text strong>Award Type</Text>
+                                        </Col>
+                                        <Col xs={24} sm={24} md={24} lg={6} xl={6}>
+                                            {(awardinfo.awardtypecode) ? awardinfo.awardtypecode : '-'}
+                                        </Col>
+                                    </Row>
+                                    <Row style={{ marginBottom: '10px' }}>
+                                        <Divider>Price</Divider>
+                                        <Col xs={24} sm={24} md={24} lg={18} xl={18}>
+                                            <Text strong style={{ fontSize: '16px' }}>Total Mileage</Text> <br />
+                                            <Text type="secondary" style={{ fontSize: '12px' }}>{formatNumber(price)} x {quantity}</Text>
+                                        </Col>
+                                        <Col xs={24} sm={24} md={24} lg={6} xl={6}>
+                                            <Text strong style={{ fontSize: '16px' }}>{formatNumber(totalMileage)}</Text>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            </Row>
+                            <Row gutter={24} type="flex" justify="center" style={{ marginTop: 10 }}>
+                                <Button htmlType="submit" type="primary" label="Buy" />
+                                <Button url={'/member/form/' + this.props.match.params.ID + '/redemption'} htmlType="link" type="default" label="Back" />
+                            </Row> */}
+                        </Form>
+                    </Spin>
+                </Row>
+            )
+        }
+    }
+}
+
+const mapStateToProps = state => ({ ...state });
+export default connect(mapStateToProps)(Form.create()(App));

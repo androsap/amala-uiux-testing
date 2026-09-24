@@ -1,0 +1,14 @@
+[
+    {
+        "value": "COMPLAINT",
+        "label": "Complaint"
+    },
+    {
+        "value": "INFORMATION",
+        "label": "Information"
+    },
+    {
+        "value": "LOG",
+        "label": "Log"
+    }
+]

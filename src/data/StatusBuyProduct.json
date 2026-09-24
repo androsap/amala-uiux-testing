@@ -1,0 +1,58 @@
+[
+    {
+        "label": "Waiting for Payment",
+        "value": "WAITING_FOR_PAYMENT"
+    },
+    {
+        "label": "Ready to Print",
+        "value": "READYTOPRINT"
+    },
+    {
+        "label": "Printing",
+        "value": "PRINTING"
+    },
+    {
+        "label": "Printed",
+        "value": "PRINTED"
+    },
+    {
+        "label": "Ready to Pack",
+        "value": "READYTOPACK"
+    },
+    {
+        "label": "Packaging",
+        "value": "PACKAGING"
+    },
+    {
+        "label": "Packed",
+        "value": "PACKED"
+    },
+    {
+        "label": "Ready to Pickup",
+        "value": "READYTODELIVER"
+    },
+    {
+        "label": "On Delivery",
+        "value": "DELIVERING"
+    },
+    {
+        "label": "Delivered",
+        "value": "SUCCESS"
+    },
+    {
+        "label": "Return",
+        "value": "RETURN"
+    },
+    {
+        "label": "Reorder",
+        "value": "REORDER"
+    },
+    {
+        "label": "Failed",
+        "value": "FAILED"
+    },
+    {
+        "label": "Cancel",
+        "value": "CANCEL"
+    }
+]

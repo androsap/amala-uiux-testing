@@ -39,7 +39,7 @@ class CustomTransaction extends React.Component {
 
                 var options2 = response.result.map(obj => {
                     var result2 = {};
-                    result2['label'] = `${obj.customtrxname} - ${obj.customtrxcode}`;
+                    result2['label'] = `${obj.customtrxcode} - ${obj.customtrxname}`;
                     result2['value'] = obj.customtrxcode;
                     return result2;
                 });

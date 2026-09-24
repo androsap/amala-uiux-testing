@@ -49,7 +49,11 @@ class PartnerSelect extends React.Component {
                 Alert.error(response.status.responsemessage);
             }
         });
-    }
+    };
+
+    handleResetOptions = () => {
+        this.setState({ options: [] })
+    };
 
     render() {
         return (<SelectBase {...this.props} options={this.state.options} isLoading={this.state.isLoading} />)

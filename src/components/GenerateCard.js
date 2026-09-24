@@ -68,7 +68,6 @@ class GenerateCard extends Component {
 			const canvas = this.refs.canvas;
 			const ctx = canvas.getContext('2d');
 			const img = this.refs.image;
-			const date = (membershipid === 'JUN' || membershipid === 'JUNINDV') ? membersince : this.props.validthru;
 
 			img.onload = () => {
 				ctx.drawImage(img, 0, 0, 445, 281);
@@ -78,7 +77,7 @@ class GenerateCard extends Component {
 				ctx.font = "bold 27px monospace";
 				ctx.fillText(this.props.cardnumber, 20, 220);
 				ctx.font = "20px monospace";
-				ctx.fillText(date, 110, 256);
+				ctx.fillText((membershipid === 'JUN') ? membersince : this.props.validthru, 110, 256);
 			}
 		}
 

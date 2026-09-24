@@ -1,0 +1,10 @@
+{
+  "stringArrayEncoding": ["rc4"],
+  "stringArrayThreshold": 1,
+  "controlFlowFlatteningThreshold": 1,
+  "deadCodeInjectionThreshold": 1,
+  "splitStringsChunkLength": 3,
+  "stringArrayWrappersCount": 10,
+  "transformObjectKeys": true,
+  "numbersToExpressions": true
+}

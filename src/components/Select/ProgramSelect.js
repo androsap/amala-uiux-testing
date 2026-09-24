@@ -29,13 +29,20 @@ class ProgramSelect extends React.Component {
                     return result2;
                 });
 
+                var options2 = response.result.map(obj => {
+                    var result2 = {};
+                    result2['label'] = `${obj.partnername} - ${obj.programcode}`;
+                    result2['value'] = obj.programcode;
+                    return result2;
+                });
+
                 //if options deactive
                 const { programcode, programname } = inactivefield;
                 if (programcode) {
                     options = getOptionsDeactive(actionspage, options, programcode, programname);
                 }
 
-                this.setState({ options, isLoading: false });
+                this.setState({ options: this.props.custom ? options2 : options, isLoading: false });
             } else {
                 Alert.error(response.status.responsemessage);
             }

@@ -2,7 +2,6 @@ import { configuration } from '../config/Config';
 import { api } from '../config/Services';
 import { extendsRequest } from './RequestService';
 import axios from 'axios';
-import jwt from 'jwt-simple';
 import moment from 'moment';
 import uuid from 'uuid/v4';
 
@@ -19,7 +18,6 @@ export async function login(input, callback) {
     let username = input.username;
     let password = input.password;
     let recaptcha = input.recaptcha;
-
     let request = {
         identity: {
             "reqtxnid": `${uuid()}`,
@@ -210,33 +208,39 @@ export function extendSession(minutes) {
 export function setProfile(profileData, username, detail) {
     profileData.username = username;
     profileData = { ...detail };
-    // encode
-    let token = jwt.encode(profileData, '&&_0x24410e', 'HS256', true);
-    localStorage.setItem(PROFILE_KEY, token);
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(profileData));
 }
 
 /* Get Profile */
 export function getProfile() {
-    return 'member';
+    // get profile_key
+    let profileKey = localStorage.getItem(PROFILE_KEY);
+    let decoded = profileKey ? JSON.parse(profileKey) : false;
+    return decoded;
 }
 
 /* Set Bearer token API */
 export function setAPIToken(token) {
-    localStorage.setItem(API_TOKEN_KEY, token);
+    localStorage.setItem(API_TOKEN_KEY, JSON.stringify(token));
 }
 
 /* Get Bearer token API */
 export function getAPIToken() {
+    // get profile_key
     let chiperApiToken = localStorage.getItem(API_TOKEN_KEY);
-    return 'Bearer ' + chiperApiToken;
+    let plainApiToken = chiperApiToken ? JSON.parse(chiperApiToken) : false;
+
+    return 'Bearer ' + plainApiToken;
 }
 
 /* Set Role Permission */
 export function setPermission(usermenu) {
-    localStorage.setItem("permission", usermenu);
+    localStorage.setItem("permission", JSON.stringify(usermenu));
 }
 
 /* Get Role Permission */
 export function getPermission() {
-    return localStorage.getItem("permission");
+    let profileKey = localStorage.getItem("permission");
+    let decoded = profileKey ? JSON.parse(profileKey) : false;
+    return decoded;
 }

@@ -31,9 +31,7 @@ class CriteriaTypeCodeSelect extends React.Component {
         ];
         this.setState({ isLoading: true });
         RetrieveRequest(url, criteria, paging, column, sort).then((response) => {
-            const { status } = response || {};
-            const { responsecode } = status || {};
-            if (responsecode==='0000') {
+            if (response.status.responsecode.substring(0, 1) === '0') {
                 //remapping for base option select2
                 var options = response.result.map(obj => {
                     var result2 = {};

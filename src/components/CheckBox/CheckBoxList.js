@@ -34,12 +34,10 @@ class RadioButton extends React.Component {
                     rules: this.validationRules(),
                     initialValue: this.props.initialvalue
                 })(
-                    // <Checkbox.Group options={this.props.options} checked={this.props.checked} />
-
                     <Checkbox.Group onChange={this.props.onChange} style={this.props.style}>
                         <Row>
                             {this.props.options.map((obj) => (
-                                <Col span={8}>
+                                <Col span={(this.props.colSpan) ? this.props.colSpan : 8}>
                                     <Checkbox key={obj.key} value={obj.value}>{obj.label}</Checkbox>
                                 </Col>
                             ))}

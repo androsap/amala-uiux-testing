@@ -1,0 +1,18 @@
+[
+    {
+        "label": "KTP",
+        "value": "KTP"
+    },
+    {
+        "label": "SIM",
+        "value": "SIM"
+    },
+    {
+        "label": "Passport",
+        "value": "Passport"
+    },
+    {
+        "label": "Other",
+        "value": "Other"
+    }
+]

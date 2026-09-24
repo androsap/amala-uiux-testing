@@ -1,0 +1,18 @@
+[
+    {
+        "label": "Card",
+        "value": "CARD"
+    },
+    {
+        "label": "Merchant",
+        "value": "MERCHANT"
+    },
+    {
+        "label": "Envelope",
+        "value": "ENVELOPE"
+    },
+    {
+        "label": "Paper",
+        "value": "PAPER"
+    }
+]

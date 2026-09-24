@@ -84,13 +84,20 @@ class TierSelect extends React.Component {
                     return result2;
                 });
 
+                var options2 = response.result.map(obj => {
+                    var result2 = {};
+                    result2['label'] = `${obj.tiername} - ${obj.tierid}`;
+                    result2['value'] = obj.tierid;
+                    return result2;
+                });
+
                 //if options deactive
                 const { tierid, tiername } = inactivefield;
                 if (tierid) {
                     options = getOptionsDeactive(actionspage, options, tierid, tiername);
                 }
 
-                this.setState({ options, isLoading: false });
+                this.setState({ options: this.props.custom ? options2 : options, isLoading: false });
             } else {
                 Alert.error(response.status.responsemessage);
             }
@@ -125,7 +132,11 @@ class TierSelect extends React.Component {
                 Alert.error(response.status.responsemessage);
             }
         });
-    }
+    };
+
+    handleResetOptions = () => {
+        this.setState({ options: [] })
+    };
 
     render() {
         return (<SelectBase {...this.props} options={this.state.options} isLoading={this.state.isLoading} />)

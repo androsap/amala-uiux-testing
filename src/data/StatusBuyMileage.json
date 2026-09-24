@@ -1,0 +1,14 @@
+[
+    {
+        "label": "Waiting For Payment",
+        "value": "WAITING_FOR_PAYMENT"
+    },
+    {
+        "label": "Success",
+        "value": "SUCCESS"
+    },
+    {
+        "label": "Failed",
+        "value": "FAILED"
+    }
+]

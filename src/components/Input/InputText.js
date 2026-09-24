@@ -34,12 +34,13 @@ class InputText extends Component {
                             else if (valType[1] === "letterslashspace") validate = { pattern: new RegExp("^[a-zA-Z/ ]*$"), type: "must be letter, slash and space" };
                             else if (valType[1] === "letterspace") validate = { pattern: new RegExp("^[a-zA-Z ]*$"), type: "must be letter and space" };
                             else if (valType[1] === "alphabet") validate = { pattern: new RegExp("^[A-Z]*$"), type: "must be uppercase" };
-                            else if (valType[1] === "alphabetnumeric") validate = { pattern: new RegExp("^[A-Z0-9]*$"), type: "must be uppercase" };
+                            else if (valType[1] === "alphabetnumeric") validate = { pattern: new RegExp("^[A-Z0-9]*$"), type: "must be uppercase and number" };
                             else if (valType[1] === "alphabetslash") validate = { pattern: new RegExp("^[A-Z/]*$"), type: "must be uppercase and slash" };
                             else if (valType[1] === "alphabetspace") validate = { pattern: new RegExp("^[A-Z ]*$"), type: "must be uppercase and space" };
                             else if (valType[1] === "alphabetandspace") validate = { pattern: new RegExp("^[A-Za-z ]*$"), type: "must be alphabet and space" };
                             else if (valType[1] === "phonenumber") validate = { pattern: new RegExp("^[+]?[0-9]*$"), type: "can be filled with number only" };
                             else if (valType[1] === "alphanumeric") validate = { pattern: new RegExp("^[A-Za-z0-9]*$"), type: "must be alphanumeric" };
+                            else if (valType[1] === "alphanumericnospaceuppercase") validate = { pattern: new RegExp("^[A-Z-0-9]*$"), type: "must be alphanumeric no space and uppercase" };
                             else if (valType[1] === "seatnumber") validate = { pattern: new RegExp("^(?:[0-9]+[A-Z]|A-Z]+[0-9])[A-Z0-9]*$"), type: "must be alphanumeric combination and uppercase" };
                             else if (valType[1] === "alphanumericspace") validate = { pattern: new RegExp("^[A-Za-z0-9 ]*$"), type: "must be alphanumeric and space" };
                             else if (valType[1] === "alphanumericdot") validate = { pattern: new RegExp("^[A-Za-z0-9.]*$"), type: "must be alphanumeric and dot" };
@@ -95,7 +96,8 @@ class InputText extends Component {
                 {getFieldDecorator(this.props.datafield, {
                     validateTrigger: 'onBlur',
                     rules: this.validationRules(),
-                    initialValue: this.props.defaultValue
+                    initialValue: this.props.defaultValue,
+                    getValueFromEvent: this.props.getValueFromEvent
                 })(
                     <Input
                         name={this.props.datafield}
@@ -104,6 +106,7 @@ class InputText extends Component {
                         maxLength={this.props.maxLength}
                         maxSize={this.props.maxSize}
                         onChange={this.props.onChange}
+                        onFocus={this.props.onFocus}
                         onBlur={this.props.onBlur}
                         prefix={this.props.prefix}
                         suffix={this.props.suffix}

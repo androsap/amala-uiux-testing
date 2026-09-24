@@ -20,6 +20,7 @@ class Layout extends Component {
         let departurepaidbookingclasscode = (flightdeparture && flightdeparture.paidbookingclasscode !== undefined) ? flightdeparture.paidbookingclasscode : null;
         let promocodedepr = (flightdeparture && flightdeparture.promocode !== undefined) ? flightdeparture.promocode : '-';
         let promonamedepr = (flightdeparture && flightdeparture.promoname !== undefined) ? flightdeparture.promoname : '-';
+        let pricedepr = (flightdeparture && flightdeparture.price !== undefined) ? flightdeparture.price : '-';
         let discountamountdepr = (flightdeparture && flightdeparture.discountamount !== undefined) ? flightdeparture.discountamount : '-';
         let statusdepr = (flightdeparture && flightdeparture.status !== undefined) ? jsUcfirst(flightdeparture.status, '_') : '-';
         let departureusecancelfee = (!flightdeparture) ? null : (flightdeparture.usecancelfee === undefined || flightdeparture.usecancelfee === null) ? null : (flightdeparture.usecancelfee) ? <Tag color='green'>Yes</Tag> : <Tag color='red'>No</Tag>;
@@ -36,6 +37,7 @@ class Layout extends Component {
         let returnpaidbookingclasscode = (flightreturn && flightreturn.paidbookingclasscode !== undefined) ? flightreturn.paidbookingclasscode : null;
         let promonameretr = (flightreturn && flightreturn.promoname !== undefined) ? flightreturn.promoname : '-';
         let promocoderetr = (flightreturn && flightreturn.promocode !== undefined) ? flightreturn.promocode : '-';
+        let priceretr = (flightreturn && flightreturn.price !== undefined) ? flightreturn.price : '-';
         let discountamountretr = (flightreturn && flightreturn.discountamount !== undefined) ? flightreturn.discountamount : '-';
         let statusretr = (flightreturn && flightreturn.status !== undefined) ? jsUcfirst(flightreturn.status, '_') : '-';
         let returnusecancelfee = (!flightreturn) ? null : (flightreturn.usecancelfee === undefined || flightreturn.usecancelfee === null) ? null : (flightreturn.usecancelfee) ? <Tag color='green'>Yes</Tag> : <Tag color='red'>No</Tag>;

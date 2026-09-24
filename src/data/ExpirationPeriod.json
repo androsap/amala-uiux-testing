@@ -1,0 +1,14 @@
+[
+    {
+        "label": "Week",
+        "value": "WEEK"
+    },
+    {
+        "label": "Month",
+        "value": "MONTH"
+    },
+    {
+        "label": "Year",
+        "value": "YEAR"
+    }
+]

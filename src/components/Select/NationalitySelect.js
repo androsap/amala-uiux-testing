@@ -12,6 +12,12 @@ class NationalitySelect extends React.Component {
             isLoading: false
         }
     }
+    
+    componentDidMount() {
+        if (this.props.forceRender) {
+            this.retrieveData();
+        }
+    }
 
     retrieveData(criteria = {}, countryinactive = {}, actionspage = 'create') {
         let paging = { limit: -1, page: 1 }
@@ -48,7 +54,11 @@ class NationalitySelect extends React.Component {
                 Alert.error(response.status.responsemessage);
             }
         });
-    }
+    };
+
+    handleResetOptions = () => {
+        this.setState({ options: [] })
+    };
 
     render() {
         return (<SelectBase {...this.props} options={this.state.options} isLoading={this.state.isLoading} />)

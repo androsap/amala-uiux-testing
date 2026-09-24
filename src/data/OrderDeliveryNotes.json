@@ -1,0 +1,10 @@
+[
+    {
+        "value": "RETURN",
+        "label": "RETURN"
+    },
+    {
+        "value": "SUCCESS",
+        "label": "DELIVERED"
+    }
+]

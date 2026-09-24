@@ -1,0 +1,10 @@
+[
+    {
+        "label": "Buy Mileage",
+        "value": "AWARDMILES"
+    },
+    {
+        "label": "Buy to Extend Mileage",
+        "value": "EXPIRED"
+    }
+]

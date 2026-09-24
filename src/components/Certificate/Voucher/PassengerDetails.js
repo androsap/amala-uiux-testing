@@ -23,7 +23,7 @@ class Layout extends Component {
                     <Form.Item label="Family Name" style={{ margin: 0 }}>
                         <span className="ant-form-text">{familyname}</span>
                     </Form.Item>
-                    <Form.Item label="Member ID" style={{ margin: 0 }}>
+                    <Form.Item label="Card Number" style={{ margin: 0 }}>
                         <span className="ant-form-text">{memberid}</span>
                     </Form.Item>
                 </Col>

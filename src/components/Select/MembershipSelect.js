@@ -35,22 +35,33 @@ class MembershipSelect extends React.Component {
                     return result2;
                 });
 
+                var options2 = response.result.map(obj => {
+                    var result2 = {};
+                    result2['label'] = obj.membershipname;
+                    result2['value'] = obj.membershipname;
+                    return result2;
+                });
+
                 //if options deactive
                 const { membershipid, membershipname } = inactivefield;
-                if (membershipid) {
+                if (membershipid, membershipname) {
                     options = getOptionsDeactive(actionspage, options, membershipid, membershipname);
                 }
 
-                if(exclude.length > 0){
-                    options = options.filter(obj => !exclude.includes(obj.value) );
+                if (exclude.length > 0) {
+                    options = options.filter(obj => !exclude.includes(obj.value));
                 }
 
-                this.setState({ options, isLoading: false });
+                this.setState({ options: this.props.custom ? options2 : options, isLoading: false });
             } else {
                 Alert.error(response.status.responsemessage);
             }
         });
     }
+
+    handleResetOptions = () => {
+        this.setState({ options: [] })
+    };
 
     render() {
         return (<SelectBase {...this.props} options={this.state.options} isLoading={this.state.isLoading} />)

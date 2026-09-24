@@ -41,3 +41,21 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.field-focus-alert {
+  animation: field-focus-alert-in 2s ease-in-out;
+  transform-origin: bottom center;
+}
+
+@keyframes field-focus-alert-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+    max-height: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 60px;
+  }
+}

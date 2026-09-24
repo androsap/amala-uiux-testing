@@ -1,4 +1,3 @@
-export { default as EmailChecklist} from './EmailChecklist';
 export { default as PaymentSuccess} from './PaymentSuccess';
 export { default as Ready} from './Ready';
 export { default as Printing} from './Printing';
@@ -9,3 +8,4 @@ export { default as Delivered} from './Delivered';
 export { default as OnDelivery} from './OnDelivery';
 export { default as Return} from './Return';
 export { default as Reorder} from './Reorder';
+export { default as EmailChecklist} from './EmailChecklist';

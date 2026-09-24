@@ -1,0 +1,27 @@
+{
+  "rewrites": [
+    { "source": "/amala/:path*", "destination": "https://amala-api-pdt.garuda-indonesia.com/amala/:path*" },
+    { "source": "/api/:path*", "destination": "https://amala-api-pdt.garuda-indonesia.com/api/:path*" },
+    { "source": "/lms/:path*", "destination": "https://amala-api-pdt.garuda-indonesia.com/lms/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/meta.json",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }]
+    },
+    {
+      "source": "/index.html",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Content-Security-Policy", "value": "frame-ancestors 'self';" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "origin" }
+      ]
+    }
+  ]
+}

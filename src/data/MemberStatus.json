@@ -1,0 +1,46 @@
+[
+    {
+        "value": "ACTIVE",
+        "label": "ACTIVE"
+    },
+    {
+        "value": "INACTIVEEMAIL",
+        "label": "INACTIVE EMAIL"
+    },
+    {
+        "value": "GRACEPERIOD",
+        "label": "GRACE PERIOD"
+    },
+    {
+        "value": "MERGED",
+        "label": "MERGED"
+    },
+    {
+        "value": "DECEASED",
+        "label": "DECEASED"
+    },
+    {
+        "value": "TEST",
+        "label": "TEST"
+    },
+    {
+        "value": "SUSPECTEDFRAUD",
+        "label": "SUSPECTED FRAUD"
+    },
+    {
+        "value": "FRAUD",
+        "label": "FRAUD"
+    },
+    {
+        "value": "TERMINATED",
+        "label": "TERMINATED"
+    },
+    {
+        "value": "SUSPECTDUPLICATE",
+        "label": "SUSPECT DUPLICATE"
+    },
+    {
+        "value": "DUPLICATE",
+        "label": "DUPLICATE"
+    }
+]

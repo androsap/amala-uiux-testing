@@ -42,10 +42,14 @@ class ChannelSelect extends React.Component {
         });
     }
 
+    getChannelApplicationId = (channelid) => {
+        const { data } = this.state;
+        const found = data.find(item => item.channelid === channelid);
+        return found ? found.channelapplicationid : null;
+    };
+
     render() {
         return (<SelectBase {...this.props} options={this.state.options} isLoading={this.state.isLoading} />)
     }
-
 }
-
 export default ChannelSelect;

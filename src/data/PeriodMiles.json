@@ -1,0 +1,10 @@
+[
+    {
+        "label": "Existing Period",
+        "value": "EXISTING_PERIOD"
+    },
+    {
+        "label": "New Period",
+        "value": "NEW_PERIOD"
+    }
+]

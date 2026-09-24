@@ -1,0 +1,27 @@
+.quote-box {
+    margin: 16px 0;
+    padding: 16px;
+    background-color: #ffffff;
+    border-left: 4px solid #ffa39e;
+    font-family: monospace;
+    color: #ffffff;
+    white-space: pre-wrap;
+    border-radius: 4px;
+    max-width: 600px;
+  }
+  
+  .quote-box-success {
+    margin: 16px 0;
+    padding: 16px;
+    background-color: #ffffff;
+    border-left: 4px solid #F5FCEC;
+    font-family: monospace;
+    color: #ffffff;
+    white-space: pre-wrap;
+    border-radius: 4px;
+    max-width: 600px;
+  }
+  
+  /* .ant-result-icon {
+    display: none;
+  } */
