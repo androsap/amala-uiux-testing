@@ -57,6 +57,9 @@ class CacheBuster extends React.Component {
           // console.log(`You already have the latest version - ${latestVersion}. No cache refresh needed.`);
           this.setState({ loading: false, isLatestVersion: true });
         }
+      })
+      .catch(() => {
+        this.setState({ loading: false, isLatestVersion: true });
       });
   }
 
