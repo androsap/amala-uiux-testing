@@ -5,7 +5,6 @@ import { EmailChecklist } from "../../../components/IconSVG/index";
 import { BasicRequest } from "../../../utilities/RequestService";
 import { setIdToken, setTimeToken, setProfile, setAPIToken } from "../../../utilities/AuthService";
 import { Alert, Button, MemberOTPSkeleton } from "../../../components/Base/BaseComponent";
-import { jwtDecode } from "jwt-decode";
 
 import Error404 from '../../../pages/error/Error404';
 import OtpInput from "react-otp-input";

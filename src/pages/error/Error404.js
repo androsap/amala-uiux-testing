@@ -9,7 +9,7 @@ class Error404 extends Component {
 
 	render() {
 		return (
-			<>
+			<React.Fragment>
 				<Row type="flex" justify="center" align="middle" style={{ minHeight: "80vh", padding: "24px 16px", textAlign: "center" }}>
 					<Col xs={24} sm={20} md={16} lg={12} xl={10}>
 						<Row type="flex" justify="center" style={{ height: "100%" }}>
@@ -33,7 +33,7 @@ class Error404 extends Component {
 						</Row>
 					</Col>
 				</Row>
-			</>
+			</React.Fragment>
 		);
 	}
 }

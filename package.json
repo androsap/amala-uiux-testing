@@ -4,7 +4,6 @@
   "version": "1.0.1",
   "private": true,
   "dependencies": {
-    "@ant-design/charts": "^2.6.7",
     "@types/dotenv": "^8.2.0",
     "antd": "^3.23.6",
     "axios": "^0.18.1",
@@ -13,7 +12,6 @@
     "html-to-text": "^5.1.1",
     "iframe": "^1.0.0",
     "js-sha512": "^0.8.0",
-    "jwt-decode": "^4.0.0",
     "jwt-simple": "^0.5.6",
     "md5": "^2.2.1",
     "moment": "^2.23.0",
@@ -65,7 +63,6 @@
   "browserslist": {
     "production": [
       ">0.2%",
-      "not dead",
       "not op_mini all"
     ],
     "development": [
@@ -76,6 +73,10 @@
   },
   "devDependencies": {
     "javascript-obfuscator": "^5.4.3",
-    "serve": "^14.2.6"
+    "serve": "^14.2.6",
+    "webpack": "3.8.1"
+  },
+  "overrides": {
+    "webpack": "3.8.1"
   }
 }

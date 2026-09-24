@@ -185,7 +185,7 @@ class EmailVerified extends Component {
 
 		if (isLoading) {
 			return <EmailVerifSkeleton />
-		} else return <>
+		} else return <React.Fragment>
 			{
 				(verified) ? <div style={styles.page}>
 					<style>{keyframes}</style>
@@ -202,7 +202,7 @@ class EmailVerified extends Component {
 						{!isLoading && (
 							<div style={styles.main}>
 								{(
-									<>
+									<React.Fragment>
 										<img src={ASSETS.illustration} alt="" style={styles.illustration} />
 										<span style={styles.eyebrow}>
 											<span style={styles.dot} /> Email Verified
@@ -216,7 +216,7 @@ class EmailVerified extends Component {
 										<a href="https://www.garuda-indonesia.com" style={styles.button}>
 											Go to Website →
 										</a>
-									</>
+									</React.Fragment>
 								)}
 							</div>
 						)}
@@ -238,7 +238,7 @@ class EmailVerified extends Component {
 					</div>
 				</div> : <Error404 />
 			}
-		</>
+		</React.Fragment>
 
 	}
 }
