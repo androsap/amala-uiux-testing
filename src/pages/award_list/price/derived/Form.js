@@ -454,16 +454,16 @@ class App extends Component {
                                     <RadioButton form={this.props.form} labeltext="Price Calculation" datafield="pricecalc" validationrules={['required']} options={PriceCalculation} className={(airlinecode) ? '' : 'hidden'} onChange={this.handleChangePriceCalculation} disabled={generalfielddisabled} />
                                     <SelectBase form={this.props.form} labeltext="Distance Range" noSuffixPlaceholder={true} datafield="distancerangecode" placeholder='Type min. 3 char to search (ex: "Grup A")' options={DistanceRange} className={(pricecalc === 'DISTANCERANGE') ? '' : 'hidden'} validationrules={(pricecalc === 'DISTANCERANGE') ? ['required'] : []} disabled={generalfielddisabled} onSearch={this.handleDistanceRangeData} showArrow={false} onChange={this.handleDistanceRangeChange} />
                                     <CityPairOdRuleSelect ref={(e) => { this.componentCityPairOdRuleSelect = e }} form={this.props.form} labeltext="City Pair" datafield="destoriginairport" placeholder='Type City Pair Code' className={(pricecalc === 'CITYPAIR') ? '' : 'hidden'} validationrules={(pricecalc === 'CITYPAIR') ? ['required'] : []} disabled={generalfielddisabled} />
-                                    <Form.Item label="Traveler">
+                                    <Form.Item label="Passenger Type">
                                         <div style={{ border: '1px solid #d9d9d9', borderRadius: 4, padding: '12px 16px', lineHeight: 1.5 }}>
                                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                                 {this.props.form.getFieldDecorator('otherstraveller', { valuePropName: 'checked', initialValue: false })(
                                                     <Switch disabled={generalfielddisabled} />
                                                 )}
-                                                <span style={{ marginLeft: 12, fontWeight: 500, marginBottom: 4 }}>{this.props.form.getFieldValue('otherstraveller') ? 'Allow others' : 'Deny others'}</span>
+                                                <span style={{ marginLeft: 12, fontWeight: 500, marginBottom: 4 }}>{this.props.form.getFieldValue('otherstraveller') ? 'Others' : 'Others'}</span>
                                             </div>
                                             <div style={{ marginTop: 8, color: 'rgba(0, 0, 0, 0.45)' }}>
-                                                By allowing this you able to set other traveller manually in this price
+                                                By allowing this you able to set other passenger manually in this price
                                             </div>
                                         </div>
                                     </Form.Item>
