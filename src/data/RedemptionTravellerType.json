@@ -1,0 +1,12 @@
+[
+    {
+        "label": "Nominee",
+        "value": "NOMINEE",
+        "info": "You able to redeem with selfusage or nominee passenger"
+    },
+    {
+        "label": "Others",
+        "value": "OTHERS",
+        "info": "You able to redeem with selfusage and or others passenger"
+    }
+]

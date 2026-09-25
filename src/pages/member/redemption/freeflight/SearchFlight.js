@@ -4,8 +4,9 @@ import { SaveRequest, DetailRequest, RetrieveRequest } from '../../../../utiliti
 import { api } from '../../../../config/Services';
 import { connect } from "react-redux";
 import { getProfile } from '../../../../utilities/AuthService';
-import { AirlineSelect, CompartmentSelect, OriDesSelect, InputNumber, Button, Alert, SwitchButton, DatePickerBase, DateRangeBase, SubclassSelect } from '../../../../components/Base/BaseComponent';
-import { Form, Row, Col, Divider, Typography, Spin } from 'antd';
+import { AirlineSelect, CompartmentSelect, OriDesSelect, InputNumber, Button, Alert, SwitchButton, DatePickerBase, DateRangeBase, SubclassSelect, RadioButton } from '../../../../components/Base/BaseComponent';
+import { Form, Row, Col, Divider, Typography, Spin, Alert as AlertAnt } from 'antd';
+import { RedemptionTravellerType } from '../../../../data';
 import ErrorGeneral from '../../../error/ErrorGeneral';
 import moment from 'moment';
 
@@ -161,6 +162,7 @@ class App extends Component {
         const { comparmentfielddisabled, subclassfielddisabled } = this.state.fielddisabled;
         const { isSuccessSearchFlight, requestSearchFlight, responseSearchFlight, awardinfo, formrender } = this.state;
         const roundtrip = this.props.form.getFieldValue('roundtrip');
+        const travellerTypeOption = RedemptionTravellerType.find(obj => obj.value === this.props.form.getFieldValue('redemptiontravellertype'));
         const maxperson = awardinfo.maxperson;
         const manualPricing = awardinfo.pricingby === 'MANUAL';
 
@@ -184,6 +186,7 @@ class App extends Component {
                         <Form {...formItemLayout} onSubmit={this.saveAction}>
                             <Row gutter={24}>
                                 <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 12, offset: 4 }} xl={{ span: 12, offset: 4 }}>
+                                    <RadioButton form={this.props.form} labeltext="Passenger Type" datafield="redemptiontravellertype" validationrules={['required']} options={RedemptionTravellerType} />
                                     <AirlineSelect ref={(e) => { this.componentAirlineSelect = e }} form={this.props.form} labeltext="Airline" datafield="airlinecode" validationrules={['required']} onChange={this.handleAirlineChange} />
                                     <CompartmentSelect ref={(e) => { this.componentCompartmentSelect = e }} form={this.props.form} labeltext="Compartment" datafield="compartmentcode" validationrules={['required']} onChange={this.handleCompartmentChange} sort={{ rank: 'desc' }} disabled={comparmentfielddisabled} />
                                     <SubclassSelect ref={(e) => { this.componentSubclassSelect = e }} form={this.props.form} labeltext="Subclass" datafield="subclasscode" validationrules={(manualPricing) ? ['required'] : []} disabled={subclassfielddisabled} />
@@ -197,6 +200,9 @@ class App extends Component {
                                             : <DatePickerBase form={this.props.form} labeltext="Departure Date" datafield="departuredate" validationrules={['required']} minDate={moment()} />
                                     } */}
                                     <InputNumber form={this.props.form} labeltext="No. of Passenger" datafield="adultpassenger" validationrules={[`required`]} min={1} max={maxperson} />
+                                </Col>
+                                <Col className="gutter-row" xs={24} sm={24} md={24} lg={7} xl={7}>
+                                    {(travellerTypeOption) ? <AlertAnt type="info" showIcon message="Information" description={travellerTypeOption.info} /> : null}
                                 </Col>
                             </Row>
                             <Row gutter={24} type="flex" justify="center" style={{ marginTop: 10 }}>

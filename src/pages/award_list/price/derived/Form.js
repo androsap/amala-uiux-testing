@@ -3,8 +3,8 @@ import { DetailRequest, RetrieveRequestCustom, SaveRequest } from '../../../../u
 import { api } from '../../../../config/Services';
 import { connect } from "react-redux";
 import { InputText, Button, Alert, DateRangeBase, RadioButton, SwitchButton, TierSelect, MembershipSelect, BranchSelect, AirlineSelect, CompartmentSelect, SubclassSelect, CityPairOdRuleSelect, SelectBase } from '../../../../components/Base/BaseComponent';
-import { Form, Row, Col, Divider, Typography, Spin } from 'antd';
-import { TravelerTypeWithAll, PriceCalculation } from '../../../../data';
+import { Form, Row, Col, Divider, Typography, Spin, Switch } from 'antd';
+import { PriceCalculation } from '../../../../data';
 import ErrorGeneral from '../../../error/ErrorGeneral';
 import moment from 'moment';
 
@@ -103,7 +103,6 @@ class App extends Component {
                 let subclassname = (result.bookingclassname) ? result.bookingclassname : null;
                 let onewaypricelow = (result.onewaypricelow) ? result.onewaypricelow.toString() : undefined;
                 let onewaypricepeak = (result.onewaypricepeak) ? result.onewaypricepeak.toString() : undefined;
-                let travellertype = (result.travellertype) ? result.travellertype : undefined;
                 let feeder = false;
                 let alltier = (result.alltier) ? result.alltier : false;
                 let allmembership = (result.allmembership) ? result.allmembership : false;
@@ -158,7 +157,7 @@ class App extends Component {
                     airlinecode, compartmentcode, subclasscode,
                     paidairlinecode, paidcompartmentcode, paidsubclasscode,
                     onewaypricelow, onewaypricepeak,
-                    travellertype, feeder,
+                    feeder,
                     pricecalc, distancerangecode, destoriginairport,
                     alltier, allmembership, allbranch,
                     eligibletier, eligiblebranch, eligibletype
@@ -446,8 +445,7 @@ class App extends Component {
                                 <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 12, offset: 4 }} xl={{ span: 12, offset: 4 }}>
                                     <DateRangeBase form={this.props.form} labeltext="Date" datafield="date" placeholder={['Start Period', 'End Period']} minDate={moment()} validationrules={['required']} disabled={generalfielddisabled} />
                                     <SwitchButton form={this.props.form} labeltext="Return City Pair" datafield="createreturncitypair" defaultChecked={false} disabled={returnpricefielddisabled} />
-                                    <RadioButton form={this.props.form} labeltext="Traveler Type" datafield="travellertype" validationrules={['required']} options={TravelerTypeWithAll} disabled={generalfielddisabled} />
-                                    <AirlineSelect ref={(e) => { this.componentPaidAirlineSelect = e }} form={this.props.form} labeltext="Paid Airline" datafield="paidairlinecode" className={(categorycode === 'UPGRADE') ? '' : 'hidden'} validationrules={(categorycode === 'UPGRADE') ? ['required'] : []} onChange={this.handleChangePaidAirline} disabled={paidairlinecodefielddisabled} />
+                                                                        <AirlineSelect ref={(e) => { this.componentPaidAirlineSelect = e }} form={this.props.form} labeltext="Paid Airline" datafield="paidairlinecode" className={(categorycode === 'UPGRADE') ? '' : 'hidden'} validationrules={(categorycode === 'UPGRADE') ? ['required'] : []} onChange={this.handleChangePaidAirline} disabled={paidairlinecodefielddisabled} />
                                     <CompartmentSelect ref={(e) => { this.componentPaidCompartmentSelect = e }} form={this.props.form} labeltext="Paid Compartment" datafield="paidcompartmentcode" className={(categorycode === 'UPGRADE') ? '' : 'hidden'} validationrules={(categorycode === 'UPGRADE') ? ['required'] : []} onChange={(e) => this.handleChangePaidCompartment(e)} disabled={paidcompartmentcodefielddisabled} />
                                     <SubclassSelect ref={(e) => { this.componentPaidSubclassSelect = e }} form={this.props.form} labeltext="Paid Subclass" datafield="paidsubclasscode" className={(categorycode === 'UPGRADE') ? '' : 'hidden'} validationrules={(categorycode === 'UPGRADE') ? ['required'] : []} mode={(actionspage !== 'create') ? '' : 'multiple'} disabled={paidsubclasscodefielddisabled} />
                                     <AirlineSelect ref={(e) => { this.componentAirlineSelect = e }} form={this.props.form} labeltext="Airline" datafield="airlinecode" validationrules={['required']} onChange={this.handleChangeAirlineCode} disabled={airlinecodefielddisabled} />
@@ -456,6 +454,19 @@ class App extends Component {
                                     <RadioButton form={this.props.form} labeltext="Price Calculation" datafield="pricecalc" validationrules={['required']} options={PriceCalculation} className={(airlinecode) ? '' : 'hidden'} onChange={this.handleChangePriceCalculation} disabled={generalfielddisabled} />
                                     <SelectBase form={this.props.form} labeltext="Distance Range" noSuffixPlaceholder={true} datafield="distancerangecode" placeholder='Type min. 3 char to search (ex: "Grup A")' options={DistanceRange} className={(pricecalc === 'DISTANCERANGE') ? '' : 'hidden'} validationrules={(pricecalc === 'DISTANCERANGE') ? ['required'] : []} disabled={generalfielddisabled} onSearch={this.handleDistanceRangeData} showArrow={false} onChange={this.handleDistanceRangeChange} />
                                     <CityPairOdRuleSelect ref={(e) => { this.componentCityPairOdRuleSelect = e }} form={this.props.form} labeltext="City Pair" datafield="destoriginairport" placeholder='Type City Pair Code' className={(pricecalc === 'CITYPAIR') ? '' : 'hidden'} validationrules={(pricecalc === 'CITYPAIR') ? ['required'] : []} disabled={generalfielddisabled} />
+                                    <Form.Item label="Traveler">
+                                        <div style={{ border: '1px solid #d9d9d9', borderRadius: 4, padding: '12px 16px', lineHeight: 1.5 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                {this.props.form.getFieldDecorator('otherstraveller', { valuePropName: 'checked', initialValue: false })(
+                                                    <Switch disabled={generalfielddisabled} />
+                                                )}
+                                                <span style={{ marginLeft: 12, fontWeight: 500, marginBottom: 4 }}>{this.props.form.getFieldValue('otherstraveller') ? 'Allow others' : 'Deny others'}</span>
+                                            </div>
+                                            <div style={{ marginTop: 8, color: 'rgba(0, 0, 0, 0.45)' }}>
+                                                By allowing this you able to set other traveller manually in this price
+                                            </div>
+                                        </div>
+                                    </Form.Item>
                                     <Divider orientation="left">Low Season</Divider>
                                     <InputText form={this.props.form} labeltext="One Way Price Low" datafield="onewaypricelow" validationrules={['required', 'pattern.number', 'max.11',]} maxLength="11" disabled={generalfielddisabled} />
                                     <Divider orientation="left">Peak Season</Divider>

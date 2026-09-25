@@ -64,6 +64,7 @@ export { default as PricingByAward } from './PricingByAward';
 export { default as PrintingPriorityHandling } from './PrintingPriorityHandling';
 export { default as NonPrintingPriorityHandling } from './NonPrintingPriorityHandling';
 export { default as TravelerTypeWithAll } from './TravelerTypeWithAll';
+export { default as RedemptionTravellerType } from './RedemptionTravellerType';
 export { default as PriceCalculation } from './PriceCalculation';
 export { default as TrueFalseOptions } from './TrueFalseOptions';
 export { default as StatusPromo } from './StatusPromo';
