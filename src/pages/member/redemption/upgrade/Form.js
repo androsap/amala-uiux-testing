@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { SaveRequest, DetailRequest } from '../../../../utilities/RequestService';
 import { api } from '../../../../config/Services';
-import { connect } from 'react-redux';
-import { SalutationSelect, Button, Alert, SelectBase, SwitchButton, InputText, DatePickerBase, NomineeCardNumberSelect } from '../../../../components/Base/BaseComponent';
-import { Form, Row, Col, Divider, Typography, Spin, List, Modal, Affix, Card, Tooltip, Alert as AlertAnt } from 'antd';
+import { connect } from "react-redux";
+import { SalutationSelect, Button, Alert, SelectBase, SwitchButton, InputText, NomineeCardNumberSelect } from '../../../../components/Base/BaseComponent';
+import { Form, Row, Col, Divider, Typography, Spin, List, Modal, Card, Affix, Tooltip, Alert as AlertAnt } from 'antd';
 import { formatNumber, getTravelerType } from '../../../../utilities/Helpers';
-import { TravelerType } from '../../../../data';
+import { TravelerType } from '../../../../data'
 import moment from 'moment';
 import UsePromo from '../freeflight/UsePromo';
 
@@ -22,7 +22,7 @@ class App extends Component {
             spinloading: false,
             fieldvalue: {},
             fielddisabled: {
-                comparmentfielddisabled: true
+                comparmentfielddisabled: true,
             },
             requestSearchFlight: {},
             flightDeparture: [],
@@ -45,19 +45,19 @@ class App extends Component {
             promocoderetr: null,
             promoUsage: null,
             dataList: props.location.state.priceList,
+            inputValue: '',
         }
     }
 
     componentDidMount() {
-        //title bar on browser
-        document.title = "Redemption Upgrade | Loyalty Management System";
+        document.title = "Redemption Freeflight | Loyalty Management System";
         const { state } = this.props.location;
         let memberid = this.props.match.params.ID;
         if (state === undefined) {
-            this.props.history.push(`/member/form/${memberid}/redemption/`);
+            this.props.history.push('/member/form/' + memberid + '/redemption/');
         } else {
             const { priceList, requestSearchFlight, awardinfo } = state;
-            const { departuredate, returndate, airlinecode, paidbookingclassdepart, paidbookingclassreturn, paidcompartmentcodedepart, paidcompartmentcodereturn, origin, destination } = requestSearchFlight;
+            const { departuredate, returndate, airlinecode, bookingclass, compartmentcode, origin, destination } = requestSearchFlight;
             const { pricingby } = awardinfo;
 
             let { selectFlightDeparture, selectFlightReturn } = this.state;
@@ -67,8 +67,8 @@ class App extends Component {
             if (pricingby === 'MANUAL') {
                 selectFlightDeparture = 0;
                 selectFlightReturn = 0;
-                flightDeparture = [{ airlinecode, origin, destination, compartmentcode: paidcompartmentcodedepart, bookingclasscode: paidbookingclassdepart, flightdate: departuredate }];
-                flightReturn = [{ airlinecode, compartmentcode: paidcompartmentcodereturn, origin: destination, destination: origin, bookingclasscode: paidbookingclassreturn, flightdate: returndate }];
+                flightDeparture = [{ origin, destination, compartmentcode, airlinecode, bookingclasscode: bookingclass, flightdate: departuredate }];
+                flightReturn = [{ compartmentcode, airlinecode, origin: destination, destination: origin, bookingclasscode: bookingclass, flightdate: returndate }];
             }
             this.setState({ ...this.state, flightDeparture, flightReturn, requestSearchFlight, awardinfo, selectFlightDeparture, selectFlightReturn });
         }
@@ -76,15 +76,16 @@ class App extends Component {
 
     saveAction = (e, typeButton) => {
         e.preventDefault();
-
         const callback = (input) => {
             this.setState({ isLoading: true });
-            const { mileageDeparture, mileageReturn, awardinfo, selectFlightDeparture, selectFlightReturn, flightDeparture, flightReturn, totalafterdiscountdepr, totalafterdiscountretr, summaryafterdiscountdepr, summaryafterdiscountretr, promocodedepr, promocoderetr } = this.state;
-            const { awardcode, adultpassenger, memberid, username, roundtrip, paidcompartmentcodedepart, paidcompartmentcodereturn, paidbookingclassdepart, paidbookingclassreturn } = this.state.requestSearchFlight;
+            const { mileageDeparture, mileageReturn, awardinfo, selectFlightDeparture, selectFlightReturn, flightDeparture, flightReturn,
+                totalafterdiscountdepr, summaryafterdiscountdepr, summaryafterdiscountretr, totalafterdiscountretr, promocodedepr, promocoderetr } = this.state;
+            const { awardcode, adultpassenger, memberid, username, roundtrip } = this.state.requestSearchFlight;
             const { pricingby } = awardinfo;
 
             let departureActivity = flightDeparture[selectFlightDeparture];
             let pricedepr = (selectFlightDeparture !== null) ? ((summaryafterdiscountdepr === null || summaryafterdiscountdepr === undefined) ? mileageDeparture : totalafterdiscountdepr) : mileageDeparture;
+
             departureActivity = {
                 promocode: (promocodedepr !== null) ? promocodedepr : null,
                 price: (pricingby === 'MANUAL') ? Number(input.pricedeparture) : pricedepr,
@@ -97,14 +98,13 @@ class App extends Component {
                 compartment: departureActivity.compartmentcode,
                 bookingclass: departureActivity.bookingclasscode,
                 peakseasonstatus: (pricingby === 'MANUAL') ? false : departureActivity.peakseasonstatus,
-                paidcompartmentcode: (departureActivity.paidcompartmentcodedepart) ? departureActivity.paidcompartmentcodedepart : paidcompartmentcodedepart,
-                paidbookingclasscode: (departureActivity.paidbookingclassdepart) ? departureActivity.paidbookingclassdepart : paidbookingclassdepart,
+                paidcompartmentcode: null,
+                paidbookingclasscode: null,
                 bookingtype: "INTERNET"
             }
-
             let returnActivity = null;
+            let priceretr = (selectFlightReturn !== null) ? ((summaryafterdiscountretr === null || summaryafterdiscountretr === undefined) ? mileageReturn : totalafterdiscountretr) : mileageReturn;
             if (roundtrip) {
-                let priceretr = (selectFlightReturn !== null) ? ((summaryafterdiscountretr === null || summaryafterdiscountretr === undefined) ? mileageReturn : totalafterdiscountretr) : mileageReturn;
                 returnActivity = flightReturn[selectFlightReturn];
                 returnActivity = {
                     promocode: (promocoderetr !== null) ? promocoderetr : null,
@@ -118,12 +118,11 @@ class App extends Component {
                     compartment: returnActivity.compartmentcode,
                     bookingclass: returnActivity.bookingclasscode,
                     peakseasonstatus: (pricingby === 'MANUAL') ? false : returnActivity.peakseasonstatus,
-                    paidcompartmentcode: (returnActivity.paidcompartmentcodereturn) ? returnActivity.paidcompartmentcodereturn : paidcompartmentcodereturn,
-                    paidbookingclasscode: (returnActivity.paidbookingclassreturn) ? returnActivity.paidbookingclassreturn : paidbookingclassreturn,
+                    paidcompartmentcode: null,
+                    paidbookingclasscode: null,
                     bookingtype: "INTERNET"
                 }
             }
-
             //define parameter
             let promocode = null;
             let channelapp = "amalabo";
@@ -131,14 +130,7 @@ class App extends Component {
                 (totalafterdiscountdepr !== null && totalafterdiscountretr === null) ? ((totalafterdiscountdepr + mileageReturn) * adultpassenger) :
                     (totalafterdiscountretr !== null && totalafterdiscountdepr === null) ? ((totalafterdiscountretr + mileageDeparture) * adultpassenger) :
                         (totalafterdiscountdepr !== null && totalafterdiscountretr !== null) ? ((totalafterdiscountdepr + totalafterdiscountretr) * adultpassenger) :
-                            (totalafterdiscountdepr === null && totalafterdiscountretr === null) ? ((mileageDeparture + mileageReturn) * adultpassenger) : null
-
-            //Untuk Nominee ini bakal dirollback
-            // let totalprice = (totalafterdiscountdepr !== null && totalafterdiscountretr === null) ? ((totalafterdiscountdepr + mileageReturn) * adultpassenger) :
-            //     (totalafterdiscountretr !== null && totalafterdiscountdepr === null) ? ((totalafterdiscountretr + mileageDeparture) * adultpassenger) :
-            //         (totalafterdiscountdepr !== null && totalafterdiscountretr !== null) ? ((totalafterdiscountdepr + totalafterdiscountretr) * adultpassenger) :
-            //             (totalafterdiscountdepr === null && totalafterdiscountretr === null) ? (pricingby === 'MANUAL') ? ((Number(input.pricedeparture) + Number(input.pricereturn)) * adultpassenger) :
-            //                 ((mileageDeparture + mileageReturn) * adultpassenger) : null;
+                            (totalafterdiscountdepr === null && totalafterdiscountretr === null) ? ((mileageDeparture + mileageReturn) * adultpassenger) : null;
 
             let issueddate = moment().format("YYYY-MM-DD");
             let quantity = null;
@@ -151,15 +143,15 @@ class App extends Component {
                 departure: [departureActivity],
                 return: (returnActivity) ? [returnActivity] : []
             };
-
             let remark = (input.remark) ? input.remark : null;
+
             let redeemuser = [];
             for (let i = 0; i < adultpassenger; i++) {
                 redeemuser.push({
                     name: input[`passenger-name${i}`],
                     familyname: input[`passenger-familyname${i}`],
                     salutationcode: input[`passenger-salutationcode${i}`],
-                    memberiduser: i === 0 ? (input[`passenger-memberid0`].split(' '))[0] : input[`passenger-memberid${i}`],
+                    memberiduser: i === 0 ? input[`passenger-memberid${i}`] : input[`passenger-memberid${i}`],
                     travelertype: input[`passenger-travelertype${i}`],
                     selfusage: i === 0 ? (input.selfusage || false) : false,
                     certificateprice:
@@ -172,12 +164,15 @@ class App extends Component {
                 })
             }
 
-            let data = (typeButton === 'BUY') ? { promocode, channelapp, awardcode, issueddate, quantity, memberid, username, bookingcode, ticketnumber, ticketvaliditydate, freeaward, totalprice, redeemuser, redeemairactivity, remark, return: roundtrip } : {
+            let data = (typeButton === 'BUY') ? {
+                promocode, channelapp, awardcode, issueddate, quantity, memberid, username, bookingcode, ticketnumber, ticketvaliditydate, freeaward, totalprice, redeemuser, redeemairactivity, remark, return: roundtrip
+            } : {
                 referenceid: null, memberid: memberid, requesttype: "REDEMPTION", requeststatus: "NEW", approvalby: null, approvaldate: null, remark: null, reqdatas: {
-                    url: 'redemption/transaction/v1.2/buyaward',
-                    promocode, channelapp, awardcode, issueddate, quantity, memberid, username, bookingcode, ticketnumber, ticketvaliditydate, freeaward, totalprice, redeemuser, redeemairactivity, remark, return: roundtrip, categorycode: awardinfo.categorycode
+                    url: 'redemption/transaction/v1.2/buyaward', promocode, channelapp, awardcode, issueddate, quantity, memberid, username, bookingcode, ticketnumber,
+                    ticketvaliditydate, freeaward, totalprice, redeemuser, redeemairactivity, remark, return: roundtrip, categorycode: awardinfo.categorycode
                 }
             };
+
             let url = (typeButton === 'BUY') ? api.url.redemption.buyaward : api.url.requestapproval.create;
             let message = 'New data has been created';
             SaveRequest(url, data).then((response) => {
@@ -186,7 +181,7 @@ class App extends Component {
                     let responseBuyAward = response.result;
                     Alert.success((responsemessage) ? responsemessage : message);
 
-                    this.props.refreshHeader()
+                    this.props.refreshHeader();
                     if (typeButton === 'BUY') {
                         this.setState({ isSuccessBuy: true, responseBuyAward })
                     } else this.props.history.push(`/member/form/${memberid}/redemption`);
@@ -195,7 +190,6 @@ class App extends Component {
                 this.setState({ isLoading: false });
             })
         }
-
 
         this.props.form.validateFieldsAndScroll((err, input) => {
             const { promocodedepr, promocoderetr } = this.state;
@@ -252,7 +246,7 @@ class App extends Component {
         let salutationcode = (selfusage) ? this.props.profile.salutationcode : undefined;
         let name = (selfusage) ? this.props.profile.firstname : undefined;
         let familyname = (selfusage) ? this.props.profile.lastname : undefined;
-        let memberid = (selfusage) ? this.props.cardnumber : undefined;
+        let memberid = (selfusage) ? (this.props.cardnumber) : undefined;
         let age = moment().diff(moment(this.props.profile.dateofbirth), 'years');;
         let travelertype = (selfusage) ? getTravelerType(age) : undefined;
 
@@ -266,6 +260,8 @@ class App extends Component {
     }
 
     handleOthersPassenger = (value, data, key) => {
+        // Others traveller fills passenger data manually; don't wipe it when card number is cleared.
+        if (this.state.requestSearchFlight.redemptiontravellertype === 'OTHERS') return;
         if (value && data) {
             const { salutationcode, firstname, lastname, dateofbirth } = data;
             let age = moment().diff(moment(dateofbirth), 'years');
@@ -290,7 +286,7 @@ class App extends Component {
     handleCancelPromo = (type) => {
         const { summaryafterdiscountdepr, summaryafterdiscountretr } = this.state;
         if (type === 'DEPARTURE' && summaryafterdiscountdepr !== null) {
-            this.setState({ promocodedepr: null, summarydiscountdepr: null, summaryafterdiscountdepr: null, totalafterdiscountdepr: null, discountdepr: null, totaldiscountdepr: null });
+            this.setState({ promocodedepr: null, summarydiscountdepr: null, summaryafterdiscountdepr: null, totalafterdiscountdepr: null, discountdepr: null, totaldiscountdepr: null, discountdepr: null, });
         } else if (type === 'RETURN' && summaryafterdiscountretr !== null) {
             this.setState({ promocoderetr: null, summarydiscountretr: null, summaryafterdiscountretr: null, totalafterdiscountretr: null, discountretr: null, totaldiscountretr: null, discountdepr: null, });
         } else if (type === 'BOTH' && summaryafterdiscountdepr !== null && summaryafterdiscountretr !== null) {
@@ -301,16 +297,13 @@ class App extends Component {
         }
     }
 
-
     handleOpenModal = (e, type) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, input) => {
             const { flightnumberdeparture, flightnumberreturn } = input || {};
             if (flightnumberdeparture && type === 'DEPARTURE') {
-                this.handleCancelPromo('DEPARTURE')
                 this.setState({ visibleDepr: true, modalType: type, flightnumberdeparture });
             } else if (flightnumberreturn && type === 'RETURN') {
-                this.handleCancelPromo('RETURN')
                 this.setState({ visibleRetr: true, modalType: type, flightnumberreturn });
             }
         });
@@ -369,7 +362,7 @@ class App extends Component {
         DetailRequest(url, data).then((response) => {
             const { status, result } = response;
             const { responsecode, responsemessage } = status || {};
-            if (responsecode) {
+            if (responsecode === '0000') {
                 this.setState({ promoUsageStatus: result, responsemessage });
                 this.handlePromoUsage(callback, input);
             } else {
@@ -379,8 +372,8 @@ class App extends Component {
     }
 
     handlePromoUsage = (callback, input) => {
-        const { promocodedepr, promocoderetr } = this.state || {}
         const { promoUsageStatus } = this.state
+        const { promocodedepr, promocoderetr } = this.state || {}
         if ((promoUsageStatus[0].status && !promoUsageStatus[1]) || (promoUsageStatus[0].status && promoUsageStatus[1].status)) {
             if (promocodedepr && promocoderetr) {
                 this.getpromo(promocodedepr, 'DEPARTURE')
@@ -402,28 +395,29 @@ class App extends Component {
             });
         }
         else {
-
             const { promocodedepr, promocoderetr } = this.state
-            if (promocodedepr !== null && promocoderetr == null && !promoUsageStatus[0].status) {
+            if (promocodedepr !== null && promocoderetr === null && !promoUsageStatus[0].status) {
                 this.handleCancelPromo("DEPARTURE");
                 warning({ title: 'Promo Departure Unavailable, Normal Price will be Charged.' });
-            } else if (promocodedepr == null && promocoderetr !== null && !promoUsageStatus[0].status) {
+            };
+            if (promocodedepr === null && promocoderetr !== null && !promoUsageStatus[0].status) {
                 this.handleCancelPromo("RETURN");
                 warning({ title: 'Promo Return Unavailable, Normal Price will be Charged.' });
-            } else if
-                (promocodedepr !== null && promocoderetr !== null && !promoUsageStatus[0].status && promoUsageStatus[1].status) {
+            };
+            if (promocodedepr !== null && promocoderetr !== null && !promoUsageStatus[0].status && promoUsageStatus[1].status) {
                 this.handleCancelPromo("DEPARTURE");
                 this.getpromo(promocoderetr, 'RETURN');
                 warning({ title: 'Promo Return Used but Promo Departure Unavailable, Normal Price will be Charged.' });
-            } else if (promocodedepr !== null && promocoderetr !== null && promoUsageStatus[0].status && !promoUsageStatus[1].status) {
+            };
+            if (promocodedepr !== null && promocoderetr !== null && promoUsageStatus[0].status && !promoUsageStatus[1].status) {
                 this.handleCancelPromo("RETURN");
                 this.getpromo(promocodedepr, 'DEPARTURE');
                 warning({ title: 'Promo Departure Used but Promo Return Unavailable, Normal Price will be Charged.' });
-            } else if (promocodedepr !== null && promocoderetr !== null && !promoUsageStatus[0].status && !promoUsageStatus[1].status) {
+            };
+            if (promocodedepr !== null && promocoderetr !== null && !promoUsageStatus[0].status && !promoUsageStatus[1].status) {
                 this.handleCancelPromo("BOTH");
-                warning({ title: 'Departure and Return Promo are Unavailable, Normal Price will be Charged.' });
-            }
-            // this.handleCancelPromo("RETURN");
+                warning({ title: 'Departure and Return Promo are Unavailable, Normal Price will be Charged.' })
+            };
         }
     }
 
@@ -435,8 +429,8 @@ class App extends Component {
         let flightnumberdeparture = this.props.form.getFieldValue('flightnumberdeparture')
         const { awardinfo, selectFlightDeparture, selectFlightReturn, } = this.state;
         const { categorytype } = awardinfo || {};
-        const { price, airlinecode, bookingclasscode, compartmentcode, origin, destination, flightdate }
-            = (modalType === 'DEPARTURE') ? dataList.departure[selectFlightDeparture] : dataList.return[selectFlightReturn] || {};
+        const { price, airlinecode, bookingclasscode, compartmentcode, origin, destination, flightdate } = (modalType === 'DEPARTURE') ?
+            dataList.departure[selectFlightDeparture] : dataList.return[selectFlightReturn] || {};
         let url = api.url.redeempromo.getpromo;
         let data = {
             "promocode": promocode,
@@ -460,7 +454,7 @@ class App extends Component {
             }
         };
 
-        this.setState({ isLoading: true });
+        this.setState({ spinloading: true });
         DetailRequest(url, data).then((response) => {
             const { status, result } = response;
             const { responsecode, responsemessage } = status || {};
@@ -489,9 +483,9 @@ class App extends Component {
                         discounttypedepr: promoDataDepr[0].discounttype,
                         totaldiscountdepr: promoDataDepr[0].totaldiscount,
                         summarydiscountdepr: promoDataDepr[0].summarydiscount,
-                        summaryafterdiscountdepr: promoDataDepr[0].summaryafterdiscount,
                         totalafterdiscountdepr: promoDataDepr[0].totalafterdiscount,
-                        responsemessage
+                        summaryafterdiscountdepr: promoDataDepr[0].summaryafterdiscount,
+                        responsemessage,
                     });
                 } else {
                     if (modalType === "RETURN") {
@@ -516,9 +510,9 @@ class App extends Component {
                             discounttyperetr: promoDataRetr[0].discounttype,
                             totaldiscountretr: promoDataRetr[0].totaldiscount,
                             summarydiscountretr: promoDataRetr[0].summarydiscount,
-                            summaryafterdiscountretr: promoDataRetr[0].summaryafterdiscount,
                             totalafterdiscountretr: promoDataRetr[0].totalafterdiscount,
-                            responsemessage
+                            summaryafterdiscountretr: promoDataRetr[0].summaryafterdiscount,
+                            responsemessage,
                         });
                     }
                 }
@@ -530,8 +524,9 @@ class App extends Component {
                     this.handleCancelPromo('RETURN')
                 }
             }
-            this.setState({ isLoading: false });
+            this.setState({ spinloading: false });
         });
+
     }
 
     handlePromoCodedepr = (e) => {
@@ -582,65 +577,53 @@ class App extends Component {
             labelCol: { xs: { span: 24 }, sm: { span: 8 }, },
             wrapperCol: { xs: { span: 24 }, sm: { span: 16 } }
         };
-        const { spinloading, flightnumberdeparture, flightnumberreturn, cardnumber, promocodedepr, promocoderetr, discountdepr, discountretr, pricedeparture, pricereturn, awardinfo, modalType,
-            totalafterdiscountdepr, totalafterdiscountretr, discounttypedepr, discounttyperetr, totaldiscountdepr, totaldiscountretr, isLoading, visibleDepr, visibleRetr, isSuccessBuy,
-            flightDeparture, flightReturn, selectFlightDeparture, selectFlightReturn, requestSearchFlight, mileageDeparture, mileageReturn, responseBuyAward } = this.state;
-        // const { promocoderetr, promoDataDepr, promoDataRetr, summarydiscountdepr, summarydiscountretr} = this.this.state;
+        const { flightnumberdeparture, flightnumberreturn, cardnumber, promocodedepr, promocoderetr, discountdepr, discountretr, spinloading, flightDeparture, flightReturn, pricedeparture,
+            totalafterdiscountdepr, totalafterdiscountretr, discounttypedepr, discounttyperetr, totaldiscountdepr, totaldiscountretr, isLoading, visibleDepr, visibleRetr, modalType,
+            requestSearchFlight, mileageDeparture, mileageReturn, isSuccessBuy, responseBuyAward, awardinfo, selectFlightDeparture, selectFlightReturn, pricereturn } = this.state;
         const { roundtrip, adultpassenger } = requestSearchFlight;
         const manualPricing = (awardinfo && (awardinfo.pricingby === 'MANUAL'));
 
-        let selfusage = this.props.form.getFieldValue('selfusage');
-        // let deprpromo = this.props.form.getFieldValue('promocodedepr');
-        // let retrpromo = this.props.form.getFieldValue('promocoderetr');
         let summaryDepartureFlight = (flightDeparture[selectFlightDeparture]) ? flightDeparture[selectFlightDeparture] : {};
         let summaryReturnFlight = (flightReturn && flightReturn[selectFlightReturn]) ? flightReturn[selectFlightReturn] : {};
         let memberid = this.props.match.params.ID;
         let awardcode = this.props.match.params.awardcode;
+        let selfusage = this.props.form.getFieldValue('selfusage');
+        let othersTraveller = requestSearchFlight.redemptiontravellertype === 'OTHERS';
         let passengerList = [];
         let totalMileage = (manualPricing) ? ((roundtrip) ? ((pricereturn && pricedeparture) ? formatNumber((Number(pricedeparture) + Number(pricereturn)) * adultpassenger) : null) :
-            ((pricedeparture) ? formatNumber(pricedeparture * adultpassenger) : null)) : formatNumber((mileageDeparture + mileageReturn) * adultpassenger);
+            ((pricedeparture) ? formatNumber(Number(pricedeparture) * adultpassenger) : null)) : formatNumber((mileageDeparture + mileageReturn) * adultpassenger);
 
-        // if (adultpassenger > 1) {
-        //     for (let key = 1; key < adultpassenger; key++) {
-        //         // this.handleSetKey(key);
-        //         passengerList[key] = <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
-        //             <Divider>Passenger #{key + 1}</Divider>
-        //             <NomineeCardNumberSelect adultpassenger={adultpassenger} wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid" + key}
-        //                 onChange={this.handleOthersPassenger} indexRow={key} memberID={memberid} />
-        //             <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Salutation" datafield={"passenger-salutationcode" + key} disabled/>
-        //             <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Name" datafield={"passenger-name" + key} validationrules={['required', 'pattern.letterspace']} maxLength={45} disabled/>
-        //             <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Family Name" datafield={"passenger-familyname" + key} validationrules={['pattern.letter']} maxLength={45} disabled/>
-        //             {/* <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="GarudaMiles ID" datafield={"passenger-memberid" + key} validationrules={['pattern.number']} maxLength={16} /> */}
-        //             <SelectBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Traveler Type" datafield={"passenger-travelertype" + key} validationrules={['required']} options={TravelerType} />
-        //         </Col>;
-        //     }
-        // }
         if (adultpassenger > 1) {
             for (let key = 1; key < adultpassenger; key++) {
-                passengerList[key] = <Col className='gutter-row' xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
+                // this.handleSetKey(key);
+                passengerList[key] = <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
                     <Divider>Passenger #{key + 1}</Divider>
-                    <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Salutation' datafield={'passenger-salutationcode' + key} />
-                    <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Name' datafield={'passenger-name' + key} validationrules={['required', 'pattern.letterspace']} maxLength={45} />
-                    <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Family Name' datafield={'passenger-familyname' + key} validationrules={['required', 'pattern.letter']} maxLength={45} />
-                    <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='GarudaMiles ID' datafield={'passenger-memberid' + key} validationrules={['pattern.number']} maxLength={16} />
-                    <SelectBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Traveler Type' datafield={'passenger-travelertype' + key} validationrules={['required']} options={TravelerType} />
+                    {(othersTraveller) ?
+                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid" + key} validationrules={['pattern.number']} maxLength={16} />
+                        : <NomineeCardNumberSelect adultpassenger={adultpassenger} wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid" + key}
+                            onChange={this.handleOthersPassenger} indexRow={key} memberID={memberid} />}
+                    <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Salutation" datafield={"passenger-salutationcode" + key} disabled={!othersTraveller} />
+                    <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Name" datafield={"passenger-name" + key} validationrules={['required', 'pattern.letterspace']} maxLength={45} disabled={!othersTraveller} />
+                    <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Family Name" datafield={"passenger-familyname" + key} validationrules={['pattern.letter']} maxLength={45} disabled={!othersTraveller} />
+                    {/* <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="GarudaMiles ID" datafield={"passenger-memberid" + key} validationrules={['pattern.number']} maxLength={16} /> */}
+                    <SelectBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Traveler Type" datafield={"passenger-travelertype" + key} validationrules={['required']} options={TravelerType} />
                 </Col>;
             }
         }
 
         if (isSuccessBuy) {
-            return (<Redirect to={{ pathname: '/member/form/' + memberid + '/redemption/upgrade/' + awardcode + '/certificate', state: { responseBuyAward } }} />)
+            return (<Redirect to={{ pathname: `/member/form/${memberid}/redemption/freeflight/${awardcode}/certificate`, state: { responseBuyAward } }} />)
         } else {
             return (
                 <Row>
                     {
                         (modalType === 'DEPARTURE') ?
                             <Modal visible={visibleDepr} title="Use Promo" loading={isLoading} onCancel={this.handleCloseModal} footer={null} destroyOnClose={true} width={680}>
-                                <UsePromo onClose={this.handleOk} {...this.props} modalType={modalType} flightnumberdeparture={flightnumberdeparture}
+                                <UsePromo onClose={this.handleOk} {...this.props} modalType={modalType} flightnumberdeparture={flightnumberdeparture} form={this.props.form}
                                     setStateOfParent2={this.setStateOfParent2} cardnumber={cardnumber} awardinfo={awardinfo} selectFlightDeparture={selectFlightDeparture}
                                 />
-                            </Modal> :
-                            (modalType === 'RETURN') ?
+                            </Modal>
+                            : (modalType === 'RETURN') ?
                                 <Modal visible={visibleRetr} title="Use Promo" loading={isLoading} onCancel={this.handleCloseModal} footer={null} destroyOnClose={true} width={680}>
                                     <UsePromo onClose={this.handleOk} {...this.props} modalType={modalType} flightnumberreturn={flightnumberreturn}
                                         setStateOfParent2={this.setStateOfParent2} cardnumber={cardnumber} awardinfo={awardinfo} selectFlightReturn={selectFlightReturn}
@@ -650,371 +633,376 @@ class App extends Component {
                     }
                     <Row>
                         <Title level={4}>
-                            <Button url={{ pathname: '/member/form/' + memberid + '/redemption/upgrade/' + awardcode, state: { ...this.props.location.state } }} shape="circle" icon="left" /> Redemption Upgrade
+                            {/* <Button url={'/member/form/' + memberid + '/redemption/freeflight/' + awardcode} shape="circle" icon="left" />  Redemption Freeflight */}
+                            <Button url={{ pathname: `/member/form/${memberid}/redemption/freeflight/${awardcode}`, state: { ...this.props.location.state } }} shape="circle" icon="left" />  Redemption Freeflight
                         </Title>
                         <Divider />
                     </Row>
                     <Spin spinning={isLoading}>
-                        <Form {...formItemLayout}>
-                            {/* <Row> */}
-                            <Col className="gutter-row" xs={24} sm={24} md={24} lg={16} xl={16}>
-                                <Row>
-                                    <Divider>Flight Information</Divider>
-                                    <Col className="gutter-row" xs={24} sm={24} md={24} lg={24} xl={24}>
-                                        <Divider>Departure Flight</Divider>
-                                        <Row className="pricelist-flight-header">
-                                            <Col xs={24} lg={4}>Activity Date</Col>
-                                            <Col xs={24} lg={4}>Airline</Col>
-                                            <Col xs={24} lg={(manualPricing) ? 6 : 4}>Origin - Destination</Col>
-                                            {(manualPricing) ? <Col xs={24} lg={10}>Compartment / Booking Class</Col> : <Col xs={24} lg={4}>Compartment /<br />Booking Class</Col>}
-                                            {(manualPricing) ? null : <Col xs={24} lg={4}>Price</Col>}
-                                        </Row>
-                                        <List
-                                            itemLayout="horizontal"
-                                            dataSource={flightDeparture}
-                                            renderItem={(item, key) => (
-                                                <Row className="pricelist-flight">
-                                                    <Col xs={24} lg={4}>
-                                                        {(item.flightdate) ? moment(item.flightdate).format("DD/MM/YYYY") : '-'}
-                                                    </Col>
-                                                    <Col xs={24} lg={4}>
-                                                        {(item.airlinecode) ? item.airlinecode : '-'}
-                                                    </Col>
-                                                    <Col xs={24} lg={(manualPricing) ? 6 : 4}>
-                                                        {(item.origin) ? item.origin : '-'} - {(item.destination) ? item.destination : '-'}
-                                                    </Col>
-                                                    <Col xs={24} lg={(manualPricing) ? 10 : 4}>
-                                                        {(item.compartmentcode) ? item.compartmentcode : '-'}&nbsp;/&nbsp;
-                                                        {(item.bookingclasscode) ? item.bookingclasscode : '-'}
-                                                    </Col>
-                                                    {(manualPricing) ? null : <Col xs={24} lg={4} xl={4}>
-                                                        {(item.price) ? formatNumber(item.price) : '-'}
-                                                    </Col>}
-                                                    {(manualPricing) ? null : <Col xs={24} lg={4}>
-                                                        <Button htmlType="button" type={(key === selectFlightDeparture) ? 'primary' : 'default'} size="small" label="Select" onClick={(e) => this.handleSelectFlight(e, 'DEPARTURE', key)} />
-                                                    </Col>}
-                                                </Row>
-                                            )}
-                                        />
-                                    </Col>
-                                </Row>
-                                <Form>
-                                    <Row gutter={24} type="flex" justify="center" style={{ marginTop: 10 }} className={(!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null) ? '' : 'hidden'}>
-                                        {(promocodedepr !== null) ?
-                                            <Col className={''} xs={24} sm={24} md={24} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }}>
-                                                <AlertAnt showIcon message={`Promo ${promocodedepr} used`} type="success" style={{ marginBottom: '10px' }}
-                                                    closeText="Cancel Promo" afterClose={() => this.handleCancelPromo('DEPARTURE')} />
-                                            </Col> : null}
-                                    </Row>
-                                    <Row className={(!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null) ? '' : 'hidden'}>
-                                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 22, pull: 2 }} xl={{ span: 22, pull: 2 }}>
-                                            {
-                                                (manualPricing) ? <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 12 }} form={this.props.form} labeltext="Departure Price" datafield="pricedeparture"
-                                                    validationrules={['required', (rules, value, callback) => this.handlePriceBy(rules, value, callback, 'pricedeparture')]} type='number' /> : null
-                                            }
-                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 12 }} form={this.props.form} labeltext="Departure Flight Number" datafield="flightnumberdeparture" validationrules={['required', 'pattern.number']} maxLength={4} onChange={() => this.handleFlightNumber(flightnumberdeparture, "DEPARTURE")} />
-                                            <Row gutter={24}>
-                                                <Col xs={24} lg={{ span: 14, offset: 4 }}>
-                                                    <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 14 }} form={this.props.form} labeltext="Input Promo Code" datafield="promocodedepr" placeholder="Ex. air00020" maxLength={20} onPressEnter={this.handlePromoCodedepr} disabled={(this.props.form.getFieldValue('flightnumberdeparture')) ? false : true} />
-                                                    {(spinloading) ? <Spin style={{ marginTop: 10, marginLeft: 10 }} /> : null}
-                                                </Col>
-                                                <Col xs={24} lg={6}>
-                                                    <Button htmlType="button" size="medium" label="Promo List" onClick={(e) => this.handleOpenModal(e, 'DEPARTURE')} style={{ marginTop: 3 }} />
-                                                </Col>
+                        <Form {...formItemLayout} onSubmit={this.saveAction}>
+                            <Row>
+                                <Col className="gutter-row" xs={24} sm={24} md={24} lg={16} xl={16}>
+                                    <Row>
+                                        <Divider>Flight Information</Divider>
+                                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={24} xl={24}>
+                                            <Divider>Departure Flight</Divider>
+                                            <Row className="pricelist-flight-header">
+                                                <Col xs={24} lg={4}>Activity Date</Col>
+                                                <Col xs={24} lg={4}>Airline</Col>
+                                                <Col xs={24} lg={(manualPricing) ? 6 : 4}>Origin - Destination</Col>
+                                                {(manualPricing) ? <Col xs={24} lg={10}>Compartment / Booking Class</Col> : <Col xs={24} lg={4}>Compartment /<br />Booking Class</Col>}
+                                                {(manualPricing) ? null : <Col xs={24} lg={4}>Price</Col>}
                                             </Row>
+                                            <List
+                                                itemLayout="horizontal"
+                                                dataSource={flightDeparture}
+                                                renderItem={(item, key) => (
+                                                    <Row className="pricelist-flight">
+                                                        <Col xs={24} lg={4}>
+                                                            {(item.flightdate) ? moment(item.flightdate).format("DD/MM/YYYY") : '-'}
+                                                        </Col>
+                                                        <Col xs={24} lg={4}>
+                                                            {(item.airlinecode) ? item.airlinecode : '-'}
+                                                        </Col>
+                                                        <Col xs={24} lg={(manualPricing) ? 6 : 4}>
+                                                            {(item.origin) ? item.origin : '-'} - {(item.destination) ? item.destination : '-'}
+                                                        </Col>
+                                                        <Col xs={24} lg={(manualPricing) ? 10 : 4}>
+                                                            {(item.compartmentcode) ? item.compartmentcode : '-'}&nbsp;/&nbsp;
+                                                            {(item.bookingclasscode) ? item.bookingclasscode : '-'}
+                                                        </Col>
+                                                        {(manualPricing) ? null : <Col xs={24} lg={4} xl={4}>
+                                                            {(item.price) ? formatNumber(item.price) : '-'}
+                                                        </Col>}
+                                                        {(manualPricing) ? null : <Col xs={24} lg={4}>
+                                                            <Button htmlType="button" type={(key === selectFlightDeparture) ? 'primary' : 'default'} size="small" label="Select" onClick={(e) => this.handleSelectFlight(e, 'DEPARTURE', key)} />
+                                                        </Col>}
+                                                    </Row>
+                                                )}
+                                            />
                                         </Col>
                                     </Row>
-                                    {/* <Row gutter={24} type="flex" justify="center" className={(!roundtrip && selectFlightDeparture !== null && promocodedepr) || (roundtrip && selectFlightDeparture !== null && promocodedepr) ? '' : 'hidden'}>
-                                        <Col className="gutter-row" xs={18} sm={18} md={18} lg={{ span: 18, offset: 0 }} xl={{ span: 18, offset: 0 }}>
-                                            <AlertAnt showIcon message={`Promo ${promocodedepr} used`} type="success" style={{ marginBottom: '10px' }}
-                                                closeText="Cancel Promo" afterClose={() => this.handleCancelPromo('DEPARTURE')} />
+                                    <Form>
+                                        <Row gutter={48} type="flex" justify="center" style={{ marginTop: 10 }} className={(!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null) ? '' : 'hidden'}>
+                                            {(promocodedepr !== null) ?
+                                                <Col xs={24} sm={24} md={24} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }}>
+                                                    <AlertAnt showIcon message={`Promo ${promocodedepr} used`} type="success" style={{ marginBottom: '10px' }}
+                                                        closeText="Cancel Promo" afterClose={() => this.handleCancelPromo('DEPARTURE')} />
+                                                </Col> : null}
+                                        </Row>
+                                        <Row className={(!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null) ? '' : 'hidden'}>
+                                            <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 22, pull: 2 }} xl={{ span: 22, pull: 2 }}>
+                                                {
+                                                    (manualPricing) ? <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 12 }} form={this.props.form} labeltext="Departure Price" datafield="pricedeparture"
+                                                        validationrules={['required', (rules, value, callback) => this.handlePriceBy(rules, value, callback, 'pricedeparture')]} type='number' /> : null
+                                                }
+                                                <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 12 }} form={this.props.form} labeltext="Departure Flight Number" datafield="flightnumberdeparture" validationrules={['required', 'pattern.number']} maxLength={4} onChange={() => this.handleFlightNumber(flightnumberdeparture, "DEPARTURE")} />
+                                                <Row gutter={24}>
+                                                    <Col xs={24} lg={{ span: 14, offset: 4 }}>
+                                                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 14 }} form={this.props.form} labeltext="Input Promo Code" datafield="promocodedepr" placeholder="Ex. air00020" maxLength={20} onPressEnter={this.handlePromoCodedepr} disabled={(this.props.form.getFieldValue('flightnumberdeparture')) ? false : true} />
+                                                        {
+                                                            (spinloading) ? <Spin style={{ marginTop: 10, marginLeft: 10 }} /> : null
+                                                        }
+                                                    </Col>
+                                                    <Col xs={24} lg={{ span: 6 }}>
+                                                        <Button htmlType="button" size="medium" label="Promo List" onClick={(e) => this.handleOpenModal(e, 'DEPARTURE')} style={{ marginTop: 3 }} />
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                        </Row>
+                                    </Form>
+
+                                    {
+                                        (roundtrip && selectFlightDeparture !== null) ?
+                                            <Row>
+                                                <Row>
+                                                    <Col className="gutter-row" xs={24} sm={24} md={24} lg={24} xl={24}>
+                                                        <Divider>Return Flight</Divider>
+                                                        <Row className="pricelist-flight-header">
+                                                            <Col xs={24} lg={4}>Activity Date</Col>
+                                                            <Col xs={24} lg={4}>Airline</Col>
+                                                            <Col xs={24} lg={(manualPricing) ? 6 : 4}>Origin - Destination</Col>
+                                                            {(manualPricing) ? <Col xs={24} lg={10}>Compartment / Booking Class</Col> : <Col xs={24} lg={4}>Compartment /<br />Booking Class</Col>}
+                                                            {(manualPricing) ? null : <Col xs={24} lg={4}>Price</Col>}
+                                                        </Row>
+                                                        <List
+                                                            itemLayout="horizontal"
+                                                            dataSource={flightReturn}
+                                                            renderItem={(item, key) => (
+                                                                <Row className="pricelist-flight">
+                                                                    <Col xs={24} lg={4}>
+                                                                        {(item.flightdate) ? moment(item.flightdate).format("DD/MM/YYYY") : '-'}
+                                                                    </Col>
+                                                                    <Col xs={24} lg={4}>
+                                                                        {(item.airlinecode) ? item.airlinecode : '-'}
+                                                                    </Col>
+                                                                    <Col xs={24} lg={(manualPricing) ? 6 : 4}>
+                                                                        {(item.origin) ? item.origin : '-'} - {(item.destination) ? item.destination : '-'}
+                                                                    </Col>
+                                                                    <Col xs={24} lg={(manualPricing) ? 10 : 4}>
+                                                                        {(item.compartmentcode) ? item.compartmentcode : '-'}&nbsp;/&nbsp;
+                                                                        {(item.bookingclasscode) ? item.bookingclasscode : '-'}
+                                                                    </Col>
+                                                                    {(manualPricing) ? null : <Col xs={24} lg={4} xl={4}>
+                                                                        {(item.price) ? formatNumber(item.price) : '-'}
+                                                                    </Col>}
+                                                                    {(manualPricing) ? null : <Col xs={24} lg={4}>
+                                                                        <Button htmlType="button" type={(key === selectFlightReturn) ? 'primary' : 'default'} size="small" label="Select" onClick={(e) => this.handleSelectFlight(e, 'RETURN', key)} />
+                                                                    </Col>}
+                                                                </Row>
+                                                            )}
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Form>
+                                                        <Row gutter={24} type="flex" justify="center" style={{ marginTop: 10 }} className={(roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null) ? '' : 'hidden'}>
+                                                            {(promocoderetr !== null) ?
+                                                                <Col className={''} xs={24} sm={24} md={24} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }}>
+                                                                    <AlertAnt showIcon message={`Promo ${promocoderetr} used`} type="success" style={{ marginBottom: '10px' }}
+                                                                        closeText="Cancel Promo" afterClose={() => this.handleCancelPromo('RETURN')} />
+                                                                </Col> : null}
+                                                        </Row>
+                                                        <Row className={(roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null) ? '' : 'hidden'}>
+                                                            <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
+                                                                {
+                                                                    (manualPricing) ? <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Return Price" datafield="pricereturn"
+                                                                        validationrules={['required', (rules, value, callback) => this.handlePriceBy(rules, value, callback, 'pricereturn')]} type='number' /> : null
+                                                                }
+                                                                <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Return Flight Number" datafield="flightnumberreturn" validationrules={['required', 'pattern.number']} maxLength={4} onChange={() => this.handleFlightNumber(flightnumberreturn, "RETURN")} />
+                                                                <Row gutter={24}>
+                                                                    <Col xs={24} lg={14}>
+                                                                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 14 }} form={this.props.form} labeltext="Input Promo Code" datafield="promocoderetr" placeholder="Ex. air00020" maxLength={20} onPressEnter={this.handlePromoCoderetr} disabled={(this.props.form.getFieldValue('flightnumberreturn')) ? false : true} />
+                                                                        {
+                                                                            (spinloading) ? <Spin style={{ marginTop: 10, marginLeft: 10 }} /> : null
+                                                                        }
+                                                                    </Col>
+                                                                    <Col xs={24} lg={10}>
+                                                                        <Button htmlType="button" size="medium" label="Promo List" onClick={(e) => this.handleOpenModal(e, 'RETURN')} style={{ marginTop: 3 }} />
+                                                                    </Col>
+                                                                </Row>
+                                                            </Col>
+                                                        </Row>
+                                                    </Form>
+                                                </Row>
+                                            </Row>
+                                            : null
+                                    }
+
+                                    {/* <Row className={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? '' : 'hidden'}>
+                                        <Divider>Flight Schedule Completion</Divider>
+                                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
+                                            <Form.Item label="Depature Flight">
+                                                <span className="ant-form-text">
+                                                    {summaryDepartureFlight.airlinecode} /  {summaryDepartureFlight.origin} - {summaryDepartureFlight.destination} / {summaryDepartureFlight.compartmentcode} / {summaryDepartureFlight.bookingclasscode}
+                                                </span>
+                                            </Form.Item>
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Departure Flight Number" datafield="flightnumberdeparture" validationrules={['required', 'pattern.number']} maxLength={4} />
+                                            {
+                                                (roundtrip) ?
+                                                    <span>
+                                                        <Form.Item label="Return Flight">
+                                                            <span className="ant-form-text">
+                                                                {summaryReturnFlight.airlinecode} / {summaryReturnFlight.origin} - {summaryReturnFlight.destination} / {summaryReturnFlight.compartmentcode} / {summaryReturnFlight.bookingclasscode}
+                                                            </span>
+                                                        </Form.Item>
+                                                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Return Flight Number" datafield="flightnumberreturn" validationrules={['required', 'pattern.number']} maxLength={4} />
+                                                    </span>
+                                                    : null
+                                            }
                                         </Col>
                                     </Row> */}
-                                </Form>
-                                {
-                                    (roundtrip && selectFlightDeparture !== null) ?
-                                        <Row>
-                                            <Row>
-                                                <Col className="gutter-row" xs={24} sm={24} md={24} lg={24} xl={24}>
-                                                    <Divider>Return Flight</Divider>
-                                                    <Row className="pricelist-flight-header">
-                                                        <Col xs={24} lg={4}>Activity Date</Col>
-                                                        <Col xs={24} lg={4}>Airline</Col>
-                                                        <Col xs={24} lg={(manualPricing) ? 6 : 4}>Origin - Destination</Col>
-                                                        {(manualPricing) ? <Col xs={24} lg={10}>Compartment / Booking Class</Col> : <Col xs={24} lg={4}>Compartment /<br />Booking Class</Col>}
-                                                        {(manualPricing) ? null : <Col xs={24} lg={4}>Price</Col>}
-                                                    </Row>
-                                                    <List
-                                                        itemLayout="horizontal"
-                                                        dataSource={flightReturn}
-                                                        renderItem={(item, key) => (
-                                                            <Row className="pricelist-flight">
-                                                                <Col xs={24} lg={4}>
-                                                                    {(item.flightdate) ? moment(item.flightdate).format("DD/MM/YYYY") : '-'}
-                                                                </Col>
-                                                                <Col xs={24} lg={4}>
-                                                                    {(item.airlinecode) ? item.airlinecode : '-'}
-                                                                </Col>
-                                                                <Col xs={24} lg={(manualPricing) ? 6 : 4}>
-                                                                    {(item.origin) ? item.origin : '-'} - {(item.destination) ? item.destination : '-'}
-                                                                </Col>
-                                                                <Col xs={24} lg={(manualPricing) ? 10 : 4}>
-                                                                    {(item.compartmentcode) ? item.compartmentcode : '-'}&nbsp;/&nbsp;
-                                                                    {(item.bookingclasscode) ? item.bookingclasscode : '-'}
-                                                                </Col>
-                                                                {(manualPricing) ? null : <Col xs={24} lg={4} xl={4}>
-                                                                    {(item.price) ? formatNumber(item.price) : '-'}
-                                                                </Col>}
-                                                                {(manualPricing) ? null : <Col xs={24} lg={4}>
-                                                                    <Button htmlType="button" type={(key === selectFlightReturn) ? 'primary' : 'default'} size="small" label="Select" onClick={(e) => this.handleSelectFlight(e, 'RETURN', key)} />
-                                                                </Col>}
-                                                            </Row>
-                                                        )}
-                                                    />
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Form>
-                                                    <Row gutter={24} type="flex" justify="center" style={{ marginTop: 10 }} className={(roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null) ? '' : 'hidden'}>
-                                                        {(promocoderetr !== null) ?
-                                                            <Col className={''} xs={24} sm={24} md={24} lg={{ span: 24, offset: 0 }} xl={{ span: 24, offset: 0 }}>
-                                                                <AlertAnt showIcon message={`Promo ${promocoderetr} used`} type="success" style={{ marginBottom: '10px' }}
-                                                                    closeText="Cancel Promo" afterClose={() => this.handleCancelPromo('RETURN')} />
-                                                            </Col> : null}
-                                                    </Row>
-                                                    <Row className={(roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null) ? '' : 'hidden'}>
-                                                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
-                                                            {
-                                                                (manualPricing) ? <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Return Price" datafield="pricereturn"
-                                                                    validationrules={['required', (rules, value, callback) => this.handlePriceBy(rules, value, callback, 'pricereturn')]} type='number' /> : null
-                                                            }
-                                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Return Flight Number" datafield="flightnumberreturn" validationrules={['required', 'pattern.number']} maxLength={4} onChange={() => this.handleFlightNumber(flightnumberreturn, "RETURN")} />
-                                                            <Row gutter={24}>
-                                                                <Col xs={24} lg={14}>
-                                                                    <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 14 }} form={this.props.form} labeltext="Input Promo Code" datafield="promocoderetr" placeholder="Ex. air00020" maxLength={20} onPressEnter={this.handlePromoCoderetr} disabled={(this.props.form.getFieldValue('flightnumberreturn')) ? false : true} />
-                                                                    {(spinloading) ? <Spin style={{ marginTop: 10, marginLeft: 10 }} /> : null}
-                                                                </Col>
-                                                                <Col xs={24} lg={10}>
-                                                                    <Button htmlType="button" size="medium" label="Promo List" onClick={(e) => this.handleOpenModal(e, 'RETURN')} style={{ marginTop: 3 }} />
-                                                                </Col>
-                                                            </Row>
-                                                        </Col>
-                                                    </Row>
-                                                    {/* <Row gutter={24} type="flex" justify="center" className={(roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null && promocoderetr) ? '' : 'hidden'}>
-                                                        <AlertAnt showIcon message={`Promo ${promocoderetr} used`} type="success" style={{ marginBottom: '10px' }}
-                                                                closeText="Cancel Promo" afterClose={() => this.handleCancelPromo('RETURN')} />
-                                                        </Row> */}
-                                                </Form>
-                                            </Row>
-                                        </Row>
-                                        : null
-                                }
-                                {/* <Row className={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? '' : 'hidden'}>
-                                    <Divider>Passenger Data</Divider>
-                                    <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
-                                        <Divider>Passenger #1</Divider>
-                                        <SwitchButton wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Self Usage" datafield="selfusage" onChange={this.handleSelfUsageChange} />
-                                        <NomineeCardNumberSelect adultpassenger={adultpassenger} wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid0"} disabled={selfusage}
-                                            onChange={this.handleOthersPassenger} indexRow={0} memberID={memberid} />
-                                        <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} ref={(e) => { this.componentSalutationSelect = e }} form={this.props.form} labeltext="Salutation" datafield={"passenger-salutationcode0"} disabled/>
-                                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Name" datafield={"passenger-name0"} validationrules={['required', 'pattern.letterspace']} maxLength={45} disabled/>
-                                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Family Name" datafield={"passenger-familyname0"} validationrules={['pattern.letter']} maxLength={45} disabled/>
-                                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="GarudaMiles ID" datafield={"passenger-memberid0"} disabled={selfusage} validationrules={['pattern.number']} maxLength={16} />
-                                        <SelectBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Traveler Type" datafield={"passenger-travelertype0"} validationrules={['required']} options={TravelerType} disabled={selfusage} />
-                                    </Col>
-                                    {passengerList}
-                                </Row> */}
 
-                                <Row className={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? '' : 'hidden'}>
-                                    <Divider>Passenger Data</Divider>
-                                    <Col className='gutter-row' xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
-                                        <Divider>Passenger #1</Divider>
-                                        <SwitchButton wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Self Usage' datafield='selfusage' onChange={this.handleSelfUsageChange} />
-                                        <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} ref={(e) => { this.componentSalutationSelect = e }} form={this.props.form} labeltext='Salutation' datafield={'passenger-salutationcode0'} disabled={selfusage} />
-                                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Name' datafield={'passenger-name0'} validationrules={['required', 'pattern.letterspace']} maxLength={45} disabled={selfusage} />
-                                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Family Name' datafield={'passenger-familyname0'} validationrules={['required', 'pattern.letter']} maxLength={45} disabled={selfusage} />
-                                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='GarudaMiles ID' datafield={'passenger-memberid0'} disabled={selfusage} validationrules={['pattern.number']} maxLength={16} />
-                                        <SelectBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Traveler Type' datafield={'passenger-travelertype0'} validationrules={['required']} options={TravelerType} disabled={selfusage} />
-                                    </Col>
-                                    {passengerList}
-                                </Row>
-                                <Row className={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? '' : 'hidden'}>
-                                    <Divider>Booking Completion</Divider>
-                                    <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
-                                        <Form.Item label="Issued Date">
-                                            <span className="ant-form-text">{moment().format("DD MMMM YYYY")}</span>
-                                        </Form.Item>
-                                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Booking Code" datafield="bookingcode" validationrules={['required', 'pattern.alphanumeric']} maxLength={6} />
-                                        <DatePickerBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Ticket Validity Date" datafield="ticketvaliditydate" validationrules={['required']} minDate={moment(new Date())} />
-                                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Paid Ticket Number" datafield="ticketnumber" validationrules={['required', 'pattern.alphanumeric']} maxLength={13} />
-                                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Remark" datafield="remark" />
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col className="gutter-row" xs={24} sm={24} md={24} lg={8} xl={8} style={{ padding: '0 10px' }}>
-                                <Affix offsetTop={0}>
-                                    <div>
-                                        <Card title="Award Information" bordered={false} style={{ boxShadow: '0 2px 5px 0 rgba(27,27,27,.1)' }} bodyStyle={{ padding: '5px', paddingBottom: '5px' }}>
-                                            <Row>
-                                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>Award Code</Col>
-                                                <Col xs={24} sm={24} md={24} lg={12} xl={12} style={{ textAlign: 'right' }}>
-                                                    <Tooltip title={(awardinfo.awardcode) ? awardinfo.awardcode : '-'}>
-                                                        {
-                                                            (awardinfo.awardcode) ? (awardinfo.awardcode.length > 12) ? awardinfo.awardcode.substring(0, 12) + '...' : awardinfo.awardcode : '-'
-                                                        }
-                                                    </Tooltip>
-                                                </Col>
-                                            </Row>
-                                            <Row style={{ marginTop: '5px' }}>
-                                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>Award Type </Col>
-                                                <Col xs={24} sm={24} md={24} lg={12} xl={12} style={{ textAlign: 'right' }}>
-                                                    {(awardinfo.awardtypecode) ? awardinfo.awardtypecode : '-'}
-                                                </Col>
-                                            </Row>
-                                            <Row style={{ marginTop: '5px' }}>
-                                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>Partner</Col>
-                                                <Col xs={24} sm={24} md={24} lg={12} xl={12} style={{ textAlign: 'right' }}>
-                                                    {(awardinfo.partnername) ? awardinfo.partnername : '-'}
-                                                </Col>
-                                            </Row>
-                                        </Card>
-                                        <Card title="Price Details" bordered={false} style={{ boxShadow: '0 2px 5px 0 rgba(27,27,27,.1)', marginTop: '5px' }} bodyStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
-                                            <Row>
-                                                <Col xs={24} sm={24} md={24} lg={18} xl={18}>
-                                                    <Text strong style={{ display: 'block' }}>Departure Flight</Text>
-                                                    <Text style={{ display: 'block' }}> {moment(summaryDepartureFlight.flightdate).format("DD MMMM YYYY")} &nbsp;{(summaryDepartureFlight.peakseasonstatus) ? <Text type="warning">Peak Season Period</Text> : null} </Text>
-                                                    <Text style={{ display: 'block' }}>
-                                                        {
-                                                            (selectFlightDeparture !== null) ? `${summaryDepartureFlight.origin} - ${summaryDepartureFlight.destination}
+                                    <Row className={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? '' : 'hidden'}>
+                                        <Divider>Passenger Data</Divider>
+                                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
+                                            <Divider>Passenger #1</Divider>
+                                            <SwitchButton wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Self Usage' datafield='selfusage' onChange={this.handleSelfUsageChange} />
+                                            {(othersTraveller) ?
+                                                <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid0"} validationrules={['pattern.number']} maxLength={16} disabled={selfusage} />
+                                                : <NomineeCardNumberSelect adultpassenger={adultpassenger} wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid0"}
+                                                    onChange={this.handleOthersPassenger} indexRow={0} memberID={memberid} disabled={selfusage} />}
+                                            <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} ref={(e) => { this.componentSalutationSelect = e }} form={this.props.form} labeltext='Salutation' datafield={'passenger-salutationcode0'} disabled={!othersTraveller || selfusage} />
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Name' datafield={'passenger-name0'} validationrules={['required', 'pattern.letterspace']} maxLength={45} disabled={!othersTraveller || selfusage} />
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Family Name' datafield={'passenger-familyname0'} validationrules={['pattern.letter']} maxLength={45} disabled={!othersTraveller || selfusage} />
+                                            {/* <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='GarudaMiles ID' datafield={'passenger-memberid0'} disabled={selfusage} validationrules={['pattern.number']} maxLength={16} /> */}
+                                            <SelectBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Traveler Type' datafield={'passenger-travelertype0'} validationrules={['required']} options={TravelerType} disabled={selfusage} />
+                                        </Col>
+                                        {passengerList}
+                                    </Row>
+                                    <Row className={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? '' : 'hidden'}>
+                                        <Divider>Booking Completion</Divider>
+                                        <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
+                                            <Form.Item label="Issued Date">
+                                                <span className="ant-form-text">{moment().format("DD MMMM YYYY")}</span>
+                                            </Form.Item>
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Booking Code" datafield="bookingcode" validationrules={['required', 'pattern.alphanumeric']} maxLength={6} />
+                                            {/* <DatePickerBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Ticket Validity Date" datafield="ticketvaliditydate" minDate={moment(new Date())} />
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Ticket Number" datafield="ticketnumber" validationrules={['pattern.alphanumeric']} maxLength={13} /> */}
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Remark" datafield="remark" />
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col className="gutter-row" xs={24} sm={24} md={24} lg={8} xl={8} style={{ padding: '0 10px' }}>
+                                    <Affix offsetTop={0}>
+                                        <div>
+                                            <Card title="Award Information" bordered={false} style={{ boxShadow: '0 2px 5px 0 rgba(27,27,27,.1)' }} bodyStyle={{ padding: '5px', paddingBottom: '5px' }}>
+                                                <Row>
+                                                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>Award Code</Col>
+                                                    <Col xs={24} sm={24} md={24} lg={12} xl={12} style={{ textAlign: 'right' }}>
+                                                        <Tooltip title={(awardinfo.awardcode) ? awardinfo.awardcode : '-'}>
+                                                            {(awardinfo.awardcode) ? (awardinfo.awardcode.length > 12) ? awardinfo.awardcode.substring(0, 12) + '...' : awardinfo.awardcode : '-'}
+                                                        </Tooltip>
+                                                    </Col>
+                                                </Row>
+                                                <Row style={{ marginTop: '5px' }}>
+                                                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>Award Type</Col>
+                                                    <Col xs={24} sm={24} md={24} lg={12} xl={12} style={{ textAlign: 'right' }}>
+                                                        {(awardinfo.awardtypecode) ? awardinfo.awardtypecode : '-'}
+                                                    </Col>
+                                                </Row>
+                                                <Row style={{ marginTop: '5px' }}>
+                                                    <Col xs={24} sm={24} md={24} lg={12} xl={12}>Partner</Col>
+                                                    <Col xs={24} sm={24} md={24} lg={12} xl={12} style={{ textAlign: 'right' }}>
+                                                        {(awardinfo.partnername) ? awardinfo.partnername : '-'}
+                                                    </Col>
+                                                </Row>
+                                            </Card>
+                                            <Card title="Price Details" bordered={false} style={{ boxShadow: '0 2px 5px 0 rgba(27,27,27,.1)', marginTop: '5px' }}>
+                                                <Row>
+                                                    <Col xs={24} sm={24} md={24} lg={18} xl={18}>
+                                                        <Text strong style={{ display: 'block' }}>Departure Flight</Text>
+                                                        <Text style={{ display: 'block' }}> {moment(summaryDepartureFlight.flightdate).format("DD MMMM YYYY")} &nbsp;{(summaryDepartureFlight.peakseasonstatus) ? <Text type="warning">Peak Season Period</Text> : null} </Text>
+                                                        <Text style={{ display: 'block' }}>
+                                                            {
+                                                                (selectFlightDeparture !== null) ? `${summaryDepartureFlight.origin} - ${summaryDepartureFlight.destination}
                                                                     / ${summaryDepartureFlight.airlinecode} / ${summaryDepartureFlight.compartmentcode} / ${summaryDepartureFlight.bookingclasscode} (x${adultpassenger})` : '-'
-                                                        }
-                                                    </Text>
-                                                    <Text style={{ display: 'block', marginLeft: 30 }}>
-                                                        {
-                                                            (manualPricing) ? ((pricedeparture) ? formatNumber(pricedeparture * adultpassenger) : '') : (mileageDeparture) ? `@${formatNumber(mileageDeparture)} x ${adultpassenger}` : " "
-                                                        }
-                                                    </Text>
-                                                    <Text style={{ display: 'block' }}>
-                                                        {
-                                                            (promocodedepr) ? `Promo ${promocodedepr}` : " "
-                                                        }
-                                                    </Text>
-                                                    {/* {(summaryDepartureFlight.peakseasonstatus) ? <Text type="warning">Peak Season Period</Text> : null} */}
-                                                </Col>
-                                                {/* set total mileage of activity */}
-                                                <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
-                                                    {(selectFlightDeparture !== null) ? (manualPricing) ? ((pricedeparture) ? formatNumber(pricedeparture * adultpassenger) : '') : formatNumber(mileageDeparture * adultpassenger) : ""}
-                                                </Col>
-                                                <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right', marginTop: 63 }}>
-                                                    {(totaldiscountdepr) ? `- ${formatNumber(totaldiscountdepr * adultpassenger)}` : (!totaldiscountdepr) ? "" : ""}
-                                                </Col>
-                                                <Col xs={24} sm={24} md={24} lg={18} xl={18} style={{ display: 'block', marginLeft: 30 }}>
-                                                    <Text style={{ display: 'block' }}>
-                                                        {(discountdepr && discounttypedepr === "PERCENTAGE" && totaldiscountdepr) ? `(Disc ${discountdepr}%) @${formatNumber(totaldiscountdepr)} x ${adultpassenger}` :
-                                                            (discountdepr && discounttypedepr === "MILEAGE" && totaldiscountdepr) ? `(Disc ${discountdepr} Miles) @${formatNumber(totaldiscountdepr)} x ${adultpassenger}` : ''}
-                                                    </Text>
-                                                </Col>
-                                                {/* set total mileage of activity after discount*/}
-                                                {/* <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
+                                                            }
+                                                        </Text>
+                                                        <Text style={{ display: 'block', marginLeft: 30 }}>
+                                                            {
+                                                                (manualPricing) ? ((pricedeparture) ? formatNumber(pricedeparture * adultpassenger) : '') : (mileageDeparture) ? `@${formatNumber(mileageDeparture)} x ${adultpassenger}` : " "
+                                                            }
+                                                        </Text>
+                                                        <Text style={{ display: 'block' }}>
+                                                            {
+                                                                (promocodedepr) ? `Promo ${promocodedepr}` : " "
+                                                            }
+                                                        </Text>
+                                                        {/* {(summaryDepartureFlight.peakseasonstatus) ? <Text type="warning">Peak Season Period</Text> : null} */}
+                                                    </Col>
+                                                    {/* set total mileage of activity */}
+                                                    <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
+                                                        {(selectFlightDeparture !== null) ? (manualPricing) ? ((pricedeparture) ? formatNumber(pricedeparture * adultpassenger) : '') : formatNumber(mileageDeparture * adultpassenger) : ""}
+                                                    </Col>
+                                                    <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right', marginTop: 63 }}>
+                                                        {(totaldiscountdepr) ? `- ${formatNumber(totaldiscountdepr * adultpassenger)}` : (!totaldiscountdepr) ? "" : ""}
+                                                    </Col>
+                                                    <Col xs={24} sm={24} md={24} lg={18} xl={18} style={{ display: 'block', marginLeft: 30 }}>
+                                                        <Text style={{ display: 'block' }}>
+                                                            {(discountdepr && discounttypedepr === "PERCENTAGE" && totaldiscountdepr) ? `(Disc ${discountdepr}%) @${formatNumber(totaldiscountdepr)} x ${adultpassenger}` :
+                                                                (discountdepr && discounttypedepr === "MILEAGE" && totaldiscountdepr) ? `(Disc ${discountdepr} Miles) @${formatNumber(totaldiscountdepr)} x ${adultpassenger}` : ''}
+                                                        </Text>
+                                                    </Col>
+                                                    {/* set total mileage of activity after discount*/}
+                                                    {/* <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
                                                         {
                                                             (selectFlightDeparture !== null && totalafterdiscountdepr !== null) ?
                                                                 <Text strong>{formatNumber(summaryafterdiscountdepr)}</Text> : ""
                                                         }
                                                     </Col> */}
-                                            </Row>
-                                            {
-                                                (roundtrip) ?
-                                                    <Row style={{ marginTop: '5px' }}>
-                                                        <Col xs={24} sm={24} md={24} lg={18} xl={18}>
-                                                            <Text strong style={{ display: 'block' }}> Return Flight </Text>
-                                                            <Text style={{ display: 'block' }}> {moment(summaryReturnFlight.flightdate).format("DD MMMM YYYY")} &nbsp;{(summaryReturnFlight.peakseasonstatus) ? <Text type="warning">Peak Season Period</Text> : null} </Text>
-                                                            <Text style={{ display: 'block' }}>
-                                                                {
-                                                                    (selectFlightReturn !== null) ? `${summaryReturnFlight.origin} - ${summaryReturnFlight.destination}
-                                                                / ${summaryReturnFlight.airlinecode} / ${summaryReturnFlight.compartmentcode} / ${summaryReturnFlight.bookingclasscode} (x${adultpassenger})` : '-'
-                                                                }
-                                                            </Text>
-                                                            <Text style={{ display: 'block', marginLeft: 30 }}>
-                                                                {
-                                                                    (manualPricing) ? ((pricereturn) ? formatNumber(pricereturn * adultpassenger) : '') : (mileageReturn) ? `@${formatNumber(mileageReturn)} x ${adultpassenger}` : " "
-                                                                }
-                                                            </Text>
-                                                            <Text style={{ display: 'block' }}>
-                                                                {
-                                                                    (promocoderetr) ? `Promo ${promocoderetr}` : " "
-                                                                }
-                                                            </Text>
-                                                            {/* {(summaryReturnFlight.peakseasonstatus) ? <Text type="warning">Peak Season Period</Text> : null} */}
-                                                        </Col>
-                                                        {/* set total mileage of activity */}
-                                                        <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
-                                                            {(selectFlightReturn !== null) ? (manualPricing) ? ((pricereturn) ? formatNumber(pricereturn * adultpassenger) : '') : formatNumber(mileageReturn * adultpassenger) : ""}
-                                                        </Col>
-                                                        <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right', marginTop: 63 }}>
-                                                            {(totaldiscountretr) ? `- ${formatNumber(totaldiscountretr * adultpassenger)}` : (!totaldiscountretr) ? "" : ""}
-                                                        </Col>
-                                                        <Col xs={24} sm={24} md={24} lg={18} xl={18} style={{ display: 'block', marginLeft: 30 }}>
-                                                            <Text style={{ display: 'block' }}>
-                                                                {(discountretr && discounttyperetr === "PERCENTAGE" && totaldiscountretr) ? `(Disc ${discountretr}%) @${formatNumber(totaldiscountretr)} x ${adultpassenger}` :
-                                                                    (discountretr && discounttyperetr === "MILEAGE" && totaldiscountretr) ? `(Disc ${discountretr} Miles) @${formatNumber(totaldiscountretr)} x ${adultpassenger}` : ''}
-                                                            </Text>
-                                                        </Col>
-                                                        {/* set total mileage of activity after discount */}
-                                                        {/* <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
-                                                            {
-                                                                (selectFlightReturn !== null && totalafterdiscountretr !== null) ?
-                                                                    <Text strong>{formatNumber(summaryafterdiscountretr)}</Text> : ""
-                                                            }
-                                                        </Col> */}
-                                                    </Row>
-                                                    : null
-                                            }
-                                            <Row style={{ paddingTop: '16px', borderTop: '1px solid #e8e8e8', marginTop: '12px' }}>
-                                                {/* {
-                                                    (totalafterdiscountdepr !== null) ?
-                                                        <div>
-                                                            <Col xs={24} sm={24} md={24} lg={18} xl={18}>
-                                                                <Text type="secondary">Promo {promocodedepr}</Text>
-                                                            </Col>
-                                                            <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
-                                                                <Text type="secondary">-{summarydiscountdepr}</Text>
-                                                            </Col>
-                                                        </div> : ''
-                                                }
+                                                </Row>
                                                 {
-                                                    (totalafterdiscountretr !== null) ?
-                                                        <div>
+                                                    (roundtrip) ?
+                                                        <Row style={{ marginTop: '5px' }}>
                                                             <Col xs={24} sm={24} md={24} lg={18} xl={18}>
-                                                                <Text type="secondary">Promo {promocoderetr}</Text>
+                                                                <Text strong style={{ display: 'block' }}> Return Flight </Text>
+                                                                <Text style={{ display: 'block' }}> {moment(summaryReturnFlight.flightdate).format("DD MMMM YYYY")} &nbsp;{(summaryReturnFlight.peakseasonstatus) ? <Text type="warning">Peak Season Period</Text> : null} </Text>
+                                                                <Text style={{ display: 'block' }}>
+                                                                    {
+                                                                        (selectFlightReturn !== null) ? `${summaryReturnFlight.origin} - ${summaryReturnFlight.destination}
+                                                                            / ${summaryReturnFlight.airlinecode} / ${summaryReturnFlight.compartmentcode} / ${summaryReturnFlight.bookingclasscode} (x${adultpassenger})` : '-'
+                                                                    }
+                                                                </Text>
+                                                                <Text style={{ display: 'block', marginLeft: 30 }}>
+                                                                    {
+                                                                        (manualPricing) ? ((pricereturn) ? formatNumber(pricereturn * adultpassenger) : '') : (mileageReturn) ? `@${formatNumber(mileageReturn)} x ${adultpassenger}` : " "
+                                                                    }
+                                                                </Text>
+                                                                <Text style={{ display: 'block' }}>
+                                                                    {
+                                                                        (promocoderetr) ? `Promo ${promocoderetr}` : " "
+                                                                    }
+                                                                </Text>
+                                                                {/* {(summaryReturnFlight.peakseasonstatus) ? <Text type="warning">Peak Season Period</Text> : null} */}
                                                             </Col>
+                                                            {/* set total mileage of activity */}
                                                             <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
-                                                                <Text type="secondary">-{summarydiscountretr}</Text>
+                                                                {(selectFlightReturn !== null) ? (manualPricing) ? ((pricereturn) ? formatNumber(pricereturn * adultpassenger) : '') : formatNumber(mileageReturn * adultpassenger) : ""}
                                                             </Col>
-                                                        </div> : ''
-                                                } */}
-                                                <Col xs={24} sm={24} md={24} lg={18} xl={18}>
-                                                    <Text strong>Total mileage</Text>
-                                                </Col>
-                                                <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
-                                                    {
-                                                        // (roundtrip && !totalafterdiscountdepr) ? totalprice = (mileageDeparture) :
-                                                        //     (roundtrip && totalafterdiscountdepr) ? totalprice = (totalafterdiscountdepr) :
-                                                        (totalafterdiscountdepr !== null && totalafterdiscountretr == null) ? formatNumber((totalafterdiscountdepr + mileageReturn) * adultpassenger) :
-                                                            (totalafterdiscountretr !== null && totalafterdiscountdepr == null) ? formatNumber((totalafterdiscountretr + mileageDeparture) * adultpassenger) :
-                                                                (totalafterdiscountdepr !== null && totalafterdiscountretr !== null) ? formatNumber((totalafterdiscountdepr + totalafterdiscountretr) * adultpassenger) :
-                                                                    (totalafterdiscountdepr === null && totalafterdiscountretr === null) ? totalMileage : '-'
+                                                            <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right', marginTop: 63 }}>
+                                                                {(totaldiscountretr) ? `- ${formatNumber(totaldiscountretr * adultpassenger)}` : (!totaldiscountretr) ? "" : ""}
+                                                            </Col>
+                                                            <Col xs={24} sm={24} md={24} lg={18} xl={18} style={{ display: 'block', marginLeft: 30 }}>
+                                                                <Text style={{ display: 'block' }}>
+                                                                    {(discountretr && discounttyperetr === "PERCENTAGE" && totaldiscountretr) ? `(Disc ${discountretr}%) @${formatNumber(totaldiscountretr)} x ${adultpassenger}` :
+                                                                        (discountretr && discounttyperetr === "MILEAGE" && totaldiscountretr) ? `(Disc ${discountretr} Miles) @${formatNumber(totaldiscountretr)} x ${adultpassenger}` : ''}
+                                                                </Text>
+                                                            </Col>
+                                                            {/* set total mileage of activity after discount */}
+                                                            {/* <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
+                                                                {
+                                                                    (selectFlightReturn !== null && totalafterdiscountretr !== null) ?
+                                                                        <Text strong>{formatNumber(summaryafterdiscountretr)}</Text> : ""
+                                                                }
+                                                            </Col> */}
+                                                        </Row>
+                                                        : null
+                                                }
+                                                <Row style={{ paddingTop: '16px', borderTop: '1px solid #e8e8e8', marginTop: '12px' }}>
+                                                    {/* {
+                                                        (totalafterdiscountdepr !== null) ?
+                                                            <div>
+                                                                <Col xs={24} sm={24} md={24} lg={18} xl={18}>
+                                                                    <Text type="secondary">Promo {promocodedepr}</Text>
+                                                                </Col>
+                                                                <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
+                                                                    <Text type="secondary">-{summarydiscountdepr}</Text>
+                                                                </Col>
+                                                            </div> : ''
                                                     }
-                                                </Col>
-                                            </Row>
-                                        </Card>
-                                        <Button htmlType="button" type="primary" label='Buy' block={true} style={{ marginTop: '20px' }} menucode={'REDEEM'} prefixmenuname={'REDEEM'} actioncode={'BUY'}
-                                            disabled={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? false : true} onClick={(e) => this.saveAction(e, 'BUY')} />
-                                        <Button htmlType="button" type="primary" label='Request' block={true} style={{ marginTop: '20px' }} menucode={'REDEEM'} prefixmenuname={'REDEEM'} actioncode={'REQUEST'}
-                                            disabled={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? false : true} onClick={(e) => this.saveAction(e, 'REQUEST')} />
-                                    </div>
-                                </Affix>
-                            </Col>
-                            {/* </Row> */}
+                                                    {
+                                                        (totalafterdiscountretr !== null) ?
+                                                            <div>
+                                                                <Col xs={24} sm={24} md={24} lg={18} xl={18}>
+                                                                    <Text type="secondary">Promo {promocoderetr}</Text>
+                                                                </Col>
+                                                                <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
+                                                                    <Text type="secondary">-{summarydiscountretr}</Text>
+                                                                </Col>
+                                                            </div> : ''
+                                                    } */}
+                                                    <Col xs={24} sm={24} md={24} lg={18} xl={18}>
+                                                        <Text strong>Total Mileage</Text>
+                                                    </Col>
+                                                    <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ textAlign: 'right' }}>
+                                                        {
+                                                            (totalafterdiscountdepr !== null && totalafterdiscountretr === null) ? formatNumber((totalafterdiscountdepr + mileageReturn) * adultpassenger) :
+                                                                (totalafterdiscountretr !== null && totalafterdiscountdepr === null) ? formatNumber((totalafterdiscountretr + mileageDeparture) * adultpassenger) :
+                                                                    (totalafterdiscountdepr !== null && totalafterdiscountretr !== null) ? formatNumber((totalafterdiscountdepr + totalafterdiscountretr) * adultpassenger) :
+                                                                        (totalafterdiscountdepr === null && totalafterdiscountretr === null) ? (totalMileage) ? totalMileage : '-' : '-'
+                                                        }
+                                                    </Col>
+                                                </Row>
+                                            </Card>
+                                            <Button htmlType="button" type="primary" label='Buy' block={true} style={{ marginTop: '20px' }} menucode={'REDEEM'} prefixmenuname={'REDEEM'} actioncode={'BUY'}
+                                                disabled={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? false : true} onClick={(e) => this.saveAction(e, 'BUY')} />
+                                            <Button htmlType="button" type="primary" label='Request' block={true} style={{ marginTop: '20px' }} menucode={'REDEEM'} prefixmenuname={'REDEEM'} actioncode={'REQUEST'}
+                                                disabled={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? false : true} onClick={(e) => this.saveAction(e, 'REQUEST')} />
+                                        </div>
+                                    </Affix>
+                                </Col>
+                            </Row>
                             {/* <Row className={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? '' : 'hidden'}>
                                 <Divider>Redemption Summary</Divider>
                                 <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 14, offset: 5 }} xl={{ span: 14, offset: 5 }}>
@@ -1085,6 +1073,7 @@ class App extends Component {
                                 <Button htmlType="submit" type="primary" label="Buy" disabled={(!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null) ? false : true} />
                                 <Button url={'/member/form/' + this.props.match.params.ID + '/redemption'} htmlType="link" type="default" label="Back" />
                             </Row> */}
+
                         </Form>
                     </Spin>
                 </Row>

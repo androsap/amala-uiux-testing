@@ -260,6 +260,8 @@ class App extends Component {
     }
 
     handleOthersPassenger = (value, data, key) => {
+        // Others traveller fills passenger data manually; don't wipe it when card number is cleared.
+        if (this.state.requestSearchFlight.redemptiontravellertype === 'OTHERS') return;
         if (value && data) {
             const { salutationcode, firstname, lastname, dateofbirth } = data;
             let age = moment().diff(moment(dateofbirth), 'years');
@@ -586,37 +588,29 @@ class App extends Component {
         let memberid = this.props.match.params.ID;
         let awardcode = this.props.match.params.awardcode;
         let selfusage = this.props.form.getFieldValue('selfusage');
+        let othersTraveller = requestSearchFlight.redemptiontravellertype === 'OTHERS';
         let passengerList = [];
         let totalMileage = (manualPricing) ? ((roundtrip) ? ((pricereturn && pricedeparture) ? formatNumber((Number(pricedeparture) + Number(pricereturn)) * adultpassenger) : null) :
             ((pricedeparture) ? formatNumber(Number(pricedeparture) * adultpassenger) : null)) : formatNumber((mileageDeparture + mileageReturn) * adultpassenger);
 
-        // if (adultpassenger > 1) {
-        //     for (let key = 1; key < adultpassenger; key++) {
-        //         // this.handleSetKey(key);
-        //         passengerList[key] = <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
-        //             <Divider>Passenger #{key + 1}</Divider>
-        //             <NomineeCardNumberSelect adultpassenger={adultpassenger} wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid" + key}
-        //                 onChange={this.handleOthersPassenger} indexRow={key} memberID={memberid} />
-        //             <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Salutation" datafield={"passenger-salutationcode" + key} disabled />
-        //             <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Name" datafield={"passenger-name" + key} validationrules={['required', 'pattern.letterspace']} maxLength={45} disabled />
-        //             <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Family Name" datafield={"passenger-familyname" + key} validationrules={['pattern.letter']} maxLength={45} disabled />
-        //             {/* <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="GarudaMiles ID" datafield={"passenger-memberid" + key} validationrules={['pattern.number']} maxLength={16} /> */}
-        //             <SelectBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Traveler Type" datafield={"passenger-travelertype" + key} validationrules={['required']} options={TravelerType} />
-        //         </Col>;
-        //     }
-        // }
         if (adultpassenger > 1) {
             for (let key = 1; key < adultpassenger; key++) {
-                passengerList[key] = <Col className='gutter-row' xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
+                // this.handleSetKey(key);
+                passengerList[key] = <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
                     <Divider>Passenger #{key + 1}</Divider>
-                    <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Salutation' datafield={'passenger-salutationcode' + key} />
-                    <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Name' datafield={'passenger-name' + key} validationrules={['required', 'pattern.letterspace']} maxLength={45} />
-                    <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Family Name' datafield={'passenger-familyname' + key} validationrules={['required', 'pattern.letter']} maxLength={45} />
-                    <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='GarudaMiles ID' datafield={'passenger-memberid' + key} validationrules={['pattern.number']} maxLength={16} />
-                    <SelectBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Traveler Type' datafield={'passenger-travelertype' + key} validationrules={['required']} options={TravelerType} />
+                    {(othersTraveller) ?
+                        <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid" + key} validationrules={['pattern.number']} maxLength={16} />
+                        : <NomineeCardNumberSelect adultpassenger={adultpassenger} wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid" + key}
+                            onChange={this.handleOthersPassenger} indexRow={key} memberID={memberid} />}
+                    <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Salutation" datafield={"passenger-salutationcode" + key} disabled={!othersTraveller} />
+                    <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Name" datafield={"passenger-name" + key} validationrules={['required', 'pattern.letterspace']} maxLength={45} disabled={!othersTraveller} />
+                    <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Family Name" datafield={"passenger-familyname" + key} validationrules={['pattern.letter']} maxLength={45} disabled={!othersTraveller} />
+                    {/* <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="GarudaMiles ID" datafield={"passenger-memberid" + key} validationrules={['pattern.number']} maxLength={16} /> */}
+                    <SelectBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Traveler Type" datafield={"passenger-travelertype" + key} validationrules={['required']} options={TravelerType} />
                 </Col>;
             }
         }
+
         if (isSuccessBuy) {
             return (<Redirect to={{ pathname: `/member/form/${memberid}/redemption/freeflight/${awardcode}/certificate`, state: { responseBuyAward } }} />)
         } else {
@@ -711,7 +705,7 @@ class App extends Component {
                                                         }
                                                     </Col>
                                                     <Col xs={24} lg={{ span: 6 }}>
-                                                        <Button htmlType="button" size="medium" label="Promo List" onClick={(e) => this.handleOpenModal(e, 'DEPARTURE')} style={{ marginTop: 3 }} disabled={(this.props.form.getFieldValue('flightnumberdeparture')) && awardinfo.pricingby !== 'MANUAL' ? false : true} />
+                                                        <Button htmlType="button" size="medium" label="Promo List" onClick={(e) => this.handleOpenModal(e, 'DEPARTURE')} style={{ marginTop: 3 }} />
                                                     </Col>
                                                 </Row>
                                             </Col>
@@ -784,7 +778,7 @@ class App extends Component {
                                                                         }
                                                                     </Col>
                                                                     <Col xs={24} lg={10}>
-                                                                        <Button htmlType="button" size="medium" label="Promo List" onClick={(e) => this.handleOpenModal(e, 'RETURN')} style={{ marginTop: 3 }} disabled={(this.props.form.getFieldValue('flightnumberdeparture')) && awardinfo.pricingby !== 'MANUAL' ? false : true} />
+                                                                        <Button htmlType="button" size="medium" label="Promo List" onClick={(e) => this.handleOpenModal(e, 'RETURN')} style={{ marginTop: 3 }} />
                                                                     </Col>
                                                                 </Row>
                                                             </Col>
@@ -819,29 +813,19 @@ class App extends Component {
                                         </Col>
                                     </Row> */}
 
-                                    {/* <Row className={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? '' : 'hidden'}>
+                                    <Row className={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? '' : 'hidden'}>
                                         <Divider>Passenger Data</Divider>
                                         <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
                                             <Divider>Passenger #1</Divider>
                                             <SwitchButton wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Self Usage' datafield='selfusage' onChange={this.handleSelfUsageChange} />
-                                            <NomineeCardNumberSelect adultpassenger={adultpassenger} wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid0"}
-                                                onChange={this.handleOthersPassenger} indexRow={0} memberID={memberid} disabled={selfusage} />
-                                            <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} ref={(e) => { this.componentSalutationSelect = e }} form={this.props.form} labeltext='Salutation' datafield={'passenger-salutationcode0'} disabled/>
-                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Name' datafield={'passenger-name0'} validationrules={['required', 'pattern.letterspace']} maxLength={45} disabled/>
-                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Family Name' datafield={'passenger-familyname0'} validationrules={['pattern.letter']} maxLength={45} disabled/>
-                                            <SelectBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Traveler Type' datafield={'passenger-travelertype0'} validationrules={['required']} options={TravelerType} disabled={selfusage} />
-                                        </Col>
-                                        {passengerList}
-                                    </Row> */}
-                                    <Row className={((!roundtrip && selectFlightDeparture !== null) || (roundtrip && selectFlightDeparture !== null && selectFlightReturn !== null)) ? '' : 'hidden'}>
-                                        <Divider>Passenger Data</Divider>
-                                        <Col className='gutter-row' xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
-                                            <Divider>Passenger #1</Divider>
-                                            <SwitchButton wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Self Usage' datafield='selfusage' onChange={this.handleSelfUsageChange} />
-                                            <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} ref={(e) => { this.componentSalutationSelect = e }} form={this.props.form} labeltext='Salutation' datafield={'passenger-salutationcode0'} disabled={selfusage} />
-                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Name' datafield={'passenger-name0'} validationrules={['required', 'pattern.letterspace']} maxLength={45} disabled={selfusage} />
-                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Family Name' datafield={'passenger-familyname0'} validationrules={['required', 'pattern.letter']} maxLength={45} disabled={selfusage} />
-                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='GarudaMiles ID' datafield={'passenger-memberid0'} disabled={selfusage} validationrules={['pattern.number']} maxLength={16} />
+                                            {(othersTraveller) ?
+                                                <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid0"} validationrules={['pattern.number']} maxLength={16} disabled={selfusage} />
+                                                : <NomineeCardNumberSelect adultpassenger={adultpassenger} wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid0"}
+                                                    onChange={this.handleOthersPassenger} indexRow={0} memberID={memberid} disabled={selfusage} />}
+                                            <SalutationSelect wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} ref={(e) => { this.componentSalutationSelect = e }} form={this.props.form} labeltext='Salutation' datafield={'passenger-salutationcode0'} disabled={!othersTraveller || selfusage} />
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Name' datafield={'passenger-name0'} validationrules={['required', 'pattern.letterspace']} maxLength={45} disabled={!othersTraveller || selfusage} />
+                                            <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Family Name' datafield={'passenger-familyname0'} validationrules={['pattern.letter']} maxLength={45} disabled={!othersTraveller || selfusage} />
+                                            {/* <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='GarudaMiles ID' datafield={'passenger-memberid0'} disabled={selfusage} validationrules={['pattern.number']} maxLength={16} /> */}
                                             <SelectBase wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Traveler Type' datafield={'passenger-travelertype0'} validationrules={['required']} options={TravelerType} disabled={selfusage} />
                                         </Col>
                                         {passengerList}

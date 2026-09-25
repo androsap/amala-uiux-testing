@@ -40,7 +40,7 @@ class App extends Component {
         await this.getDetail(awardcode);
         if (state) {
             const { requestSearchFlight } = state;
-            let { airlinecode, compartmentcode, bookingclass, origin, destination, roundtrip, adultpassenger, departuredate, returndate } = requestSearchFlight;
+            let { airlinecode, compartmentcode, bookingclass, origin, destination, roundtrip, adultpassenger, departuredate, returndate, redemptiontravellertype } = requestSearchFlight;
             if (airlinecode) {
                 let comparmentfielddisabled = false;
                 let subclassfielddisabled = false;
@@ -58,7 +58,7 @@ class App extends Component {
                 bookingclass = (bookingclass) ? bookingclass : undefined;
 
                 this.setState({ fielddisabled: { ...this.state.fielddisabled, comparmentfielddisabled, subclassfielddisabled } });
-                this.props.form.setFieldsValue({ airlinecode, compartmentcode, subclasscode: bookingclass, origin, destination, roundtrip, adultpassenger });
+                this.props.form.setFieldsValue({ airlinecode, compartmentcode, subclasscode: bookingclass, origin, destination, roundtrip, adultpassenger, redemptiontravellertype });
             }
         }
     }
@@ -103,7 +103,8 @@ class App extends Component {
                 } else departuredate = (input.departuredate) ? moment(input.departuredate).format("YYYY-MM-DD") : null;
 
                 let flightdata = [{ airlinecode, compartmentcode, origin, destination, bookingclass, return: roundtrip, departuredate, returndate }];
-                let requestSearchFlight = { memberid, awardcode, username, adultpassenger, airlinecode, bookingclass, compartmentcode, origin, destination, roundtrip, departuredate, returndate };
+                let redemptiontravellertype = input.redemptiontravellertype;
+                let requestSearchFlight = { memberid, awardcode, username, adultpassenger, airlinecode, bookingclass, compartmentcode, origin, destination, roundtrip, departuredate, returndate, redemptiontravellertype };
                 let data = { awardcode, memberid, username, adultpassenger, flightdata };
                 let url = (this.state.awardinfo.pricingby === 'MANUAL') ? api.url.accrualruleod.list : api.url.redemption.getpricelist;
 
@@ -201,8 +202,8 @@ class App extends Component {
                                     } */}
                                     <InputNumber form={this.props.form} labeltext="No. of Passenger" datafield="adultpassenger" validationrules={[`required`]} min={1} max={maxperson} />
                                 </Col>
-                                <Col className="gutter-row" xs={24} sm={24} md={24} lg={7} xl={7}>
-                                    {(travellerTypeOption) ? <AlertAnt type="info" showIcon message="Information" description={travellerTypeOption.info} /> : null}
+                                <Col className="gutter-row" xs={24} sm={24} md={24} lg={8} xl={8}>
+                                    {(travellerTypeOption) ? <AlertAnt type="info" showIcon message={<strong>Information</strong>} description={travellerTypeOption.info} style={{ paddingRight: 22 }} /> : null}
                                 </Col>
                             </Row>
                             <Row gutter={24} type="flex" justify="center" style={{ marginTop: 10 }}>

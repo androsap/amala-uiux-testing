@@ -40,7 +40,7 @@ class App extends Component {
         const { state } = this.props.location;
         if (state) {
             const { requestSearchFlight } = state;
-            let { airlinecode, paidcompartmentcodedepart, paidcompartmentcodereturn, paidbookingclassdepart, paidbookingclassreturn, origin, destination, roundtrip, adultpassenger, departuredate, returndate } = requestSearchFlight;
+            let { airlinecode, paidcompartmentcodedepart, paidcompartmentcodereturn, paidbookingclassdepart, paidbookingclassreturn, origin, destination, roundtrip, adultpassenger, departuredate, returndate, redemptiontravellertype } = requestSearchFlight;
             if (airlinecode) {
                 paidcompartmentcodedepart = (paidcompartmentcodedepart) ? paidcompartmentcodedepart : undefined;
                 paidcompartmentcodereturn = (paidcompartmentcodereturn) ? paidcompartmentcodereturn : undefined;
@@ -68,7 +68,7 @@ class App extends Component {
                 let paidsubclasscodereturn = (paidbookingclassreturn) ? paidbookingclassreturn : undefined;
 
                 this.setState({ fielddisabled: { ...this.state.fielddisabled, comparmentfielddisabled, subclassfielddisabled, subclassreturnfielddisabled } });
-                this.props.form.setFieldsValue({ airlinecode, paidcompartmentcodedepart, paidcompartmentcodereturn, paidsubclasscodedepart, paidsubclasscodereturn, origin, destination, roundtrip, adultpassenger });
+                this.props.form.setFieldsValue({ airlinecode, paidcompartmentcodedepart, paidcompartmentcodereturn, paidsubclasscodedepart, paidsubclasscodereturn, origin, destination, roundtrip, adultpassenger, redemptiontravellertype });
             }
         }
     }
@@ -118,7 +118,8 @@ class App extends Component {
                 } else departuredate = (input.departuredate) ? moment(input.departuredate).format("YYYY-MM-DD") : null;
 
                 let flightdata = [{ airlinecode, origin, destination, return: roundtrip, departuredate, returndate, upgrade }];
-                let requestSearchFlight = { memberid, awardcode, username, adultpassenger, airlinecode, origin, destination, roundtrip, departuredate, returndate, paidcompartmentcodedepart, paidbookingclassdepart, paidcompartmentcodereturn, paidbookingclassreturn };
+                let redemptiontravellertype = input.redemptiontravellertype;
+                let requestSearchFlight = { memberid, awardcode, username, adultpassenger, airlinecode, origin, destination, roundtrip, departuredate, returndate, paidcompartmentcodedepart, paidbookingclassdepart, paidcompartmentcodereturn, paidbookingclassreturn, redemptiontravellertype };
                 let data = { awardcode, memberid, username, adultpassenger, flightdata };
                 let url = (this.state.awardinfo.pricingby === 'MANUAL') ? api.url.accrualruleod.list : api.url.redemption.getpricelist;
                 if (this.state.awardinfo.pricingby === 'MANUAL') {
