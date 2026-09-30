@@ -3,7 +3,7 @@ import { DetailRequest, RetrieveRequestCustom, SaveRequest } from '../../../../u
 import { api } from '../../../../config/Services';
 import { connect } from "react-redux";
 import { InputText, Button, Alert, DateRangeBase, RadioButton, SwitchButton, TierSelect, MembershipSelect, BranchSelect, AirlineSelect, CompartmentSelect, SubclassSelect, CityPairOdRuleSelect, SelectBase } from '../../../../components/Base/BaseComponent';
-import { Form, Row, Col, Divider, Typography, Spin, Switch } from 'antd';
+import { Form, Row, Col, Divider, Typography, Spin, Tooltip, Icon } from 'antd';
 import { PriceCalculation } from '../../../../data';
 import ErrorGeneral from '../../../error/ErrorGeneral';
 import moment from 'moment';
@@ -454,19 +454,13 @@ class App extends Component {
                                     <RadioButton form={this.props.form} labeltext="Price Calculation" datafield="pricecalc" validationrules={['required']} options={PriceCalculation} className={(airlinecode) ? '' : 'hidden'} onChange={this.handleChangePriceCalculation} disabled={generalfielddisabled} />
                                     <SelectBase form={this.props.form} labeltext="Distance Range" noSuffixPlaceholder={true} datafield="distancerangecode" placeholder='Type min. 3 char to search (ex: "Grup A")' options={DistanceRange} className={(pricecalc === 'DISTANCERANGE') ? '' : 'hidden'} validationrules={(pricecalc === 'DISTANCERANGE') ? ['required'] : []} disabled={generalfielddisabled} onSearch={this.handleDistanceRangeData} showArrow={false} onChange={this.handleDistanceRangeChange} />
                                     <CityPairOdRuleSelect ref={(e) => { this.componentCityPairOdRuleSelect = e }} form={this.props.form} labeltext="City Pair" datafield="destoriginairport" placeholder='Type City Pair Code' className={(pricecalc === 'CITYPAIR') ? '' : 'hidden'} validationrules={(pricecalc === 'CITYPAIR') ? ['required'] : []} disabled={generalfielddisabled} />
-                                    <Form.Item label="Passenger Type">
-                                        <div style={{ border: '1px solid #d9d9d9', borderRadius: 4, padding: '12px 16px', lineHeight: 1.5 }}>
-                                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                {this.props.form.getFieldDecorator('otherstraveller', { valuePropName: 'checked', initialValue: false })(
-                                                    <Switch disabled={generalfielddisabled} />
-                                                )}
-                                                <span style={{ marginLeft: 12, fontWeight: 500, marginBottom: 4 }}>{this.props.form.getFieldValue('otherstraveller') ? 'Others' : 'Others'}</span>
-                                            </div>
-                                            <div style={{ marginTop: 8, color: 'rgba(0, 0, 0, 0.45)' }}>
-                                                By turn this ON, you set this price into <strong>Others passenger only</strong>. Can't be used for selfusage and/or nominee passenger
-                                            </div>
-                                        </div>
-                                    </Form.Item>
+                                    <SwitchButton form={this.props.form} datafield="otherstraveller" defaultChecked={false} disabled={generalfielddisabled}
+                                        labeltext={<span>
+                                            Others Passenger&nbsp;
+                                            <Tooltip trigger={['hover', 'click']} title={<span>By turn this ON, you set this price into <strong>Others passenger only</strong>. Can't be used for selfusage and/or nominee passenger</span>}>
+                                                <Icon type="question-circle" style={{ cursor: 'pointer' }} />
+                                            </Tooltip>
+                                        </span>} />
                                     <Divider orientation="left">Low Season</Divider>
                                     <InputText form={this.props.form} labeltext="One Way Price Low" datafield="onewaypricelow" validationrules={['required', 'pattern.number', 'max.11',]} maxLength="11" disabled={generalfielddisabled} />
                                     <Divider orientation="left">Peak Season</Divider>
