@@ -817,7 +817,7 @@ class App extends Component {
                                         <Divider>Passenger Data</Divider>
                                         <Col className="gutter-row" xs={24} sm={24} md={24} lg={{ span: 20, offset: 2 }} xl={{ span: 20, offset: 2 }}>
                                             <Divider>Passenger #1</Divider>
-                                            <SwitchButton wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Self Usage' datafield='selfusage' onChange={this.handleSelfUsageChange} />
+                                            {(othersTraveller) ? '' :<SwitchButton wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext='Self Usage' datafield='selfusage' onChange={this.handleSelfUsageChange} />}
                                             {(othersTraveller) ?
                                                 <InputText wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid0"} validationrules={['pattern.number']} maxLength={16} disabled={selfusage} />
                                                 : <NomineeCardNumberSelect adultpassenger={adultpassenger} wrapperCol={{ span: 10 }} labelCol={{ span: 8 }} form={this.props.form} labeltext="Card Number" datafield={"passenger-memberid0"}

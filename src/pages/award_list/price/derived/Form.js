@@ -463,7 +463,7 @@ class App extends Component {
                                                 <span style={{ marginLeft: 12, fontWeight: 500, marginBottom: 4 }}>{this.props.form.getFieldValue('otherstraveller') ? 'Others' : 'Others'}</span>
                                             </div>
                                             <div style={{ marginTop: 8, color: 'rgba(0, 0, 0, 0.45)' }}>
-                                                By allowing this you able to set other passenger manually in this price
+                                                By turn this ON, you set this price into <strong>Others passenger only</strong>. Can't be used for selfusage and/or nominee passenger
                                             </div>
                                         </div>
                                     </Form.Item>
