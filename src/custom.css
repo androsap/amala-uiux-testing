@@ -574,3 +574,13 @@ a {
 }
 
 }
+.tooltip-info .ant-tooltip-inner {
+    background-color: #e6f7ff;
+    border: 1px solid #91d5ff;
+    color: rgba(0, 0, 0, 0.75);
+}
+
+.tooltip-info .ant-tooltip-arrow::before {
+    background-color: #e6f7ff;
+    border: 1px solid #91d5ff;
+}

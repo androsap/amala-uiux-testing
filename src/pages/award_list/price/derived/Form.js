@@ -454,13 +454,12 @@ class App extends Component {
                                     <RadioButton form={this.props.form} labeltext="Price Calculation" datafield="pricecalc" validationrules={['required']} options={PriceCalculation} className={(airlinecode) ? '' : 'hidden'} onChange={this.handleChangePriceCalculation} disabled={generalfielddisabled} />
                                     <SelectBase form={this.props.form} labeltext="Distance Range" noSuffixPlaceholder={true} datafield="distancerangecode" placeholder='Type min. 3 char to search (ex: "Grup A")' options={DistanceRange} className={(pricecalc === 'DISTANCERANGE') ? '' : 'hidden'} validationrules={(pricecalc === 'DISTANCERANGE') ? ['required'] : []} disabled={generalfielddisabled} onSearch={this.handleDistanceRangeData} showArrow={false} onChange={this.handleDistanceRangeChange} />
                                     <CityPairOdRuleSelect ref={(e) => { this.componentCityPairOdRuleSelect = e }} form={this.props.form} labeltext="City Pair" datafield="destoriginairport" placeholder='Type City Pair Code' className={(pricecalc === 'CITYPAIR') ? '' : 'hidden'} validationrules={(pricecalc === 'CITYPAIR') ? ['required'] : []} disabled={generalfielddisabled} />
-                                    <SwitchButton form={this.props.form} datafield="otherstraveller" defaultChecked={false} disabled={generalfielddisabled}
-                                        labeltext={<span>
-                                            Others Passenger&nbsp;
-                                            <Tooltip trigger={['hover', 'click']} title={<span>By turn this ON, you set this price into <strong>Others passenger only</strong>. Can't be used for selfusage and/or nominee passenger</span>}>
-                                                <Icon type="question-circle" style={{ cursor: 'pointer' }} />
+                                    <SwitchButton form={this.props.form} labeltext="Others Passenger" datafield="otherstraveller" defaultChecked={false} disabled={generalfielddisabled}
+                                        suffix={
+                                            <Tooltip trigger={['hover', 'click']} placement="right" overlayClassName="tooltip-info" title={<span>By turn this ON, you set this price into <strong>Others passenger only</strong>. Can't be used for selfusage and/or nominee passenger</span>}>
+                                                <Icon type="question-circle" style={{ color: '#1890ff', cursor: 'pointer' }} />
                                             </Tooltip>
-                                        </span>} />
+                                        } />
                                     <Divider orientation="left">Low Season</Divider>
                                     <InputText form={this.props.form} labeltext="One Way Price Low" datafield="onewaypricelow" validationrules={['required', 'pattern.number', 'max.11',]} maxLength="11" disabled={generalfielddisabled} />
                                     <Divider orientation="left">Peak Season</Divider>

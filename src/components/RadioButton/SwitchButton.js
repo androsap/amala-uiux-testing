@@ -38,6 +38,7 @@ class SwitchButton extends React.Component {
                     (this.props.checked) ? <Switch checkedChildren="Yes" unCheckedChildren="No" disabled={this.props.disabled} onChange={this.props.onChange} checked={this.props.checked} /> :
                         <Switch checkedChildren="Yes" unCheckedChildren="No" disabled={this.props.disabled} onChange={this.props.onChange} />
                 )}
+                {(this.props.suffix) ? <span style={{ marginLeft: 8 }}>{this.props.suffix}</span> : null}
             </Form.Item>
         )
     }
